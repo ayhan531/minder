@@ -1,7 +1,7 @@
 services:
   - type: web
     runtime: python
-    name: minder-ottoman-web
+    name: eminevim-yatirim-web
     buildCommand: python --version && python -m py_compile tools/backend_server.py
     startCommand: python tools/backend_server.py
     healthCheckPath: /healthz
@@ -13,7 +13,7 @@ services:
       - key: PORT
         value: "5002"
       - key: PUBLIC_BASE_URL
-        sync: false
+        value: "https://eminevimyatirim.com"
       - key: ADMIN_TC
         sync: false
       - key: ADMIN_PASSWORD
@@ -23,12 +23,13 @@ services:
       - key: ALLOW_PRICE_SIMULATION
         value: "0"
       - key: OFFICIAL_COMPANY_NAME
-        value: "Minder Ottoman"
+        value: "Eminevim Yatırım"
       - key: OFFICIAL_EMAIL
-        value: "destek@minder.local"
+        value: "bilgi@eminevimyatirim.com"
       - key: OFFICIAL_PHONE
         value: "0850 303 6000"
     disk:
-      name: minder-ottoman-data
+      name: eminevim-yatirim-data
       mountPath: /var/data
       sizeGB: 1
+

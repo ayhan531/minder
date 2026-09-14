@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-labelledby="title desc">
+  <title id="title">Eminevim Yatırım</title>
+  <desc id="desc">Eminevim Yatırım için yükselen çizgi ve güven halkası taşıyan marka işareti.</desc>
+  <defs>
+    <linearGradient id="bg" x1="12" y1="10" x2="106" y2="112" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0f6bff"/>
+      <stop offset="1" stop-color="#05336f"/>
+    </linearGradient>
+    <linearGradient id="leaf" x1="28" y1="84" x2="90" y2="30" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#20c997"/>
+      <stop offset="1" stop-color="#a7f3d0"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="104" height="104" rx="26" fill="url(#bg)"/>
+  <path d="M31 76c15-5 26-14 36-29 4-6 9-10 18-11-3 14-10 27-22 37-10 8-21 11-32 3Z" fill="url(#leaf)"/>
+  <path d="M29 86h62" stroke="#ffffff" stroke-width="8" stroke-linecap="round"/>
+  <path d="M34 73 51 58l13 10 23-31" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="88" cy="36" r="7" fill="#20c997" stroke="#fff" stroke-width="4"/>
+</svg>

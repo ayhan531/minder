@@ -1,13 +1,13 @@
-/* Minder Ottoman Complete Flow & Design Adapter */
+/* Eminevim Yatırım Complete Flow & Design Adapter */
 state.portfolioTab = state.portfolioTab || "positions";
 state.portfolioCardSlide = state.portfolioCardSlide || 0;
 state.profileMenuOpen = false;
 state.installModalOpen = false;
 state.selectedTxDetail = null;
 state.specialNoticeOpen = false;
-state.userLanguage = localStorage.getItem("minder_lang") || "tr";
-state.fontSizeMode = localStorage.getItem("minder_font_size") || "medium";
-state.customAvatar = localStorage.getItem("minder_avatar") || "";
+state.userLanguage = localStorage.getItem("eminevim_lang") || "tr";
+state.fontSizeMode = localStorage.getItem("eminevim_font_size") || "medium";
+state.customAvatar = localStorage.getItem("eminevim_avatar") || "";
 
 function getCustomAvatarHtml() {
   if (state.customAvatar) {
@@ -39,7 +39,7 @@ mobileHeaderBar = function () {
   const avatarHtml = `<button type="button" class="rf-header-avatar" data-profile-menu-toggle aria-label="Profil menüsü">${getCustomAvatarHtml()}</button>`;
   
   if (isHome) {
-    return `<header class="mobile-app-header rf-mobile-header home"><div class="rf-mobile-header-left">${avatarHtml}</div><div class="ottoman-script-title">Ottoman</div><div class="rf-header-actions">${isAdmin ? `<a href="/esube/admin" data-link class="rf-admin-badge-btn">${icon("shield", 14)} Admin</a>` : ""}<button type="button" class="icon-button" data-theme-toggle aria-label="Gece modu">${icon("moon", 21)}</button><a href="/esube/notifications" data-link class="icon-button" aria-label="Bildirimler">${icon("bell", 21)}<span class="notice-dot"></span></a></div></header>`;
+    return `<header class="mobile-app-header rf-mobile-header home"><div class="rf-mobile-header-left">${avatarHtml}</div><div class="eminevim-script-title"><img src="/assets/eminevim-yatirim-logo.svg" alt="Eminevim Yatırım" /><span>Eminevim Yatırım</span></div><div class="rf-header-actions">${isAdmin ? `<a href="/esube/admin" data-link class="rf-admin-badge-btn">${icon("shield", 14)} Admin</a>` : ""}<button type="button" class="icon-button" data-theme-toggle aria-label="Gece modu">${icon("moon", 21)}</button><a href="/esube/notifications" data-link class="icon-button" aria-label="Bildirimler">${icon("bell", 21)}<span class="notice-dot"></span></a></div></header>`;
   }
 
   if (isPortfolio) {
@@ -308,7 +308,7 @@ document.addEventListener("change", (event) => {
       const reader = new FileReader();
       reader.onload = (e) => {
         state.customAvatar = e.target.result;
-        localStorage.setItem("minder_avatar", state.customAvatar);
+        localStorage.setItem("eminevim_avatar", state.customAvatar);
         showToast("Profil fotoğrafı güncellendi");
         render({ motion: false, preserveScroll: true });
       };
@@ -318,14 +318,14 @@ document.addEventListener("change", (event) => {
 
   if (event.target.id === "rf-font-size-select") {
     state.fontSizeMode = event.target.value;
-    localStorage.setItem("minder_font_size", state.fontSizeMode);
+    localStorage.setItem("eminevim_font_size", state.fontSizeMode);
     document.documentElement.style.fontSize = state.fontSizeMode === "small" ? "14px" : state.fontSizeMode === "large" ? "18px" : "16px";
     showToast("Yazı boyutu güncellendi");
   }
 
   if (event.target.id === "rf-lang-select") {
     state.userLanguage = event.target.value;
-    localStorage.setItem("minder_lang", state.userLanguage);
+    localStorage.setItem("eminevim_lang", state.userLanguage);
     showToast("Dil tercihi güncellendi");
   }
 });
@@ -362,3 +362,5 @@ requestAnimationFrame(() => {
     render({ motion: false, preserveScroll: true });
   }
 });
+
+

@@ -1,4 +1,4 @@
-# Minder Ottoman Web
+# Eminevim Yatırım Web
 
 APK referansı korunarak web projesine dönüştürülmüş yatırım, e-şube ve admin paneli.
 
@@ -20,3 +20,4 @@ Proje kök dizininde hazır `render.yaml` bulunmaktadır.
 1. Depoyu GitHub'a aktarın.
 2. Render.com > Blueprint seçin ve repoyu bağlayın.
 3. Otomatik olarak canlıya alınır.
+

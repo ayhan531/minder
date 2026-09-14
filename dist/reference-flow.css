@@ -5,7 +5,7 @@
   font-style: normal;
   font-display: swap;
 }
-/* Minder Ottoman Web Custom Flow Styles */
+/* Eminevim Yatırım Web Custom Flow Styles */
 .workspace{--rf-accent:var(--studio-primary,#0067e8);--rf-green:var(--studio-accent,#00a96b);--rf-red:var(--studio-danger,#ef3340);--rf-ink:#12203b;--rf-muted:#73809a;--rf-line:#e6ebf3;--rf-card:#fff;--rf-bg:#f5f7fb;background:var(--rf-bg)}
 .theme-dark.workspace{--rf-ink:#f5f7fb;--rf-muted:#aab4c8;--rf-line:#29354b;--rf-card:#162137;--rf-bg:#0c1424}
 .rf-dashboard,.rf-stocks,.rf-portfolio,.rf-history,.rf-profile{max-width:1180px;margin:0 auto;padding:22px;animation:rf-enter .45s cubic-bezier(.2,.75,.25,1) both}.rf-pulse,.rf-market-block,.rf-summary-card,.rf-financial,.rf-tab-body,.rf-profile-links{background:var(--rf-card);border:1px solid var(--rf-line);border-radius:22px;box-shadow:0 12px 38px rgba(24,41,72,.06)}
@@ -18,18 +18,27 @@
 @media(max-width:420px){.rf-pulse{grid-template-columns:1fr}.rf-pulse-chart{display:none}.rf-breadth{grid-column:1}.rf-stock-row{grid-template-columns:minmax(118px,1fr) 78px 68px}.rf-stock-row .market-identity small{max-width:112px}}
 .modal-backdrop{z-index:2200}.bottom-nav{z-index:1200}
 
-/* Header Styles & Ottoman Script */
-.ottoman-script-title {
-  font-family: 'Dancing Script', cursive, 'Brush Script MT', sans-serif;
-  font-size: 32px;
-  font-weight: 700;
-  color: #3b71ca;
-  letter-spacing: 0.5px;
-  text-shadow: 0 2px 10px rgba(59, 113, 202, 0.15);
-  display: inline-block;
+/* Header Styles & Eminevim Yatırım Logo */
+.eminevim-script-title {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 0;
+  color: #1f5fbf;
+  font-size: clamp(13px, 3.7vw, 16px);
+  font-weight: 850;
+  letter-spacing: 0;
+  white-space: nowrap;
   user-select: none;
 }
-.theme-dark .ottoman-script-title {
+.eminevim-script-title img {
+  width: 27px;
+  height: 27px;
+  border-radius: 8px;
+  flex: 0 0 auto;
+}
+.theme-dark .eminevim-script-title {
   color: #6ea8fe;
   text-shadow: 0 2px 12px rgba(110, 168, 254, 0.25);
 }
@@ -712,3 +721,5 @@
   .portfolio-total { font-size: 27px; }
   .rf-donut-wrapper { right: 12px; top: 40px; }
 }
+
+

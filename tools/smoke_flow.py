@@ -135,7 +135,7 @@ def main() -> None:
     )
     request(admin_client, "POST", "/api/admin/balances", {"user_id": user["id"], "action": "add", "amount": 250000, "note": "Otomatik regresyon başlangıç bakiyesi"})
     valid_iban = "TR330006100519786457841326"
-    request(admin_client, "POST", "/api/admin/bank-accounts", {"bank_name": "Smoke Bank", "account_holder": "Güney Menkul Değerler A.Ş.", "iban": valid_iban, "is_active": "1"})
+    request(admin_client, "POST", "/api/admin/bank-accounts", {"bank_name": "Smoke Bank", "account_holder": "Eminevim Yatırım A.Ş.", "iban": valid_iban, "is_active": "1"})
     body, headers = multipart(
         {
             "request_type": "deposit",
@@ -157,7 +157,7 @@ def main() -> None:
     _, portfolio = request(user_client, "GET", "/api/portfolio")
 
     data_dir = Path(os.environ.get("DATA_DIR", ROOT / "data"))
-    with sqlite3.connect(data_dir / "guney.db") as conn:
+    with sqlite3.connect(data_dir / "Eminevim.db") as conn:
         views = {
             name: conn.execute(f"SELECT COUNT(*) FROM {name}").fetchone()[0]
             for name in [
@@ -191,4 +191,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
 

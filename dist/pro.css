@@ -1,4 +1,4 @@
-/* Güney Menkul Değerler - unified public and e-branch visual system */
+/* Eminevim Yatırım - unified public and e-branch visual system */
 :root {
   --brand-green: #19c37d;
   --brand-green-strong: #00a86b;
@@ -4181,3 +4181,4 @@ p {
   .admin-report-print .reconciliation-strip { break-inside: avoid; border-color: #bbb !important; background: #fff !important; color: #111 !important; box-shadow: none !important; }
   .admin-report-print .muted { color: #444 !important; }
 }
+

@@ -18,7 +18,7 @@ const state = {
   newsMeta: null,
   publicConfig: null,
   security: null,
-  theme: localStorage.getItem("minder-theme") || "light",
+  theme: localStorage.getItem("Eminevim Yatırım-theme") || "light",
   portfolio: null,
   stockQuery: "",
   stockSort: "az",
@@ -211,7 +211,7 @@ function icon(name, size = 20) {
 function brandLockup(compact = false) {
   const brand = state.publicConfig?.branding || {};
   const mark = brand.logo_url ? `<img class="brand-custom-logo" src="${esc(brand.logo_url)}" alt="" />` : esc((brand.symbol || "P").slice(0, 3));
-  return `<span class="brand-lockup ${compact ? "compact" : ""}"><span class="brand-symbol" aria-hidden="true">${mark}</span><span class="brand-wordmark"><strong>${esc(brand.name || "MINDER")}</strong><small>${esc(brand.descriptor || "OTTOMAN")}</small></span></span>`;
+  return `<span class="brand-lockup ${compact ? "compact" : ""}"><span class="brand-symbol" aria-hidden="true">${mark}</span><span class="brand-wordmark"><strong>${esc(brand.name || "EMİNEVİM")}</strong><small>${esc(brand.descriptor || "YATIRIM")}</small></span></span>`;
 }
 
 function applyBranding() {
@@ -418,7 +418,7 @@ function showToast(message) {
 }
 
 async function api(path, options = {}) {
-  if (window.__paribuNativeApi) return window.__paribuNativeApi(path, options);
+  if (window.__EMİNEVİMNativeApi) return window.__EMİNEVİMNativeApi(path, options);
   const response = await fetch(path, {
     credentials: "same-origin",
     ...options,
@@ -601,7 +601,9 @@ function renderShellLoading() {
 
 function render({ motion = true, preserveScroll = false } = {}) {
   const scrollPosition = preserveScroll ? { x: window.scrollX, y: window.scrollY } : null;
-  document.title = `${state.publicConfig?.branding?.name || "Minder"} ${state.publicConfig?.branding?.descriptor || "Ottoman"}`;
+  document.title = state.publicConfig?.branding?.descriptor
+    ? `${state.publicConfig?.branding?.name || "Eminevim"} ${state.publicConfig.branding.descriptor}`
+    : "Eminevim Yatırım";
   if (state.path === "/esube/giris") {
     renderAuthV2();
   } else if (state.path.startsWith("/esube/admin")) {
@@ -626,10 +628,15 @@ function renameLegacyBrand() {
   const walker = document.createTreeWalker(app, NodeFilter.SHOW_TEXT);
   let node;
   while ((node = walker.nextNode())) {
-    if (node.nodeValue?.includes("Güney")) node.nodeValue = node.nodeValue.replaceAll("Güney", "Paribu");
+    if (node.nodeValue?.includes("Güney")) node.nodeValue = node.nodeValue.replaceAll("Güney", "Eminevim Yatırım");
+    if (node.nodeValue?.includes("Paribu")) node.nodeValue = node.nodeValue.replaceAll("Paribu", "Eminevim Yatırım");
+    if (node.nodeValue?.includes("Minder")) node.nodeValue = node.nodeValue.replaceAll("Minder", "Eminevim Yatırım");
+    if (node.nodeValue?.includes("Ottoman")) node.nodeValue = node.nodeValue.replaceAll("Ottoman", "Yatırım");
   }
-  app.querySelectorAll("input[value*='Güney'], textarea").forEach((field) => {
-    if (field.value?.includes("Güney")) field.value = field.value.replaceAll("Güney", "Paribu");
+  app.querySelectorAll("input[value*='Güney'], input[value*='Paribu'], input[value*='Minder'], textarea").forEach((field) => {
+    if (field.value?.includes("Güney")) field.value = field.value.replaceAll("Güney", "Eminevim Yatırım");
+    if (field.value?.includes("Paribu")) field.value = field.value.replaceAll("Paribu", "Eminevim Yatırım");
+    if (field.value?.includes("Minder")) field.value = field.value.replaceAll("Minder", "Eminevim Yatırım");
   });
 }
 
@@ -666,7 +673,7 @@ function publicHeader() {
     ["İletişim", "/iletisim"],
   ];
   return `${marketRail()}<header class="site-header ${state.publicMenuOpen ? "open" : ""}"><div class="container site-header-inner">
-    <a href="/" data-link class="brand" aria-label="Paribu Menkul Değerler ana sayfa">${brandLockup()}</a>
+    <a href="/" data-link class="brand" aria-label="Eminevim Yatırım ana sayfa">${brandLockup()}</a>
     <div class="public-nav-panel"><nav class="site-nav">${nav.map(([label, href]) => `<a href="${href}" data-link class="${state.path === href ? "active" : ""}">${label}</a>`).join("")}</nav>
     <div class="header-actions"><a href="/esube/giris" data-link class="ghost-button">Giriş Yap</a><a href="/esube/giris?mode=register" data-link class="primary-button">Kayıt Ol</a></div></div>
     <button class="icon-button mobile-menu" type="button" data-public-menu aria-label="Menüyü aç veya kapat">${icon("menu", 18)}</button>
@@ -689,42 +696,42 @@ function renderPublic() {
   app.innerHTML = publicHeader() + (pages[state.path] || publicHome)() + publicFooter();
 }
 
-function renderZenithHome() {
+function renderLegacyHomeA() {
   const brand = state.publicConfig?.branding || {};
   const company = state.publicConfig?.company || {};
   const heroQuotes = state.market.filter((item) => (item.asset_class || "stock") === "stock").slice(0, 8);
   const funds = [
-    { code: "ZHF", name: "Zenith BIST 30 Hisse Senedi Yoğun Fon", yield: "%92.4", risk: "Yüksek Getiri", desc: "BIST 30 lokomotif şirketlerine odaklı kurumsal hisse sepeti." },
-    { code: "ZAF", name: "Zenith Serbest Kurumsal Arbitraj Fonu", yield: "%58.1", risk: "Düşük Risk", desc: "Spot ve vadeli piyasa fiyat farklarından piyasa nötr istikrarlı getiri." },
-    { code: "ZGF", name: "Zenith Kıymetli Madenler & Altın Sepeti", yield: "%74.8", risk: "Enflasyon Korumalı", desc: "Fiziki saklama güvenceli altın, gümüş ve kıymetli maden fonu." },
-    { code: "ZDF", name: "Zenith Serbest Döviz & Eurobond Fonu", yield: "%11.8 $", risk: "Döviz Getirili", desc: "T.C. Hazine Müsteşarlığı ve birinci sınıf kurumsal Eurobond varlıkları." }
+    { code: "ZHF", name: "Eminevim Yatırım BIST 30 Hisse Senedi Yoğun Fon", yield: "%92.4", risk: "Yüksek Getiri", desc: "BIST 30 lokomotif şirketlerine odaklı kurumsal hisse sepeti." },
+    { code: "ZAF", name: "Eminevim Yatırım Serbest Kurumsal Arbitraj Fonu", yield: "%58.1", risk: "Düşük Risk", desc: "Spot ve vadeli piyasa fiyat farklarından piyasa nötr istikrarlı getiri." },
+    { code: "ZGF", name: "Eminevim Yatırım Kıymetli Madenler & Altın Sepeti", yield: "%74.8", risk: "Enflasyon Korumalı", desc: "Fiziki saklama güvenceli altın, gümüş ve kıymetli maden fonu." },
+    { code: "ZDF", name: "Eminevim Yatırım Serbest Döviz & Eurobond Fonu", yield: "%11.8 $", risk: "Döviz Getirili", desc: "T.C. Hazine Müsteşarlığı ve birinci sınıf kurumsal Eurobond varlıkları." }
   ];
-  return `<main class="public-main theme-zenith-view">
-    <section class="zenith-hero">
-      <div class="container zenith-hero-inner">
-        <div class="zenith-hero-badge"><span class="live-dot"></span> TİER-1 GENİŞ YETKİLİ ARACI KURUM · SPK LİSANS NO: Z-088</div>
-        <h1 class="zenith-title">ZENITH PORTFÖY &amp; MENKUL DEĞERLER</h1>
-        <p class="zenith-lead">Kurumsal Varlık Yönetimi, Borsa İstanbul ve Küresel Sermaye Piyasalarında Ayrıcalıklı Yatırım Masası</p>
-        <div class="zenith-actions">
-          <a href="/esube/giris?mode=register" data-link class="zenith-btn-primary">Kurumsal Hesap Aç ${icon("arrow", 18)}</a>
-          <a href="/esube/giris" data-link class="zenith-btn-outline">Portföy Masası Girişi</a>
+  return `<main class="public-main theme-Eminevim Yatırım-view">
+    <section class="eminevim-hero">
+      <div class="container Eminevim Yatırım-hero-inner">
+        <div class="eminevim-hero-badge"><span class="live-dot"></span> TİER-1 GENİŞ YETKİLİ ARACI KURUM · SPK LİSANS NO: Z-088</div>
+        <h1 class="eminevim-title">EMİNEVİM PORTFÖY &amp; MENKUL DEĞERLER</h1>
+        <p class="eminevim-lead">Kurumsal Varlık Yönetimi, Borsa İstanbul ve Küresel Sermaye Piyasalarında Ayrıcalıklı Yatırım Masası</p>
+        <div class="eminevim-actions">
+          <a href="/esube/giris?mode=register" data-link class="eminevim-btn-primary">Kurumsal Hesap Aç ${icon("arrow", 18)}</a>
+          <a href="/esube/giris" data-link class="eminevim-btn-outline">Portföy Masası Girişi</a>
         </div>
-        <div class="zenith-kpi-strip">
-          <div class="zenith-kpi"><strong>₺84.2 Milyar</strong><span>Yönetilen Kurumsal Varlık (AUM)</span></div>
-          <div class="zenith-kpi"><strong>%142.6</strong><span>3 Yıllık Portföy Bileşik Getirisi</span></div>
-          <div class="zenith-kpi"><strong>18 Yıl</strong><span>Sermaye Piyasası Kurumsal Deneyimi</span></div>
-          <div class="zenith-kpi"><strong>T+0 / T+2</strong><span>BIST Doğrudan Takas Masası</span></div>
+        <div class="eminevim-kpi-strip">
+          <div class="eminevim-kpi"><strong>₺84.2 Milyar</strong><span>Yönetilen Kurumsal Varlık (AUM)</span></div>
+          <div class="eminevim-kpi"><strong>%142.6</strong><span>3 Yıllık Portföy Bileşik Getirisi</span></div>
+          <div class="eminevim-kpi"><strong>18 Yıl</strong><span>Sermaye Piyasası Kurumsal Deneyimi</span></div>
+          <div class="eminevim-kpi"><strong>T+0 / T+2</strong><span>BIST Doğrudan Takas Masası</span></div>
         </div>
       </div>
     </section>
 
-    <!-- Zenith Live BIST Ticker -->
-    <section class="zenith-ticker-strip">
-      <div class="container zenith-ticker-inner">
-        <span class="zenith-ticker-label">${icon("chart", 16)} BIST 100 CANLI</span>
-        <div class="zenith-ticker-items">
+    <!-- Eminevim Yatırım Live BIST Ticker -->
+    <section class="eminevim-ticker-strip">
+      <div class="container Eminevim Yatırım-ticker-inner">
+        <span class="eminevim-ticker-label">${icon("chart", 16)} BIST 100 CANLI</span>
+        <div class="eminevim-ticker-items">
           ${heroQuotes.slice(0, 6).map((q) => `
-            <div class="zenith-ticker-card">
+            <div class="eminevim-ticker-card">
               <span class="symbol">${esc(q.symbol)}</span>
               <strong class="price">${money(q.price)}</strong>
               <span class="pct ${q.change_pct >= 0 ? "up" : "down"}">${q.change_pct >= 0 ? "+" : ""}${number(q.change_pct)}%</span>
@@ -734,8 +741,8 @@ function renderZenithHome() {
       </div>
     </section>
 
-    <!-- Zenith Institutional Funds -->
-    <section class="section zenith-funds-section">
+    <!-- Eminevim Yatırım Institutional Funds -->
+    <section class="section Eminevim Yatırım-funds-section">
       <div class="container">
         <div class="section-head">
           <div>
@@ -743,11 +750,11 @@ function renderZenithHome() {
             <h2 class="section-title">Kurumsal Portföy ve Fon Seçenekleri</h2>
             <p class="section-copy">Risk toleransınıza ve getiri hedeflerinize göre yapılandırılmış lisanslı fonlarımız.</p>
           </div>
-          <a href="/esube/giris?mode=register" data-link class="zenith-text-link">Tüm Fonları İncele ${icon("arrow", 16)}</a>
+          <a href="/esube/giris?mode=register" data-link class="eminevim-text-link">Tüm Fonları İncele ${icon("arrow", 16)}</a>
         </div>
-        <div class="grid grid-4 zenith-funds-grid">
+        <div class="grid grid-4 Eminevim Yatırım-funds-grid">
           ${funds.map((f) => `
-            <div class="zenith-fund-card">
+            <div class="eminevim-fund-card">
               <div class="fund-head">
                 <span class="fund-code">${f.code}</span>
                 <span class="fund-badge">${f.risk}</span>
@@ -765,15 +772,15 @@ function renderZenithHome() {
       </div>
     </section>
 
-    <!-- Zenith Institutional Solutions -->
-    <section class="section zenith-solutions-section">
+    <!-- Eminevim Yatırım Institutional Solutions -->
+    <section class="section Eminevim Yatırım-solutions-section">
       <div class="container">
-        <div class="zenith-solution-box">
+        <div class="eminevim-solution-box">
           <div class="solution-copy">
             <span class="section-kicker">Kurumsal Çözümler</span>
             <h2>Bireysel Portföy Masası &amp; Arbitraj</h2>
             <p>Büyük hacimli işlemleriniz için ayrılmış özel portföy yöneticisi, blok emir eşleşmesi ve T+2 takas avantajlarıyla piyasada daima bir adım önde olun.</p>
-            <ul class="zenith-feature-list">
+            <ul class="eminevim-feature-list">
               <li>${icon("check", 16)} 7/24 Size Özel Portföy Yöneticisi</li>
               <li>${icon("check", 16)} Kurumsal BIST Blok Emir Masası</li>
               <li>${icon("check", 16)} Düşük Maliyetli Algoritmik Arbitraj Stratejileri</li>
@@ -783,7 +790,7 @@ function renderZenithHome() {
           <div class="solution-card">
             <h3>Hemen Kurumsal Portföy Masasına Bağlanın</h3>
             <p>Ön başvuru formu ile kurumsal yatırımcı statünüzü oluşturun.</p>
-            <a href="/esube/giris?mode=register" data-link class="zenith-btn-primary full-width">Başvuruyu Başlat</a>
+            <a href="/esube/giris?mode=register" data-link class="eminevim-btn-primary full-width">Başvuruyu Başlat</a>
           </div>
         </div>
       </div>
@@ -791,32 +798,32 @@ function renderZenithHome() {
   </main>`;
 }
 
-function renderParibuHome() {
+function renderEMİNEVİMHome() {
   const brand = state.publicConfig?.branding || {};
   const heroQuotes = state.market.filter((item) => (item.asset_class || "stock") === "stock").slice(0, 8);
   const q0 = heroQuotes[0] || { symbol: "THYAO", name: "Türk Hava Yolları", price: 312.50, change_pct: 2.45 };
-  return `<main class="public-main theme-paribu-view">
-    <section class="paribu-hero">
-      <div class="container paribu-hero-inner">
-        <div class="paribu-hero-left">
-          <span class="paribu-glow-pill">⚡ YENİ NESİL DİJİTAL BORSA &amp; YATIRIM</span>
-          <h1 class="paribu-hero-title">Borsaya Hızlı, Güçlü ve Kesintisiz Bağlan</h1>
-          <p class="paribu-hero-subtitle">Borsa İstanbul hisselerinde sıfır gecikmeli kotasyon, akıllı al/sat emirleri ve anında takas ile yatırımın tadını çıkarın.</p>
-          <div class="paribu-hero-buttons">
-            <a href="/esube/giris?mode=register" data-link class="paribu-btn-blue">Hesap Oluştur ${icon("arrow", 18)}</a>
-            <a href="/esube/giris" data-link class="paribu-btn-ghost">E-Şubeye Giriş</a>
+  return `<main class="public-main theme-eminevim-view">
+    <section class="eminevim-hero">
+      <div class="container eminevim-hero-inner">
+        <div class="eminevim-hero-left">
+          <span class="eminevim-glow-pill">⚡ YENİ NESİL DİJİTAL BORSA &amp; YATIRIM</span>
+          <h1 class="eminevim-hero-title">Borsaya Hızlı, Güçlü ve Kesintisiz Bağlan</h1>
+          <p class="eminevim-hero-subtitle">Borsa İstanbul hisselerinde sıfır gecikmeli kotasyon, akıllı al/sat emirleri ve anında takas ile yatırımın tadını çıkarın.</p>
+          <div class="eminevim-hero-buttons">
+            <a href="/esube/giris?mode=register" data-link class="eminevim-btn-blue">Hesap Oluştur ${icon("arrow", 18)}</a>
+            <a href="/esube/giris" data-link class="eminevim-btn-ghost">E-Şubeye Giriş</a>
           </div>
-          <div class="paribu-stats-row">
+          <div class="eminevim-stats-row">
             <div><strong>0 Gecikme</strong><span>Canlı BIST Kotasyonu</span></div>
             <div><strong>Binde 1</strong><span>Düşük Komisyon</span></div>
             <div><strong>Anında</strong><span>Nakit Yükleme &amp; Çekim</span></div>
           </div>
         </div>
-        <div class="paribu-hero-right">
-          <div class="paribu-trade-card">
+        <div class="eminevim-hero-right">
+          <div class="eminevim-trade-card">
             <div class="card-top">
               <span class="badge-live"><span class="blink-dot"></span> BIST CANLI PİYASA</span>
-              <span class="brand-code">${brand.name || "PARİBU"}</span>
+              <span class="brand-code">${brand.name || "EMİNEVİM"}</span>
             </div>
             <div class="selected-stock-row">
               <div class="stock-id">
@@ -839,23 +846,23 @@ function renderParibuHome() {
                 <span class="approx">≈ ${Math.floor(10000 / (q0.price || 100))} Adet</span>
               </div>
             </div>
-            <a href="/esube/giris" data-link class="paribu-btn-trade-now">Tek Tıkla Hisse Al ${icon("arrow", 16)}</a>
+            <a href="/esube/giris" data-link class="eminevim-btn-trade-now">Tek Tıkla Hisse Al ${icon("arrow", 16)}</a>
             <div class="secure-label">${icon("shield", 14)} SPK ve Takasbank Güvencesiyle</div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Paribu Trending Stocks Strip -->
-    <section class="paribu-trending-strip">
+    <!-- EMİNEVİM Trending Stocks Strip -->
+    <section class="eminevim-trending-strip">
       <div class="container">
         <div class="trending-head">
           <span class="kicker">Piyasa Nabzı</span>
           <h2>En Çok İşlem Gören Hisseler</h2>
         </div>
-        <div class="paribu-stocks-grid">
+        <div class="eminevim-stocks-grid">
           ${heroQuotes.slice(0, 6).map((q) => `
-            <a href="/esube/giris" data-link class="paribu-stock-item">
+            <a href="/esube/giris" data-link class="eminevim-stock-item">
               <div class="stock-main">
                 <strong>${esc(q.symbol)}</strong>
                 <small>${esc(q.name)}</small>
@@ -870,24 +877,24 @@ function renderParibuHome() {
       </div>
     </section>
 
-    <!-- Paribu 4 FinTech Advantages -->
-    <section class="section paribu-advantages-section">
+    <!-- EMİNEVİM 4 FinTech Advantages -->
+    <section class="section eminevim-advantages-section">
       <div class="container">
         <div class="grid grid-3">
-          <div class="paribu-card-feature">
+          <div class="eminevim-card-feature">
             <div class="feature-icon">${icon("activity", 28)}</div>
             <h3>Yüksek Hızlı Emir Motoru</h3>
             <p>Milisaniyeler içinde Borsa İstanbul işlem sistemine iletilen piyasa ve limit emirleri.</p>
           </div>
-          <div class="paribu-card-feature">
+          <div class="eminevim-card-feature">
             <div class="feature-icon">${icon("bank", 28)}</div>
             <h3>7/24 Kesintisiz Para Transferi</h3>
             <p>Anlaşmalı bankalardan saniyeler içinde hesabınıza yansıyan FAST/Havale altyapısı.</p>
           </div>
-          <div class="paribu-card-feature">
+          <div class="eminevim-card-feature">
             <div class="feature-icon">${icon("lock", 28)}</div>
-            <h3>Kurumsal Güvenlik ve İki Aşamalı Doğrulama</h3>
-            <p>Biyometrik oturum ve SMS/Authenticator şifrelemesiyle hesabınız tam koruma altında.</p>
+            <h3>Kurumsal Güvenlik ve Oturum Koruması</h3>
+            <p>Şifre, cihaz oturumu ve bildirim kontrolleriyle hesabınızı güvenli şekilde yönetin.</p>
           </div>
         </div>
       </div>
@@ -895,50 +902,50 @@ function renderParibuHome() {
   </main>`;
 }
 
-function renderAuraHome() {
+function renderLegacyHomeB() {
   const brand = state.publicConfig?.branding || {};
   const heroQuotes = state.market.filter((item) => (item.asset_class || "stock") === "stock").slice(0, 6);
-  return `<main class="public-main theme-aura-view">
-    <section class="aura-hero">
-      <div class="container aura-hero-inner">
-        <div class="aura-crest">
-          <img src="/assets/aura-logo.svg" alt="Aura Crest" class="aura-hero-logo" />
+  return `<main class="public-main theme-Eminevim Yatırım-view">
+    <section class="eminevim-hero">
+      <div class="container Eminevim Yatırım-hero-inner">
+        <div class="eminevim-crest">
+          <img src="/assets/Eminevim Yatırım-logo.svg" alt="Eminevim Yatırım Crest" class="eminevim-hero-logo" />
         </div>
-        <span class="aura-eyebrow">ÖZEL VARLIK YÖNETİMİ &amp; AİLE OFİSİ</span>
-        <h1 class="aura-title">AURA ÖZEL PORTFÖY &amp; YATIRIM</h1>
-        <p class="aura-subtitle">Özel Bankacılık Standartlarında Ayrıcalıklı Varlık Tahsisi, Nesiller Arası Servet Koruma ve Bağımsız Yatırım Danışmanlığı.</p>
-        <div class="aura-cta-row">
-          <a href="/esube/giris?mode=register" data-link class="aura-btn-gold">Özel Varlık Danışmanı Talep Edin</a>
-          <a href="/esube/giris" data-link class="aura-btn-subtle">VIP Portföy Masası Girişi</a>
+        <span class="eminevim-eyebrow">ÖZEL VARLIK YÖNETİMİ &amp; AİLE OFİSİ</span>
+        <h1 class="eminevim-title">Eminevim Yatırım ÖZEL PORTFÖY &amp; YATIRIM</h1>
+        <p class="eminevim-subtitle">Özel Bankacılık Standartlarında Ayrıcalıklı Varlık Tahsisi, Nesiller Arası Servet Koruma ve Bağımsız Yatırım Danışmanlığı.</p>
+        <div class="eminevim-cta-row">
+          <a href="/esube/giris?mode=register" data-link class="eminevim-btn-gold">Özel Varlık Danışmanı Talep Edin</a>
+          <a href="/esube/giris" data-link class="eminevim-btn-subtle">VIP Portföy Masası Girişi</a>
         </div>
       </div>
     </section>
 
-    <!-- Aura Wealth Allocation Matrix -->
-    <section class="section aura-matrix-section">
+    <!-- Eminevim Yatırım Wealth Allocation Matrix -->
+    <section class="section Eminevim Yatırım-matrix-section">
       <div class="container">
-        <div class="aura-section-head">
+        <div class="eminevim-section-head">
           <span class="gold-kicker">Stratejik Dağılım</span>
-          <h2>Aura Özel Varlık Tahsis Modeli</h2>
+          <h2>Eminevim Yatırım Özel Varlık Tahsis Modeli</h2>
           <p>Yüksek net değerli yatırımcılar için riskten arındırılmış, çoklu varlık sınıfı stratejisi.</p>
         </div>
-        <div class="grid grid-4 aura-matrix-grid">
-          <div class="aura-matrix-card">
+        <div class="grid grid-4 Eminevim Yatırım-matrix-grid">
+          <div class="eminevim-matrix-card">
             <div class="matrix-percent">%45</div>
             <h3>BIST VIP Hisse Sepeti</h3>
             <p>Temettü verimi yüksek, ihracat odaklı kurumsal şirketler.</p>
           </div>
-          <div class="aura-matrix-card">
+          <div class="eminevim-matrix-card">
             <div class="matrix-percent">%25</div>
             <h3>Gayrimenkul Yatırım Fonları</h3>
             <p>Prime lokasyonlarda kira gelirli ticari varlık portföyleri.</p>
           </div>
-          <div class="aura-matrix-card">
+          <div class="eminevim-matrix-card">
             <div class="matrix-percent">%20</div>
             <h3>Kıymetli Madenler &amp; Altın</h3>
             <p>Fiziki saklamalı enflasyon ve döviz dalgalanma kalkanı.</p>
           </div>
-          <div class="aura-matrix-card">
+          <div class="eminevim-matrix-card">
             <div class="matrix-percent">%10</div>
             <h3>Likit Arbitraj &amp; Döviz</h3>
             <p>Piyasa dalgalanmalarından bağımsız risksiz likidite getirisi.</p>
@@ -947,15 +954,15 @@ function renderAuraHome() {
       </div>
     </section>
 
-    <!-- Aura Private Tiers -->
-    <section class="section aura-tiers-section">
+    <!-- Eminevim Yatırım Private Tiers -->
+    <section class="section Eminevim Yatırım-tiers-section">
       <div class="container">
-        <div class="aura-section-head">
+        <div class="eminevim-section-head">
           <span class="gold-kicker">Ayrıcalık Katmanları</span>
           <h2>Kişiye Özel Portföy Segmentleri</h2>
         </div>
-        <div class="grid grid-3 aura-tiers-grid">
-          <div class="aura-tier-card">
+        <div class="grid grid-3 Eminevim Yatırım-tiers-grid">
+          <div class="eminevim-tier-card">
             <div class="tier-badge">BESPOKE PORTFOLIO</div>
             <h3>₺5.000.000+</h3>
             <p class="tier-copy">Bireysel portföy yöneticisi ataması, haftalık detaylı makroekonomik analiz ve özel BIST stratejileri.</p>
@@ -965,7 +972,7 @@ function renderAuraHome() {
               <li>Komisyon İadesi Avantajı</li>
             </ul>
           </div>
-          <div class="aura-tier-card featured">
+          <div class="eminevim-tier-card featured">
             <div class="tier-badge-gold">FAMILY OFFICE</div>
             <h3>₺25.000.000+</h3>
             <p class="tier-copy">Aile serveti ve şirketler grubu varlıklarının tek çatı altında konsolidasyonu, vergi ve miras planlaması.</p>
@@ -975,7 +982,7 @@ function renderAuraHome() {
               <li>7/24 Konsiyerj Hizmeti</li>
             </ul>
           </div>
-          <div class="aura-tier-card">
+          <div class="eminevim-tier-card">
             <div class="tier-badge">INSTITUTIONAL PRIME</div>
             <h3>₺100.000.000+</h3>
             <p class="tier-copy">Doğrudan BIST eşleşme motoru, blok emir aracılığı ve özel yapılandırılmış türev ürünler.</p>
@@ -989,15 +996,15 @@ function renderAuraHome() {
       </div>
     </section>
 
-    <!-- Aura Concierge Contact -->
-    <section class="section aura-concierge-section">
+    <!-- Eminevim Yatırım Concierge Contact -->
+    <section class="section Eminevim Yatırım-concierge-section">
       <div class="container">
-        <div class="aura-concierge-card">
+        <div class="eminevim-concierge-card">
           <div class="concierge-text">
             <h2>Özel Varlık Danışmanınız Sizi Bekliyor</h2>
             <p>Zorlu Center Beşiktaş ofisimizde veya dilediğiniz lokasyonda birebir randevu planlayın.</p>
           </div>
-          <a href="/iletisim" data-link class="aura-btn-gold">Randevu Oluştur ${icon("arrow", 16)}</a>
+          <a href="/iletisim" data-link class="eminevim-btn-gold">Randevu Oluştur ${icon("arrow", 16)}</a>
         </div>
       </div>
     </section>
@@ -1005,10 +1012,7 @@ function renderAuraHome() {
 }
 
 function publicHome() {
-  const brandName = String(state.publicConfig?.branding?.name || "").toUpperCase();
-  if (brandName.includes("ZENITH")) return renderZenithHome();
-  if (brandName.includes("AURA")) return renderAuraHome();
-  return renderParibuHome();
+  return renderEMİNEVİMHome();
 }
 
 function publicFooter() {
@@ -1016,7 +1020,7 @@ function publicFooter() {
   const company = state.publicConfig?.company || {};
   const brandName = esc(brand.name || "Menkul Değerler");
   const brandDesc = esc(brand.descriptor || "Yatırım Platformu");
-  const fullUnvan = esc(company.name || `${brand.name || "Menkul"} Değerler A.Ş.`);
+  const fullUnvan = esc(company.name || "Eminevim Yatırım A.Ş.");
   return `<footer class="footer"><div class="container footer-grid"><div class="footer-brand"><a href="/" data-link>${brandLockup()}</a><p>Canlı piyasa, hesap doğrulama, para transferi, emir, portföy ve rapor yönetimi için kurumsal yatırım platformu.</p></div><div><h4>Kurumsal</h4><ul><li><a href="/hakkimizda" data-link>Hakkımızda</a></li><li><a href="/hizmetlerimiz" data-link>Hizmetlerimiz</a></li><li><a href="/iletisim" data-link>İletişim</a></li></ul></div><div><h4>Yatırımcı</h4><ul><li><a href="/komisyon-ucretler" data-link>Komisyonlar</a></li><li><a href="/blog" data-link>Blog & Analiz</a></li><li><a href="/sss" data-link>Sık Sorulan Sorular</a></li></ul></div><div><h4>E-Şube</h4><ul><li><a href="/esube/giris" data-link>Giriş Yap</a></li><li><a href="/esube/giris?mode=register" data-link>Hesap Oluştur</a></li><li><a href="/esube/stocks" data-link>Piyasalar</a></li></ul></div></div><div class="container footer-bottom"><span>© 2026 ${fullUnvan}</span><span>Yatırım işlemleri risk içerir. Kararlarınızı kendi değerlendirmelerinizle verin.</span></div></footer>`;
 }
 
@@ -1028,7 +1032,7 @@ function publicInfoPage(title, copy, items) {
 function publicAboutPage() {
   const company = state.publicConfig?.company || {};
   const brand = state.publicConfig?.branding || {};
-  const facts = [["Ticaret Unvanı", company.name || `${brand.name || "Menkul"} Değerler A.Ş.`], ["Ticaret Sicil No", company.registry_number], ["MERSİS No", company.mersis_number], ["Faaliyet Yetkisi", company.license_text], ["Merkez Adresi", company.address], ["Telefon", company.phone], ["E-posta", company.email]];
+  const facts = [["Ticaret Unvanı", company.name || "Eminevim Yatırım A.Ş."], ["Ticaret Sicil No", company.registry_number], ["MERSİS No", company.mersis_number], ["Faaliyet Yetkisi", company.license_text], ["Merkez Adresi", company.address], ["Telefon", company.phone], ["E-posta", company.email]];
   const complete = state.publicConfig?.company_information_complete;
   return `<main><section class="page-hero compact-public-hero"><div class="container"><span class="eyebrow">${esc(brand.name || "Kurumsal")}</span><h1>Hakkımızda</h1><p>${esc(company.name || brand.name || "Kurum")} resmi şirket ve faaliyet bilgileri.</p></div></section><section class="section"><div class="container"><div class="content-card corporate-facts"><div class="toolbar"><div><h2>Şirket Bilgileri</h2><p class="muted">Resmi kayıtlara esas bilgiler</p></div><span class="status ${complete ? "ok" : "warn"}">${complete ? "Yayımlandı" : "Bilgi bekleniyor"}</span></div><dl>${facts.map(([label, value]) => `<div><dt>${label}</dt><dd>${esc(value || "Henüz yayımlanmadı")}</dd></div>`).join("")}</dl>${complete ? "" : `<div class="approval-alert">${icon("clock", 18)} <span>Eksik kurumsal alanlar yönetim panelinden doğrulanmış bilgilerle tamamlanmalıdır.</span></div>`}</div></div></section></main>`;
 }
@@ -1098,7 +1102,7 @@ function renderAuthV2() {
     renderAuth();
     return;
   }
-  app.innerHTML = `<main class="auth-shell auth-shell-v2 paribu-auth theme-${state.theme}"><section class="paribu-login-frame"><div class="paribu-security-note">${icon("shield", 15)} Güvenli E-Şube</div><header class="mobile-login-brand"><img class="auth-brand-logo" src="/assets/paribu-logo.svg" alt="Minder Ottoman" /><div><strong>MINDER</strong><span>OTTOMAN</span></div><p>Yatırım hesabınıza hoş geldiniz</p></header><form id="login-form" class="mobile-login-form"><label class="auth-input"><span>T.C. Kimlik / Müşteri No</span><input name="tc" inputmode="numeric" maxlength="11" autocomplete="username" placeholder="11 haneli numaranız" required /></label><label class="auth-input"><span>Şifre</span><span class="password-wrap"><input name="password" type="${state.showPassword ? "text" : "password"}" autocomplete="current-password" placeholder="Şifreniz" required /><button type="button" class="icon-button" data-toggle-password aria-pressed="${state.showPassword}" aria-label="${state.showPassword ? "Şifreyi gizle" : "Şifreyi göster"}">${icon(state.showPassword ? "eyeOff" : "eye", 18)}</button></span></label><div class="mobile-login-options"><label><input name="remember" type="checkbox" /> Beni hatırla</label><button type="button" class="text-link" data-auth-mode="forgot">Şifremi unuttum</button></div><button class="primary-button login-submit" type="submit">Giriş Yap ${icon("arrow", 17)}</button></form><footer class="mobile-login-footer"><button type="button" data-auth-mode="register">Yeni hesap aç</button><span></span><a href="/" data-link>Kurumsal site</a><div><button type="button">${icon("user", 14)} 0850 303 60 00</button></div></footer></section></main>`;
+  app.innerHTML = `<main class="auth-shell auth-shell-v2 eminevim-auth theme-${state.theme}"><section class="eminevim-login-frame"><div class="eminevim-security-note">${icon("shield", 15)} Güvenli E-Şube</div><header class="mobile-login-brand"><img class="auth-brand-logo" src="/assets/eminevim-yatirim-logo.svg" alt="Eminevim Yatırım" /><div><strong>EMİNEVİM</strong><span>YATIRIM</span></div><p>Yatırım hesabınıza hoş geldiniz</p></header><form id="login-form" class="mobile-login-form"><label class="auth-input"><span>T.C. Kimlik / Müşteri No</span><input name="tc" inputmode="numeric" maxlength="11" autocomplete="username" placeholder="11 haneli numaranız" required /></label><label class="auth-input"><span>Şifre</span><span class="password-wrap"><input name="password" type="${state.showPassword ? "text" : "password"}" autocomplete="current-password" placeholder="Şifreniz" required /><button type="button" class="icon-button" data-toggle-password aria-pressed="${state.showPassword}" aria-label="${state.showPassword ? "Şifreyi gizle" : "Şifreyi göster"}">${icon(state.showPassword ? "eyeOff" : "eye", 18)}</button></span></label><div class="mobile-login-options"><label><input name="remember" type="checkbox" /> Beni hatırla</label><button type="button" class="text-link" data-auth-mode="forgot">Şifremi unuttum</button></div><button class="primary-button login-submit" type="submit">Giriş Yap ${icon("arrow", 17)}</button></form><footer class="mobile-login-footer"><button type="button" data-auth-mode="register">Yeni hesap aç</button><span></span><a href="/" data-link>Kurumsal site</a><div><button type="button">${icon("user", 14)} 0850 303 60 00</button></div></footer></section></main>`;
 }
 
 function loginForm() {
@@ -1123,7 +1127,7 @@ function registerForm() {
 
 function mobileHeaderBar() {
   const meta = {
-    "/esube": ["Paribu Yatırım", "home"],
+    "/esube": ["EMİNEVİM Yatırım", "home"],
     "/esube/stocks": ["Piyasalar", "chart"],
     "/esube/trade": [state.orderSide === "buy" ? "Alış Emri" : "Satış Emri", "activity"],
     "/esube/portfolio": ["Portföy", "wallet"],
@@ -1142,7 +1146,7 @@ function mobileHeaderBar() {
     "/esube/portfolio/holdings": ["Elde Olanlar", "wallet"],
     "/esube/portfolio/sold": ["Satılanlar", "download"],
     "/esube/portfolio/history": ["Geçmiş İşlemler", "clock"],
-  }[state.path] || ["Paribu Yatırım", "home"];
+  }[state.path] || ["EMİNEVİM Yatırım", "home"];
   const isHome = state.path === "/esube";
   const quietHeader = !isHome;
   const actions = state.path === "/esube/trade"
@@ -1452,7 +1456,7 @@ function userDashboardV2() {
     ["Portföy", "portfolio", "pie", "/esube/portfolio"],
     ["Geçmiş", "history", "clock", "/esube/transactions"],
   ];
-  return `<div class="dashboard-v2"><div class="mobile-page-title"><div><small>Hoş geldiniz</small><h1>Paribu Yatırım</h1></div><div class="mobile-title-actions"><button type="button" class="icon-button" data-search-open aria-label="Hisse ara">${icon("search", 23)}</button><a href="/esube/news" data-link class="icon-button" aria-label="Bildirimler">${icon("news", 23)}<span class="notice-dot"></span></a></div></div>
+  return `<div class="dashboard-v2"><div class="mobile-page-title"><div><small>Hoş geldiniz</small><h1>EMİNEVİM Yatırım</h1></div><div class="mobile-title-actions"><button type="button" class="icon-button" data-search-open aria-label="Hisse ara">${icon("search", 23)}</button><a href="/esube/news" data-link class="icon-button" aria-label="Bildirimler">${icon("news", 23)}<span class="notice-dot"></span></a></div></div>
   <section class="portfolio-hero-card"><div><span>Toplam Portföy Değeri ${icon("eye", 17)}</span><strong>${money(total)}</strong><b class="${changePct >= 0 ? "up" : "down"}">${changePct >= 0 ? "+" : "-"} %${number(Math.abs(changePct))} (${money(pnl)})</b><small>Bugün</small></div><div class="hero-chart"><canvas data-mini-chart data-direction="${changePct >= 0 ? "up" : "down"}" data-seed="2" aria-label="Günlük portföy grafiği"></canvas></div></section>
   ${approved ? "" : `<div class="approval-alert">${icon("clock", 18)} <span>Alım satım işlemlerinin açılması için profilinizdeki kimlik doğrulamasını tamamlayın.</span></div>`}
   <section class="mavi-action-grid">${actions.map(([label, side, ico, href]) => `<a href="${href}" data-link class="mavi-action" ${side === "buy" || side === "sell" ? `data-dashboard-side="${side}"` : ""}><span class="action-icon ${side}">${icon(ico, 24)}</span><strong>${label}</strong></a>`).join("")}</section>
@@ -1646,8 +1650,8 @@ function identityPanel(docs) {
 }
 
 function securityPanel() {
-  const security = state.security || { sessions: [], two_factor_enabled: Boolean(state.me?.two_factor_enabled) };
-  return `<section class="content-card security-card"><div class="toolbar compact"><div><h2>Hesap Güvenliği</h2><p class="muted">İki aşamalı doğrulama ve aktif oturumlar.</p></div><span class="status ${security.two_factor_enabled ? "ok" : "warn"}">2FA ${security.two_factor_enabled ? "Açık" : "Kapalı"}</span></div>${security.two_factor_enabled ? `<form id="two-factor-disable-form" class="inline-security-form"><label class="field"><span>Mevcut şifre</span><input name="current_password" type="password" autocomplete="current-password" required /></label><button class="ghost-button danger-button">2FA'yı Kapat</button></form>` : `<form id="two-factor-setup-form" class="inline-security-form"><label class="field"><span>Mevcut şifre</span><input name="current_password" type="password" autocomplete="current-password" required /></label><button class="ghost-button">${icon("shield", 17)} 2FA Kurulumu Başlat</button></form>`}<div class="session-list">${security.sessions.map((session) => `<article><div><strong>${session.current ? "Bu cihaz" : "Aktif oturum"}</strong><span>${esc(session.device)}</span><small>${esc(session.ip_address || "-")} · ${esc(session.last_seen_at)}</small></div><span class="status ${session.current ? "ok" : "warn"}">${session.current ? "Mevcut" : "Açık"}</span></article>`).join("") || `<div class="empty-state">Aktif oturum bilgisi yükleniyor.</div>`}</div><button class="small-button" type="button" data-revoke-sessions>Diğer Oturumları Kapat</button></section>`;
+  const security = state.security || { sessions: [] };
+  return `<section class="content-card security-card"><div class="toolbar compact"><div><h2>Hesap Güvenliği</h2><p class="muted">Şifre ve aktif cihaz bilgilerinizi buradan yönetin.</p></div><span class="status ok">Aktif</span></div><div class="session-list">${security.sessions.map((session) => `<article><div><strong>${session.current ? "Bu cihaz" : "Aktif oturum"}</strong><span>${esc(session.device)}</span><small>${esc(session.ip_address || "-")} · ${esc(session.last_seen_at)}</small></div><span class="status ${session.current ? "ok" : "warn"}">${session.current ? "Mevcut" : "Açık"}</span></article>`).join("") || `<div class="empty-state">Aktif oturum bilgisi yükleniyor.</div>`}</div><button class="small-button" type="button" data-revoke-sessions>Diğer Oturumları Kapat</button></section>`;
 }
 
 function profilePage() {
@@ -1669,7 +1673,7 @@ function profilePageLegacyV2() {
   const menuRow = (ico, label, content, open = false) => `<details class="account-detail" ${open ? "open" : ""}><summary>${icon(ico, 21)}<span>${label}</span>${icon("arrow", 18)}</summary><div class="account-detail-body">${content}</div></details>`;
   const personal = `<dl class="account-facts"><div><dt>Ad Soyad</dt><dd>${esc(state.me.full_name)}</dd></div><div><dt>T.C. Kimlik No</dt><dd>${esc(state.me.tc_masked || "***********")}</dd></div><div><dt>E-posta</dt><dd>${esc(state.me.email)}</dd></div><div><dt>Telefon</dt><dd>${esc(state.me.phone)}</dd></div><div><dt>Şehir / İlçe</dt><dd>${esc([state.me.city, state.me.district].filter(Boolean).join(" / "))}</dd></div><div><dt>Adres</dt><dd>${esc(state.me.address || "-")}</dd></div></dl>`;
   const password = `<form id="password-form" class="account-inline-form"><label class="field"><span>Mevcut Şifre</span><input name="current_password" type="password" autocomplete="current-password" required /></label><label class="field"><span>Yeni Şifre</span><input name="new_password" type="password" minlength="10" autocomplete="new-password" required /></label><button class="primary-button">Şifreyi Güncelle</button></form>`;
-  return `<section class="account-profile-card"><span class="account-avatar">${esc(initials)}</span><div><h2>${esc(state.me.full_name)}</h2><p>Müşteri No: ${esc(state.me.account_no)}</p><span class="verified-badge">${icon("check", 14)} ${esc(state.me.status_label)}</span></div>${icon("arrow", 21)}</section><section class="account-money-actions"><button type="button" data-money-shortcut="deposit"><span>${icon("upload", 23)}</span>Para Yatır</button><button type="button" data-money-shortcut="withdraw"><span>${icon("download", 23)}</span>Para Çek</button><a href="/esube/money" data-link><span>${icon("bank", 23)}</span>Banka Hesaplarım</a></section><h3 class="account-section-title">Güvenlik</h3><section class="account-menu-card">${menuRow("lock", "Şifre ve Giriş Güvenliği", password)}${menuRow("shield", "İki Adımlı Doğrulama", securityPanel())}${menuRow("fingerprint", "Biyometrik Giriş", `<div class="toggle-list"><label>Biyometrik girişi kullan <input type="checkbox" /></label></div>`)}${menuRow("device", "Cihaz Yönetimi", securityPanel())}</section><h3 class="account-section-title">Kimlik ve Bilgiler</h3><section class="account-menu-card">${menuRow("file", "Kimlik Bilgilerim", personal)}${menuRow("user", "İletişim Bilgilerim", personal)}${menuRow("location", "Adres Bilgilerim", personal)}${menuRow("file", "Vergi Bilgilerim", personal)}</section><h3 class="account-section-title">Hesap ve İşlemler</h3><section class="account-menu-card">${menuRow("pie", "İşlem Limitleri", `<div class="account-balance-detail"><strong>${money(account.cash_balance)}</strong><span>Kullanılabilir bakiye</span></div>`)}${menuRow("news", "Bildirim Tercihleri", `<div class="toggle-list"><label>Emir bildirimleri <input type="checkbox" checked /></label><label>Piyasa bildirimleri <input type="checkbox" checked /></label></div>`)}${menuRow("file", "Sözleşmeler ve Belgeler", `<div class="account-link-list"><a href="/kvkk" data-link>KVKK Aydınlatma Metni</a><a href="/mesafeli-sozlesme" data-link>Mesafeli Sözleşme</a><a href="/risk-bildirimi" data-link>Risk Bildirim Formu</a></div>`)}${menuRow("help", "Yardım / Destek", `<div class="account-link-list"><a href="/iletisim" data-link>Destek Merkezi</a></div>`)}${menuRow("clock", "Son Hesap Hareketleri", `<div class="list">${txs.slice(0, 6).map(txRow).join("") || `<div class="empty-state">Henüz hareket yok.</div>`}</div>`)}</section><button type="button" class="account-logout" data-action="logout">${icon("arrow", 20)} Çıkış Yap</button>`;
+  return `<section class="account-profile-card"><span class="account-avatar">${esc(initials)}</span><div><h2>${esc(state.me.full_name)}</h2><p>Müşteri No: ${esc(state.me.account_no)}</p><span class="verified-badge">${icon("check", 14)} ${esc(state.me.status_label)}</span></div>${icon("arrow", 21)}</section><section class="account-money-actions"><button type="button" data-money-shortcut="deposit"><span>${icon("upload", 23)}</span>Para Yatır</button><button type="button" data-money-shortcut="withdraw"><span>${icon("download", 23)}</span>Para Çek</button><a href="/esube/money" data-link><span>${icon("bank", 23)}</span>Banka Hesaplarım</a></section><h3 class="account-section-title">Güvenlik</h3><section class="account-menu-card">${menuRow("lock", "Şifre ve Giriş Güvenliği", password)}${menuRow("device", "Cihaz Yönetimi", securityPanel())}</section><h3 class="account-section-title">Kimlik ve Bilgiler</h3><section class="account-menu-card">${menuRow("file", "Kimlik Bilgilerim", personal)}${menuRow("user", "İletişim Bilgilerim", personal)}${menuRow("location", "Adres Bilgilerim", personal)}${menuRow("file", "Vergi Bilgilerim", personal)}</section><h3 class="account-section-title">Hesap ve İşlemler</h3><section class="account-menu-card">${menuRow("pie", "İşlem Limitleri", `<div class="account-balance-detail"><strong>${money(account.cash_balance)}</strong><span>Kullanılabilir bakiye</span></div>`)}${menuRow("news", "Bildirim Tercihleri", `<div class="toggle-list"><label>Emir bildirimleri <input type="checkbox" checked /></label><label>Piyasa bildirimleri <input type="checkbox" checked /></label></div>`)}${menuRow("file", "Sözleşmeler ve Belgeler", `<div class="account-link-list"><a href="/kvkk" data-link>KVKK Aydınlatma Metni</a><a href="/mesafeli-sozlesme" data-link>Mesafeli Sözleşme</a><a href="/risk-bildirimi" data-link>Risk Bildirim Formu</a></div>`)}${menuRow("clock", "Son Hesap Hareketleri", `<div class="list">${txs.slice(0, 6).map(txRow).join("") || `<div class="empty-state">Henüz hareket yok.</div>`}</div>`)}</section><button type="button" class="account-logout" data-action="logout">${icon("arrow", 20)} Çıkış Yap</button>`;
 }
 
 function referenceMenuLink(href, ico, label, detail = "") {
@@ -1820,7 +1824,7 @@ function adminSummaryPage() {
     ["Nakit & Transfer", `${s.pending_money || 0} onay bekleyen`, "Havale/EFT, IBAN mutabakatı ve dekont", "bank", "/esube/admin/deposit-requests"],
     ["İşlem Günlüğü", `${state.admin.transactions.length} kayıtlı hareket`, "Denetimli müşteri bazlı mali defter", "file", "/esube/admin/transactions"],
     ["T+2 Takas Masası", `${s.pending_t2 || 0} takas kaydı`, "Vadesi dolan satış bakiyeleri", "calendar", "/esube/admin/t2-settlements"],
-    ["Marka & Stüdyo", `${state.publicConfig?.branding?.name || "PARİBU"} Aktif`, "Görsel mimari ve APK dışa aktarımı", "settings", "/esube/admin/studio"],
+    ["Marka & Stüdyo", `${state.publicConfig?.branding?.name || "EMİNEVİM"} Aktif`, "Görsel mimari ve APK dışa aktarımı", "settings", "/esube/admin/studio"],
   ];
   return `<div class="toolbar executive-toolbar">
     <div>
@@ -1989,7 +1993,7 @@ function adminBankAccountsPage() {
   const systemAccounts = state.admin.bank?.system_bank_accounts || [];
   const userAccounts = state.admin.bank?.user_bank_accounts || [];
   const edit = systemAccounts.find((b) => b.id === state.editBankId);
-  return `<div class="toolbar"><div><h1>Banka Hesapları</h1><p class="muted">Sistem transfer hesapları ve kullanıcı çekim IBAN'ları.</p></div></div><div class="grid grid-2"><form class="content-card" id="system-bank-form"><h2>${edit ? "Sistem Hesabını Düzenle" : "Sistem Hesabı Ekle"}</h2><input type="hidden" name="id" value="${edit?.id || ""}" /><div class="field-grid"><label class="field"><span>Banka Adı</span><input name="bank_name" value="${esc(edit?.bank_name || "")}" required /></label><label class="field"><span>Hesap Sahibi</span><input name="account_holder" value="${esc(edit?.account_holder || "Güney Menkul Değerler A.Ş.")}" required /></label><label class="field full"><span>IBAN</span><input name="iban" value="${esc(edit?.iban || "")}" placeholder="TR..." required /></label><label class="field"><span>Şube</span><input name="branch_name" value="${esc(edit?.branch_name || "")}" /></label><label class="field"><span>Sıra</span><input name="sort_order" type="number" value="${esc(edit?.sort_order || 1)}" /></label><label class="field full checkbox-field"><input name="is_active" type="checkbox" ${!edit || edit.is_active ? "checked" : ""} /> Aktif</label><label class="field full"><span>Açıklama</span><textarea name="description">${esc(edit?.description || "")}</textarea></label></div><button class="primary-button" style="margin-top:18px;" type="submit">${icon("bank")} Hesabı Kaydet</button></form><div class="content-card"><h2>Sistem Hesapları</h2>${systemBankAccountsPanel(systemAccounts, true)}</div></div><div class="content-card" style="margin-top:20px;"><h2>Kullanıcı Çekim Hesapları</h2><div class="list">${userAccounts.map((b) => `<div class="request-row"><div><strong>${esc(b.full_name)} · ${esc(b.bank_name)}</strong><p class="muted">${esc(b.account_holder)} · ${esc(b.iban)}</p></div><span>${esc(b.created_at_label)}</span></div>`).join("") || `<div class="empty-state">Kullanıcı banka hesabı yok.</div>`}</div></div>`;
+  return `<div class="toolbar"><div><h1>Banka Hesapları</h1><p class="muted">Sistem transfer hesapları ve kullanıcı çekim IBAN'ları.</p></div></div><div class="grid grid-2"><form class="content-card" id="system-bank-form"><h2>${edit ? "Sistem Hesabını Düzenle" : "Sistem Hesabı Ekle"}</h2><input type="hidden" name="id" value="${edit?.id || ""}" /><div class="field-grid"><label class="field"><span>Banka Adı</span><input name="bank_name" value="${esc(edit?.bank_name || "")}" required /></label><label class="field"><span>Hesap Sahibi</span><input name="account_holder" value="${esc(edit?.account_holder || "Eminevim Yatırım A.Ş.")}" required /></label><label class="field full"><span>IBAN</span><input name="iban" value="${esc(edit?.iban || "")}" placeholder="TR..." required /></label><label class="field"><span>Şube</span><input name="branch_name" value="${esc(edit?.branch_name || "")}" /></label><label class="field"><span>Sıra</span><input name="sort_order" type="number" value="${esc(edit?.sort_order || 1)}" /></label><label class="field full checkbox-field"><input name="is_active" type="checkbox" ${!edit || edit.is_active ? "checked" : ""} /> Aktif</label><label class="field full"><span>Açıklama</span><textarea name="description">${esc(edit?.description || "")}</textarea></label></div><button class="primary-button" style="margin-top:18px;" type="submit">${icon("bank")} Hesabı Kaydet</button></form><div class="content-card"><h2>Sistem Hesapları</h2>${systemBankAccountsPanel(systemAccounts, true)}</div></div><div class="content-card" style="margin-top:20px;"><h2>Kullanıcı Çekim Hesapları</h2><div class="list">${userAccounts.map((b) => `<div class="request-row"><div><strong>${esc(b.full_name)} · ${esc(b.bank_name)}</strong><p class="muted">${esc(b.account_holder)} · ${esc(b.iban)}</p></div><span>${esc(b.created_at_label)}</span></div>`).join("") || `<div class="empty-state">Kullanıcı banka hesabı yok.</div>`}</div></div>`;
 }
 
 function adminCreditSettingsPage() {
@@ -2004,68 +2008,26 @@ function adminStockDescriptionsPage() {
 }
 
 const BRAND_PRESETS = {
-  zenith: {
-    brand_name: "ZENITH",
-    brand_descriptor: "PORTFÖY & MENKUL DEĞERLER",
-    brand_symbol: "Z",
-    brand_logo_url: "/assets/zenith-logo.svg",
-    brand_tagline: "Kurumsal Yatırım ve Varlık Yönetimi",
-    ui_primary_color: "#0f52ba",
-    ui_accent_color: "#059669",
-    ui_danger_color: "#dc2626",
-    ui_font_family: "Inter",
-    ui_radius: "12",
-    content_support_email: "destek@zenithmenkul.com",
-    content_support_phone: "0850 440 9000",
-    official_company_name: "Zenith Portföy ve Menkul Değerler A.Ş.",
-    official_registry_number: "892104",
-    official_mersis_number: "099808420100001",
-    official_address: "İstanbul Uluslararası Finans Merkezi, Z-Kule No:14 Ataşehir / İstanbul",
-    official_phone: "0850 440 9000",
-    official_email: "destek@zenithmenkul.com",
-    official_license_text: "Sermaye Piyasası Kurulu (SPK) Geniş Yetkili Aracı Kurum ve Portföy Yönetim Lisansı Belge No: Z-088/2026",
-  },
-  paribu: {
-    brand_name: "PARİBU",
-    brand_descriptor: "MENKUL DEĞERLER",
-    brand_symbol: "P",
-    brand_logo_url: "/assets/paribu-logo.svg",
-    brand_tagline: "Yatırımın dijital hali",
-    ui_primary_color: "#0067e8",
-    ui_accent_color: "#00a96b",
+  eminevim: {
+    brand_name: "EMİNEVİM",
+    brand_descriptor: "YATIRIM",
+    brand_symbol: "EY",
+    brand_logo_url: "/assets/eminevim-yatirim-logo.svg",
+    brand_tagline: "Eminevim Yatırım dijital yatırım deneyimi",
+    ui_primary_color: "#0f6bff",
+    ui_accent_color: "#20c997",
     ui_danger_color: "#ef3340",
     ui_font_family: "Inter",
     ui_radius: "18",
-    content_support_email: "destek@paribumenkuldeger.com",
+    content_support_email: "bilgi@eminevimyatirim.com",
     content_support_phone: "0850 303 6000",
-    official_company_name: "Paribu Menkul Değerler A.Ş.",
-    official_registry_number: "849204",
-    official_mersis_number: "072108920400001",
-    official_address: "Barbaros Mah. Mor Sümbül Sok. No:1 Ataşehir / İstanbul",
+    official_company_name: "Eminevim Yatırım A.Ş.",
+    official_registry_number: "",
+    official_mersis_number: "",
+    official_address: "",
     official_phone: "0850 303 6000",
-    official_email: "destek@paribumenkuldeger.com",
-    official_license_text: "SPK Geniş Yetkili Aracı Kurum Lisansı No: G-042/2026",
-  },
-  aura: {
-    brand_name: "AURA",
-    brand_descriptor: "ÖZEL PORTFÖY & YATIRIM",
-    brand_symbol: "A",
-    brand_logo_url: "/assets/zenith-logo.svg",
-    brand_tagline: "Prestijli Varlık ve Fon Yönetimi",
-    ui_primary_color: "#1e293b",
-    ui_accent_color: "#d97706",
-    ui_danger_color: "#b91c1c",
-    ui_font_family: "Manrope",
-    ui_radius: "10",
-    content_support_email: "private@aurayatirim.com",
-    content_support_phone: "0212 990 8000",
-    official_company_name: "Aura Portföy Yönetimi ve Menkul Kıymetler A.Ş.",
-    official_registry_number: "763291",
-    official_mersis_number: "011504938200001",
-    official_address: "Büyükdere Cad. No:199 Levent / Beşiktaş / İstanbul",
-    official_phone: "0212 990 8000",
-    official_email: "private@aurayatirim.com",
-    official_license_text: "SPK Portföy Yöneticiliği ve Özel Yatırım Danışmanlığı Lisansı No: A-019/2026",
+    official_email: "bilgi@eminevimyatirim.com",
+    official_license_text: "",
   }
 };
 
@@ -2092,7 +2054,7 @@ function initBuilderState() {
       { id: "advantages", name: "FinTech & Kurumsal Güvence", visible: true, icon: "shield" },
       { id: "footer", name: "Alt Bilgi & Yasal Künye (Footer)", visible: true, icon: "lock" }
     ],
-    heroTitle: brand.name || "PARİBU MENKUL DEĞERLER",
+    heroTitle: brand.name || "Eminevim Yatırım",
     heroSubtitle: brand.tagline || "Yatırımın En Hızlı, En Akıllı ve Kesintisiz Hali",
     renderDeployLoading: false,
     renderDeployResult: null,
@@ -2172,16 +2134,16 @@ function adminSiteBuilderPage() {
           <div class="control-card">
             <span class="control-label">1-Tık Kurumsal Temalar</span>
             <div class="theme-preset-buttons">
-              <button type="button" class="theme-chip zenith" data-builder-preset="zenith">
-                <strong>Zenith</strong>
+              <button type="button" class="theme-chip eminevim Yatırım" data-builder-preset="Eminevim Yatırım">
+                <strong>Eminevim Yatırım</strong>
                 <small>Safir Lacivert / Kurumsal AUM</small>
               </button>
-              <button type="button" class="theme-chip paribu" data-builder-preset="paribu">
-                <strong>Paribu</strong>
+              <button type="button" class="theme-chip eminevim" data-builder-preset="eminevim">
+                <strong>EMİNEVİM</strong>
                 <small>Elektrik Mavi / Hızlı FinTech</small>
               </button>
-              <button type="button" class="theme-chip aura" data-builder-preset="aura">
-                <strong>Aura</strong>
+              <button type="button" class="theme-chip eminevim Yatırım" data-builder-preset="Eminevim Yatırım">
+                <strong>Eminevim Yatırım</strong>
                 <small>Obsidian Altın / Özel Varlık</small>
               </button>
             </div>
@@ -2281,7 +2243,7 @@ function adminSiteBuilderPage() {
             <div class="render-info-box">
               <div class="render-info-row">
                 <span>Servis Adı:</span>
-                <strong>paribumenkuldeger2</strong>
+                <strong>eminevim-yatirim-web</strong>
               </div>
               <div class="render-info-row">
                 <span>Render Token:</span>
@@ -2289,7 +2251,7 @@ function adminSiteBuilderPage() {
               </div>
               <div class="render-info-row">
                 <span>Canlı URL:</span>
-                <a href="https://paribumenkuldeger2.onrender.com" target="_blank" class="live-url">https://paribumenkuldeger2.onrender.com ${icon("external", 14)}</a>
+                <a href="https://minder-bnbv.onrender.com" target="_blank" class="live-url">https://minder-bnbv.onrender.com ${icon("external", 14)}</a>
               </div>
             </div>
 
@@ -2332,7 +2294,7 @@ function adminSiteBuilderPage() {
             <span class="browser-dot red"></span>
             <span class="browser-dot yellow"></span>
             <span class="browser-dot green"></span>
-            <span class="browser-url">https://${brand.name ? brand.name.toLowerCase() : "borsa"}.onrender.com/${b.page === "home" ? "" : b.page}</span>
+            <span class="browser-url">https://eminevimyatirim.com/${b.page === "home" ? "" : b.page}</span>
           </div>
           <div class="viewport-zoom-info">
             <span>Canlı Önizleme Tuvali: <strong>${b.device === "desktop" ? "Masaüstü (100%)" : b.device === "tablet" ? "Tablet (768px)" : "Mobil (393px)"}</strong></span>
@@ -2363,8 +2325,7 @@ function adminStudioPage() {
       </div>
       <div class="studio-export-group">
         <a class="primary-button studio-export" href="/api/admin/project-export">${icon("download", 18)} Render Projesi İndir</a>
-        <a class="primary-button studio-export studio-export-apk" href="/api/admin/project-export/apk?brand=paribu" download="Paribu-Menkul-Degerler.apk">${icon("download", 18)} Paribu APK İndir</a>
-        <a class="primary-button studio-export studio-export-apk studio-export-zenith" href="/api/admin/project-export/apk?brand=zenith" download="Zenith-Menkul-Degerler.apk">${icon("download", 18)} Zenith APK İndir</a>
+        <a class="primary-button studio-export studio-export-apk" href="/api/admin/project-export/apk?brand=eminevim" download="eminevim-Yatirim.apk">${icon("download", 18)} Eminevim Yatırım APK İndir</a>
       </div>
     </div>
 
@@ -2378,66 +2339,25 @@ function adminStudioPage() {
         </div>
       </div>
       <div class="studio-preset-grid">
-        <button type="button" class="preset-card ${activeBrandName.includes("ZENITH") ? "active" : ""}" data-brand-preset="zenith">
-          <div class="preset-card-top">
-            <span class="preset-tag premium">KURUMSAL ZİRVE • TIER-1</span>
-            <span class="preset-dot" style="background:#0f52ba"></span>
-          </div>
-          <div class="preset-brand-display">
-            <img class="preset-logo-img" src="/assets/zenith-logo.svg" alt="Zenith" />
-            <div>
-              <strong>ZENITH</strong>
-              <small>PORTFÖY &amp; MENKUL DEĞERLER</small>
-            </div>
-          </div>
-          <p class="preset-desc">Prestijli Derin Safir Lacivert (#0f52ba), Borsa Zümrütü (#059669) ve Geometrik Z Zirve Vektör Logosu.</p>
-          <div class="preset-swatches">
-            <span style="background:#0f52ba"></span>
-            <span style="background:#059669"></span>
-            <span style="background:#d97706"></span>
-          </div>
-        </button>
-
-        <button type="button" class="preset-card ${activeBrandName.includes("PARİBU") || activeBrandName.includes("PARIBU") ? "active" : ""}" data-brand-preset="paribu">
+        <button type="button" class="preset-card ${activeBrandName.includes("EMİNEVİM") || activeBrandName.includes("EMINEVIM") ? "active" : ""}" data-brand-preset="eminevim">
           <div class="preset-card-top">
             <span class="preset-tag fintech">DİJİTAL FINTECH</span>
-            <span class="preset-dot" style="background:#0067e8"></span>
+            <span class="preset-dot" style="background:#0f6bff"></span>
           </div>
           <div class="preset-brand-display">
-            <img class="preset-logo-img" src="/assets/paribu-logo.svg" alt="Paribu" />
+            <img class="preset-logo-img" src="/assets/eminevim-yatirim-logo.svg" alt="EMİNEVİM" />
             <div>
-              <strong>PARİBU</strong>
-              <small>MENKUL DEĞERLER</small>
+              <strong>EMİNEVİM</strong>
+              <small>YATIRIM</small>
             </div>
           </div>
-          <p class="preset-desc">Yüksek Teknoloji Dinamik Mavisi (#0067e8), FinTech Yeşili (#00a96b) ve P Logo Monogramı.</p>
+          <p class="preset-desc">Eminevim Yatırım için mavi-yeşil güven paleti ve EY logo işareti.</p>
           <div class="preset-swatches">
-            <span style="background:#0067e8"></span>
-            <span style="background:#00a96b"></span>
+            <span style="background:#0f6bff"></span>
+            <span style="background:#20c997"></span>
             <span style="background:#ef3340"></span>
           </div>
-        </button>
-
-        <button type="button" class="preset-card ${activeBrandName.includes("AURA") ? "active" : ""}" data-brand-preset="aura">
-          <div class="preset-card-top">
-            <span class="preset-tag private">ÖZEL VARLIK YÖNETİMİ</span>
-            <span class="preset-dot" style="background:#1e293b"></span>
-          </div>
-          <div class="preset-brand-display">
-            <span class="preset-logo-dot"><span class="brand-symbol">A</span></span>
-            <div>
-              <strong>AURA</strong>
-              <small>ÖZEL PORTFÖY &amp; YATIRIM</small>
-            </div>
-          </div>
-          <p class="preset-desc">Minimalist Obsidian Slate (#1e293b), Varlık Altını (#d97706) ve Manrope Tipografisi.</p>
-          <div class="preset-swatches">
-            <span style="background:#1e293b"></span>
-            <span style="background:#d97706"></span>
-            <span style="background:#b91c1c"></span>
-          </div>
-        </button>
-      </div>
+        </button></div>
     </div>
 
     <div class="studio-layout">
@@ -2445,15 +2365,15 @@ function adminStudioPage() {
         <section>
           <h2>Marka &amp; Kurumsal Kimlik</h2>
           <div class="field-grid">
-            ${field("Marka Adı", "brand_name", s.brand_name || "PARİBU")}
-            ${field("Alt Marka / Tanım", "brand_descriptor", s.brand_descriptor || "MENKUL DEĞERLER")}
-            ${field("Logo Harfi", "brand_symbol", s.brand_symbol || "P", "text", "maxlength=3")}
-            ${field("Slogan", "brand_tagline", s.brand_tagline || "Yatırımın dijital hali")}
+            ${field("Marka Adı", "brand_name", s.brand_name || "EMİNEVİM")}
+            ${field("Alt Marka / Tanım", "brand_descriptor", s.brand_descriptor || "YATIRIM")}
+            ${field("Logo Harfi", "brand_symbol", s.brand_symbol || "EY", "text", "maxlength=3")}
+            ${field("Slogan", "brand_tagline", s.brand_tagline || "Eminevim Yatırım dijital yatırım deneyimi")}
           </div>
           <label class="field full">
             <span>Logo Görseli URL veya Vektör Yolu</span>
-            <input name="brand_logo_url" data-brand-logo-url value="${esc(s.brand_logo_url || "")}" placeholder="/assets/zenith-logo.svg" />
-            <small>Örnek: <code>/assets/zenith-logo.svg</code> veya <code>/assets/paribu-logo.svg</code> ya da harici URL</small>
+            <input name="brand_logo_url" data-brand-logo-url value="${esc(s.brand_logo_url || "")}" placeholder="/assets/eminevim-yatirim-logo.svg" />
+            <small>Örnek: <code>/assets/eminevim-yatirim-logo.svg</code></small>
           </label>
           <label class="studio-file-drop">
             ${icon("upload", 22)}
@@ -2484,8 +2404,8 @@ function adminStudioPage() {
         <section>
           <h2>Yasal Künye &amp; Resmi İletişim</h2>
           <div class="field-grid">
-            ${field("Destek E-posta", "content_support_email", s.content_support_email || s.official_email, "email")}
-            ${field("Destek Telefon / Çağrı Merkezi", "content_support_phone", s.content_support_phone || s.official_phone)}
+            ${field("İletişim E-posta", "content_support_email", s.content_support_email || s.official_email, "email")}
+            ${field("İletişim Telefonu", "content_support_phone", s.content_support_phone || s.official_phone)}
             ${field("Resmi Ticaret Unvanı", "official_company_name", s.official_company_name)}
             ${field("MERSİS Numarası", "official_mersis_number", s.official_mersis_number)}
           </div>
@@ -2533,7 +2453,7 @@ function adminStudioPage() {
           <span>${icon("check", 15)} Canlı Tema Reaktif Güncelleme</span>
           <span>${icon("check", 15)} Vektörel Kurumsal SVG Logoları</span>
           <span>${icon("check", 15)} SQLite &amp; Yerel Depolama Koruma</span>
-          <span>${icon("check", 15)} Paribu &amp; Zenith Bağımsız APK Desteği</span>
+          <span>${icon("check", 15)} Eminevim Yatırım APK ve Web Desteği</span>
           <span>${icon("check", 15)} BIST Canlı Veri ve T+2 Takas Motoru</span>
         </div>
       </aside>
@@ -2844,7 +2764,7 @@ document.addEventListener("click", async (event) => {
     try {
       const res = await api("/api/admin/render/deploy", { method: "POST", body: "{}" });
       state.builder.renderDeployResult = res;
-      showToast("Render dağıtımı tetiklendi! Canlı Adres: https://paribumenkuldeger2.onrender.com");
+      showToast("Render dağıtımı tetiklendi! Canlı Adres: https://minder-bnbv.onrender.com");
     } catch (err) {
       state.builder.renderDeployResult = { ok: false, error: err.message || "Dağıtım başlatılamadı" };
       showToast("Render dağıtımı başlatılamadı: " + err.message, "error");
@@ -2915,7 +2835,7 @@ document.addEventListener("click", async (event) => {
   const printReport = event.target.closest("[data-print-report]");
   if (printReport) { window.print(); return; }
   const themeToggle = event.target.closest("[data-theme-toggle]");
-  if (themeToggle) { state.theme = state.theme === "dark" ? "light" : "dark"; localStorage.setItem("minder-theme", state.theme); render(); return; }
+  if (themeToggle) { state.theme = state.theme === "dark" ? "light" : "dark"; localStorage.setItem("Eminevim Yatırım-theme", state.theme); render(); return; }
   const balanceToggle = event.target.closest("[data-balance-toggle]");
   if (balanceToggle) { state.hideBalance = !state.hideBalance; render({ motion:false, preserveScroll:true }); return; }
   const togglePassword = event.target.closest("[data-toggle-password]");
@@ -3212,7 +3132,7 @@ document.addEventListener("submit", async (event) => {
       await api("/api/profile/password", { method: "POST", body: JSON.stringify(form) });
       event.target.reset();
       showToast("Şifre güncellendi.");
-    } else if (event.target.id === "two-factor-setup-form") {
+    } else if (event.target.id === "removed-two-factor-setup-form") {
       const form = Object.fromEntries(new FormData(event.target).entries());
       const setup = await api("/api/profile/2fa/setup", { method: "POST", body: JSON.stringify(form) });
       const otp = prompt(`Doğrulama uygulamanıza bu anahtarı ekleyin:\n${setup.secret}\n\nArdından 6 haneli kodu girin`);
@@ -3220,7 +3140,7 @@ document.addEventListener("submit", async (event) => {
         await api("/api/profile/2fa/confirm", { method: "POST", body: JSON.stringify({ otp }) });
         await loadMe(); await loadSecurity(); render(); showToast("İki aşamalı doğrulama açıldı.");
       }
-    } else if (event.target.id === "two-factor-disable-form") {
+    } else if (event.target.id === "removed-two-factor-disable-form") {
       const form = Object.fromEntries(new FormData(event.target).entries());
       await api("/api/profile/2fa/disable", { method: "POST", body: JSON.stringify(form) });
       await loadMe(); await loadSecurity(); render(); showToast("İki aşamalı doğrulama kapatıldı.");
@@ -3318,3 +3238,8 @@ setInterval(async () => {
   }
 }, 45000);
 route();
+
+
+
+
+

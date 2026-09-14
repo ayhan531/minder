@@ -1,4 +1,4 @@
-"""Isolated end-to-end smoke test for the Paribu 2 backend.
+"""Isolated end-to-end smoke test for the EMİNEVİM 2 backend.
 
 Runs the real server against a temporary SQLite database, so development data
 is never changed. Uses only the Python standard library.
@@ -33,7 +33,7 @@ class Client:
             BASE + path,
             data=body,
             method=method,
-            headers={"Content-Type": "application/json", "User-Agent": "Paribu2-Smoke/1.0"},
+            headers={"Content-Type": "application/json", "User-Agent": "EMİNEVİM2-Smoke/1.0"},
         )
         try:
             with self.opener.open(request, timeout=timeout) as response:
@@ -52,7 +52,7 @@ def expect(condition: bool, message: str) -> None:
 
 def main() -> int:
     (ROOT / "artifacts").mkdir(exist_ok=True)
-    with tempfile.TemporaryDirectory(prefix="paribu2-smoke-", dir=ROOT / "artifacts") as data_dir:
+    with tempfile.TemporaryDirectory(prefix="EMİNEVİM2-smoke-", dir=ROOT / "artifacts") as data_dir:
         env = os.environ.copy()
         env.update(
             {
@@ -60,7 +60,7 @@ def main() -> int:
                 "DATA_DIR": data_dir,
                 "ADMIN_TC": "10000000000",
                 "ADMIN_PASSWORD": "AdminPass!2026",
-                "ADMIN_NAME": "Paribu Test Admin",
+                "ADMIN_NAME": "EMİNEVİM Test Admin",
                 "ADMIN_EMAIL": "admin@example.test",
                 "SEED_TEST_USER": "1",
                 "TEST_USER_TC": "20000000000",
@@ -198,3 +198,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

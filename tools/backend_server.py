@@ -23,20 +23,21 @@ import warnings
 import xml.etree.ElementTree as ET
 import zipfile
 from email.message import EmailMessage
+from email.parser import BytesParser
+from email.policy import default as email_default_policy
 
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
-import cgi
 
 
 ROOT = Path(__file__).resolve().parents[1]
 DIST = ROOT / "dist"
 DATA_DIR = Path(os.environ.get("DATA_DIR", ROOT / "data"))
-DB_PATH = Path(os.environ.get("DATABASE_PATH", DATA_DIR / "guney.db"))
+DB_PATH = Path(os.environ.get("DATABASE_PATH", DATA_DIR / "Eminevim.db"))
 UPLOAD_DIR = DATA_DIR / "uploads"
 LOGO_CACHE_DIR = DATA_DIR / "company-logos"
 PORT = int(os.environ.get("PORT", "5002"))
-COOKIE_NAME = "paribu_sid"
+COOKIE_NAME = "eminevim_sid"
 SESSION_TTL = 60 * 60 * 24 * 7
 MARKET_URL = os.environ.get("MARKET_URL", "https://trrealapi-market.onrender.com/latest")
 MARKET_URLS = [
@@ -86,6 +87,59 @@ NEWS_SOURCES = {
     "SPK": "https://spk.gov.tr/spk-bultenleri/{year}-yili-spk-bultenleri",
     "KAP": "https://www.kap.org.tr/tr",
 }
+
+
+class MultipartItem:
+    def __init__(self, name: str, filename: str, content_type: str, payload: bytes):
+        self.name = name
+        self.filename = filename
+        self.type = content_type or "application/octet-stream"
+        self.file = io.BytesIO(payload)
+        if filename:
+            self.value = ""
+        else:
+            charset = "utf-8"
+            self.value = payload.decode(charset, errors="replace")
+
+
+class MultipartForm:
+    def __init__(self, items: dict[str, MultipartItem | list[MultipartItem]]):
+        self._items = items
+
+    def keys(self):
+        return self._items.keys()
+
+    def __contains__(self, key: str) -> bool:
+        return key in self._items
+
+    def __getitem__(self, key: str):
+        return self._items[key]
+
+    @classmethod
+    def parse(cls, content_type: str, body: bytes) -> "MultipartForm":
+        if not content_type.startswith("multipart/form-data"):
+            raise HttpError(400, "Form tipi hatalı")
+        message = BytesParser(policy=email_default_policy).parsebytes(
+            b"Content-Type: " + content_type.encode("utf-8") + b"\r\n"
+            b"MIME-Version: 1.0\r\n\r\n" + body
+        )
+        items: dict[str, MultipartItem | list[MultipartItem]] = {}
+        for part in message.iter_parts():
+            name = part.get_param("name", header="content-disposition")
+            if not name:
+                continue
+            filename = part.get_filename() or ""
+            payload = part.get_payload(decode=True) or b""
+            item = MultipartItem(name, filename, part.get_content_type(), payload)
+            if name in items:
+                existing = items[name]
+                if isinstance(existing, list):
+                    existing.append(item)
+                else:
+                    items[name] = [existing, item]
+            else:
+                items[name] = item
+        return cls(items)
 
 
 FALLBACK_QUOTES = [
@@ -218,7 +272,7 @@ def send_reset_email(email: str, reset_url: str) -> bool:
     if not host or not user or not password:
         return False
     message = EmailMessage()
-    message["Subject"] = "Paribu Menkul Değerler şifre yenileme"
+    message["Subject"] = "Eminevim Yatırım şifre yenileme"
     message["From"] = os.environ.get("SMTP_FROM", user)
     message["To"] = email
     message.set_content(f"Şifrenizi 30 dakika içinde yenilemek için bağlantıyı açın:\n\n{reset_url}\n")
@@ -545,8 +599,8 @@ def migrate_db(conn: sqlite3.Connection) -> None:
     ensure_column(conn, "audit_logs", "user_agent", "TEXT DEFAULT ''")
     ensure_column(conn, "audit_logs", "request_id", "TEXT DEFAULT ''")
     conn.execute("UPDATE t2_settlements SET remaining_amount=amount WHERE status='pending' AND remaining_amount<=0")
-    conn.execute("UPDATE users SET account_no=printf('PM%06d', id) WHERE account_no IS NULL OR account_no=''")
-    conn.execute("UPDATE users SET account_no='GM' || substr(account_no, 3) WHERE account_no LIKE 'FY%'")
+    conn.execute("UPDATE users SET account_no=printf('EY%06d', id) WHERE account_no IS NULL OR account_no=''")
+    conn.execute("UPDATE users SET account_no='EY' || substr(account_no, 3) WHERE account_no LIKE 'FY%'")
     conn.execute("UPDATE system_bank_accounts SET is_active=0 WHERE REPLACE(iban, ' ', '') LIKE 'TR00%'")
     conn.execute("UPDATE orders SET gross_total=total WHERE gross_total<=0")
     conn.execute("UPDATE sessions SET last_seen_at=created_at WHERE last_seen_at<=0")
@@ -561,17 +615,17 @@ def migrate_brand_data(conn: sqlite3.Connection) -> None:
         """
         UPDATE users
         SET full_name=?
-        WHERE role='admin' AND (full_name='Sistem Admin' OR full_name='Güney Admin' OR full_name LIKE ? OR full_name LIKE ?)
+        WHERE role='admin' AND (full_name='Sistem Admin' OR full_name='Eminevim Yatırım Admin' OR full_name LIKE ? OR full_name LIKE ?)
         """,
-        ("Minder Admin", f"%{legacy}%", f"%{legacy_public}%"),
+        ("Eminevim Yatırım Admin", f"%{legacy}%", f"%{legacy_public}%"),
     )
     conn.execute(
         """
         UPDATE users
         SET email=?
-        WHERE role='admin' AND (email='' OR email='admin@local' OR email='admin@guneymenkuldegerler.com' OR email LIKE ?)
+        WHERE role='admin' AND (email='' OR email='admin@local' OR email='admin@eminevimyatirim.com' OR email LIKE ?)
         """,
-        ("admin@minder.local", f"%{legacy.lower()}%"),
+        ("admin@eminevimyatirim.com", f"%{legacy.lower()}%"),
     )
     conn.execute(
         """
@@ -581,26 +635,27 @@ def migrate_brand_data(conn: sqlite3.Connection) -> None:
         """,
         (
             legacy_company,
-            "Minder Ottoman",
+            "Eminevim Yatırım",
             legacy_public,
-            "Minder Ottoman",
+            "Eminevim Yatırım",
             f"{legacy_company} A.Ş.",
-            "Minder Ottoman",
+            "Eminevim Yatırım",
             legacy_company,
-            "Minder Ottoman",
+            "Eminevim Yatırım",
         ),
     )
-    conn.execute("UPDATE users SET account_no='MD' || substr(account_no, 3) WHERE account_no LIKE 'GM%' OR account_no LIKE 'PM%'")
+    conn.execute("UPDATE users SET account_no='EY' || substr(account_no, 3) WHERE account_no LIKE 'GM%' OR account_no LIKE 'PM%' OR account_no LIKE 'MD%'")
     replacements = {
-        "brand_name": "MINDER",
-        "brand_descriptor": "OTTOMAN",
-        "brand_symbol": "M",
-        "brand_tagline": "Referanslı yatırım deneyimi",
-        "ui_primary_color": "#4f79d9",
-        "ui_accent_color": "#0fbf7a",
-        "content_support_email": "destek@minder.local",
-        "official_company_name": "Minder Ottoman",
-        "official_email": "destek@minder.local",
+        "brand_name": "EMİNEVİM",
+        "brand_descriptor": "YATIRIM",
+        "brand_symbol": "EY",
+        "brand_logo_url": "/assets/eminevim-yatirim-logo.svg",
+        "brand_tagline": "Eminevim Yatırım dijital yatırım deneyimi",
+        "ui_primary_color": "#0f6bff",
+        "ui_accent_color": "#20c997",
+        "content_support_email": "bilgi@eminevimyatirim.com",
+        "official_company_name": "Eminevim Yatırım",
+        "official_email": "bilgi@eminevimyatirim.com",
     }
     for key, value in replacements.items():
         conn.execute(
@@ -608,8 +663,8 @@ def migrate_brand_data(conn: sqlite3.Connection) -> None:
             UPDATE system_settings
             SET setting_value=?, updated_at=?
             WHERE setting_key=? AND (
-              setting_value LIKE '%Paribu%' OR setting_value LIKE '%PARİBU%' OR
-              setting_value LIKE '%paribu%' OR setting_value LIKE '%Güney%' OR
+              setting_value LIKE '%EMİNEVİM%' OR setting_value LIKE '%EMİNEVİM%' OR
+              setting_value LIKE '%EMİNEVİM%' OR setting_value LIKE '%Eminevim Yatırım%' OR
               setting_value LIKE '%Fuzul%' OR setting_value=''
             )
             """,
@@ -679,23 +734,24 @@ def seed_system_settings(conn: sqlite3.Connection) -> None:
         "t2_enabled": "0",
         "commission_rate_bps": os.environ.get("COMMISSION_RATE_BPS", "0"),
         "minimum_commission": os.environ.get("MINIMUM_COMMISSION", "0"),
-        "official_company_name": os.environ.get("OFFICIAL_COMPANY_NAME", ""),
+        "official_company_name": os.environ.get("OFFICIAL_COMPANY_NAME", "Eminevim Yatırım A.Ş."),
         "official_registry_number": os.environ.get("OFFICIAL_REGISTRY_NUMBER", ""),
         "official_mersis_number": os.environ.get("OFFICIAL_MERSIS_NUMBER", ""),
         "official_address": os.environ.get("OFFICIAL_ADDRESS", ""),
         "official_phone": os.environ.get("OFFICIAL_PHONE", ""),
-        "official_email": os.environ.get("OFFICIAL_EMAIL", "destek@minder.local"),
+        "official_email": os.environ.get("OFFICIAL_EMAIL", "bilgi@eminevimyatirim.com"),
         "official_license_text": os.environ.get("OFFICIAL_LICENSE_TEXT", ""),
-        "brand_name": "MINDER",
-        "brand_descriptor": "OTTOMAN",
-        "brand_symbol": "M",
-        "brand_tagline": "Referanslı yatırım deneyimi",
-        "ui_primary_color": "#4f79d9",
-        "ui_accent_color": "#0fbf7a",
+        "brand_name": "EMİNEVİM",
+        "brand_descriptor": "YATIRIM",
+        "brand_symbol": "EY",
+        "brand_logo_url": "/assets/eminevim-yatirim-logo.svg",
+        "brand_tagline": "Eminevim Yatırım dijital yatırım deneyimi",
+        "ui_primary_color": "#0f6bff",
+        "ui_accent_color": "#20c997",
         "ui_danger_color": "#ef3340",
         "ui_font_family": "Inter",
         "ui_radius": "18",
-        "content_support_email": os.environ.get("OFFICIAL_EMAIL", "destek@minder.local"),
+        "content_support_email": os.environ.get("OFFICIAL_EMAIL", "bilgi@eminevimyatirim.com"),
         "content_support_phone": os.environ.get("OFFICIAL_PHONE", ""),
         "credit_monthly_interest_rate": "2.5",
         "credit_loan_term_months": "12",
@@ -737,8 +793,8 @@ def seed_admin(conn: sqlite3.Connection) -> None:
     existing = conn.execute("SELECT id FROM users WHERE tc=?", (admin_tc,)).fetchone()
     if existing:
         updates = [
-            os.environ.get("ADMIN_NAME", "Minder Admin")[:120],
-            os.environ.get("ADMIN_EMAIL", "admin@minder.local")[:120],
+            os.environ.get("ADMIN_NAME", "Eminevim Yatırım Admin")[:120],
+            os.environ.get("ADMIN_EMAIL", "admin@eminevimyatirim.com")[:120],
             now(),
             existing["id"],
         ]
@@ -775,7 +831,7 @@ def seed_admin(conn: sqlite3.Connection) -> None:
           (tc, password_salt, password_hash, full_name, phone, email, city, role, status, kyc_status, created_at, approved_at)
         VALUES (?, ?, ?, ?, ?, ?, ?, 'admin', 'approved', 'approved', ?, ?)
         """,
-        (admin_tc, salt, digest, os.environ.get("ADMIN_NAME", "Minder Admin")[:120], "0000000000", os.environ.get("ADMIN_EMAIL", "admin@minder.local")[:120], "Istanbul", now(), now()),
+        (admin_tc, salt, digest, os.environ.get("ADMIN_NAME", "Eminevim Yatırım Admin")[:120], "0000000000", os.environ.get("ADMIN_EMAIL", "admin@eminevimyatirim.com")[:120], "Istanbul", now(), now()),
     )
     conn.execute("UPDATE users SET account_no=printf('MD%06d', id) WHERE id=?", (cur.lastrowid,))
     conn.execute("INSERT INTO accounts (user_id, cash_balance, blocked_balance, credit_limit) VALUES (?, 0, 0, 0)", (cur.lastrowid,))
@@ -808,8 +864,8 @@ def seed_test_user(conn: sqlite3.Connection) -> None:
         test_tc = "20000000000"
     existing = conn.execute("SELECT id FROM users WHERE tc=?", (test_tc,)).fetchone()
     password = os.environ.get("TEST_USER_PASSWORD")
-    full_name = os.environ.get("TEST_USER_NAME", "Paribu Test Kullanıcı")[:120]
-    email = os.environ.get("TEST_USER_EMAIL", "test@paribumenkuldeger.com")[:120]
+    full_name = os.environ.get("TEST_USER_NAME", "EMİNEVİM Test Kullanıcı")[:120]
+    email = os.environ.get("TEST_USER_EMAIL", "test@eminevimyatirim.com")[:120]
     phone = os.environ.get("TEST_USER_PHONE", "05550000000")[:40]
     city = os.environ.get("TEST_USER_CITY", "Istanbul")[:80]
     district = os.environ.get("TEST_USER_DISTRICT", "Merkez")[:80]
@@ -840,7 +896,7 @@ def seed_test_user(conn: sqlite3.Connection) -> None:
             """,
             updates,
         )
-        conn.execute("UPDATE users SET account_no=printf('PM%06d', id) WHERE id=? AND (account_no IS NULL OR account_no='')", (existing["id"],))
+        conn.execute("UPDATE users SET account_no=printf('EY%06d', id) WHERE id=? AND (account_no IS NULL OR account_no='')", (existing["id"],))
         conn.execute(
             "INSERT OR IGNORE INTO accounts (user_id, cash_balance, blocked_balance, pending_balance, credit_limit) VALUES (?, ?, 0, 0, ?)",
             (existing["id"], cash, credit),
@@ -871,7 +927,7 @@ def seed_test_user(conn: sqlite3.Connection) -> None:
         (test_tc, salt, digest, full_name, phone, email, city, district, created, created),
     )
     user_id = int(cur.lastrowid)
-    conn.execute("UPDATE users SET account_no=printf('PM%06d', id) WHERE id=?", (user_id,))
+    conn.execute("UPDATE users SET account_no=printf('EY%06d', id) WHERE id=?", (user_id,))
     conn.execute(
         "INSERT INTO accounts (user_id, cash_balance, blocked_balance, pending_balance, credit_limit) VALUES (?, ?, 0, 0, ?)",
         (user_id, cash, credit),
@@ -1118,7 +1174,7 @@ def refresh_company_metadata(conn: sqlite3.Connection) -> None:
     request = urllib.request.Request(
         TRADINGVIEW_SCANNER_URL,
         data=body,
-        headers={"Content-Type": "application/json", "User-Agent": "GuneyBackend/2.0"},
+        headers={"Content-Type": "application/json", "User-Agent": "EminevimBackend/2.0"},
         method="POST",
     )
     try:
@@ -1174,7 +1230,7 @@ def refresh_market(conn: sqlite3.Connection) -> list[dict]:
     last_error = ""
     for url in dict.fromkeys(MARKET_URLS):
         try:
-            request = urllib.request.Request(url, headers={"User-Agent": "GuneyBackend/2.0"})
+            request = urllib.request.Request(url, headers={"User-Agent": "EminevimBackend/2.0"})
             with urllib.request.urlopen(request, timeout=MARKET_TIMEOUT) as response:
                 payload = json.loads(response.read().decode("utf-8"))
             quotes = normalize_market(payload)
@@ -1320,7 +1376,7 @@ class OfficialLinkParser(HTMLParser):
 def fetch_official_text(url: str) -> str:
     request = urllib.request.Request(
         url,
-        headers={"User-Agent": "ParibuMenkul/1.0"},
+        headers={"User-Agent": "EMİNEVİMMenkul/1.0"},
     )
     with urllib.request.urlopen(request, timeout=6) as response:
         return response.read().decode(response.headers.get_content_charset() or "utf-8", errors="replace")
@@ -1512,7 +1568,7 @@ def company_profile(conn: sqlite3.Connection, quote: dict) -> dict:
 
 
 class AppHandler(BaseHTTPRequestHandler):
-    server_version = "GuneyBackend/1.0"
+    server_version = "EminevimBackend/1.0"
 
     def do_OPTIONS(self) -> None:
         self.send_response(204)
@@ -1738,7 +1794,7 @@ class AppHandler(BaseHTTPRequestHandler):
         except json.JSONDecodeError:
             raise HttpError(400, "JSON okunamadı")
 
-    def read_json_or_multipart(self) -> tuple[dict, cgi.FieldStorage | None]:
+    def read_json_or_multipart(self) -> tuple[dict, MultipartForm | None]:
         if self.headers.get("Content-Type", "").startswith("multipart/form-data"):
             form = self.read_multipart()
             data = {}
@@ -1750,22 +1806,15 @@ class AppHandler(BaseHTTPRequestHandler):
             return data, form
         return self.read_json(), None
 
-    def read_multipart(self) -> cgi.FieldStorage:
+    def read_multipart(self) -> MultipartForm:
         length = int(self.headers.get("Content-Length", "0") or "0")
         if length > MAX_UPLOAD_BYTES * 4:
             raise HttpError(413, "Dosya boyutu çok büyük")
         content_type = self.headers.get("Content-Type", "")
         if not content_type.startswith("multipart/form-data"):
             raise HttpError(400, "Form tipi hatalı")
-        return cgi.FieldStorage(
-            fp=self.rfile,
-            headers=self.headers,
-            environ={
-                "REQUEST_METHOD": "POST",
-                "CONTENT_TYPE": content_type,
-                "CONTENT_LENGTH": str(length),
-            },
-        )
+        body = self.rfile.read(length)
+        return MultipartForm.parse(content_type, body)
 
     def current_session_id(self) -> str:
         cookie_header = self.headers.get("Cookie", "")
@@ -1944,7 +1993,7 @@ class AppHandler(BaseHTTPRequestHandler):
             secret = base64.b32encode(secrets.token_bytes(20)).decode("ascii").rstrip("=")
             conn.execute("UPDATE users SET two_factor_secret=?, two_factor_enabled=0 WHERE id=?", (secret, user["id"]))
             conn.commit()
-            issuer = quote_plus("Paribu Menkul Değerler")
+            issuer = quote_plus("Eminevim Yatırım")
             account = quote_plus(user["email"])
             self.json_response({"secret": secret, "otpauth_url": f"otpauth://totp/{issuer}:{account}?secret={secret}&issuer={issuer}&digits=6&period=30"})
 
@@ -2074,7 +2123,7 @@ class AppHandler(BaseHTTPRequestHandler):
                 (tc, salt, digest, full_name, phone, email, city, district, birth_date, address, risk_profile_for(suitability_score), suitability_score, now(), AGREEMENTS_VERSION, now(), now()),
             )
             user_id = cur.lastrowid
-            conn.execute("UPDATE users SET account_no=printf('PM%06d', id) WHERE id=?", (user_id,))
+            conn.execute("UPDATE users SET account_no=printf('EY%06d', id) WHERE id=?", (user_id,))
             conn.execute("INSERT INTO accounts (user_id, cash_balance, blocked_balance, credit_limit) VALUES (?, 0, 0, 0)", (user_id,))
             conn.executemany(
                 "INSERT INTO user_agreements (user_id, agreement_type, agreement_version, accepted_at, ip_address) VALUES (?, ?, ?, ?, ?)",
@@ -2109,7 +2158,7 @@ class AppHandler(BaseHTTPRequestHandler):
             self.json_response({
                 "company": company,
                 "branding": {
-                    "name": settings.get("brand_name", "PARİBU"),
+                    "name": settings.get("brand_name", "EMİNEVİM"),
                     "descriptor": settings.get("brand_descriptor", "MENKUL DEĞERLER"),
                     "symbol": settings.get("brand_symbol", "P"),
                     "logo_url": settings.get("brand_logo_url", ""),
@@ -2179,7 +2228,7 @@ class AppHandler(BaseHTTPRequestHandler):
         else:
             raise HttpError(404, "Logo bulunamadı")
 
-        request = urllib.request.Request(source_url, headers={"User-Agent": "GuneyBackend/2.0"})
+        request = urllib.request.Request(source_url, headers={"User-Agent": "EminevimBackend/2.0"})
         try:
             with urllib.request.urlopen(request, timeout=max(10.0, MARKET_TIMEOUT)) as response:
                 body = response.read(512_001)
@@ -2755,7 +2804,7 @@ class AppHandler(BaseHTTPRequestHandler):
         with connect_db() as conn:
             admin = self.require_admin(conn)
             settings = settings_map(conn)
-            active_brand_name = settings.get("brand_name", "Paribu").strip()
+            active_brand_name = settings.get("brand_name", "EMİNEVİM").strip()
             slug = re.sub(r'[^a-z0-9]+', '-', active_brand_name.lower()).strip('-') or 'investment-platform'
             audit(conn, admin["id"], f"export_project_{slug}", "system_settings", None)
             conn.commit()
@@ -2763,14 +2812,9 @@ class AppHandler(BaseHTTPRequestHandler):
         excluded_dirs = {"node_modules", ".git", "artifacts", ".gradle", "build"}
         excluded_files = {".env", ".env.local", "local.properties"}
         
-        # Identify matching APK
         matching_apk = None
-        if "zenith" in slug and (ROOT / "Zenith-Menkul-Degerler.apk").is_file():
-            matching_apk = ROOT / "Zenith-Menkul-Degerler.apk"
-        elif "aura" in slug and (ROOT / "Aura-Ozel-Yatirim.apk").is_file():
-            matching_apk = ROOT / "Aura-Ozel-Yatirim.apk"
-        elif (ROOT / "Paribu-Menkul-Degerler.apk").is_file():
-            matching_apk = ROOT / "Paribu-Menkul-Degerler.apk"
+        if (ROOT / "Eminevim-Yatirim.apk").is_file():
+            matching_apk = ROOT / "Eminevim-Yatirim.apk"
 
         export_settings = {
             key: value for key, value in settings.items()
@@ -2841,31 +2885,13 @@ class AppHandler(BaseHTTPRequestHandler):
         query = parse_qs(urlparse(self.path).query)
         brand = (query.get("brand", [""])[0]).lower()
 
-        if brand == "zenith" and (ROOT / "Zenith-Menkul-Degerler.apk").is_file():
-            apk_path = ROOT / "Zenith-Menkul-Degerler.apk"
-            filename = "Zenith-Menkul-Degerler.apk"
-        elif brand == "aura" and (ROOT / "Aura-Ozel-Yatirim.apk").is_file():
-            apk_path = ROOT / "Aura-Ozel-Yatirim.apk"
-            filename = "Aura-Ozel-Yatirim.apk"
-        elif brand == "paribu" and (ROOT / "Paribu-Menkul-Degerler.apk").is_file():
-            apk_path = ROOT / "Paribu-Menkul-Degerler.apk"
-            filename = "Paribu-Menkul-Degerler.apk"
+        if brand == "eminevim" and (ROOT / "Eminevim-Yatirim.apk").is_file():
+            apk_path = ROOT / "Eminevim-Yatirim.apk"
+            filename = "Eminevim-Yatirim.apk"
         else:
-            with connect_db() as conn:
-                settings = settings_map(conn)
-                active_brand = settings.get("brand_name", "").upper()
-            if "ZENITH" in active_brand and (ROOT / "Zenith-Menkul-Degerler.apk").is_file():
-                apk_path = ROOT / "Zenith-Menkul-Degerler.apk"
-                filename = "Zenith-Menkul-Degerler.apk"
-            elif "AURA" in active_brand and (ROOT / "Aura-Ozel-Yatirim.apk").is_file():
-                apk_path = ROOT / "Aura-Ozel-Yatirim.apk"
-                filename = "Aura-Ozel-Yatirim.apk"
-            elif (ROOT / "Paribu-Menkul-Degerler.apk").is_file():
-                apk_path = ROOT / "Paribu-Menkul-Degerler.apk"
-                filename = "Paribu-Menkul-Degerler.apk"
-            elif (ROOT / "Paribu2-debug.apk").is_file():
-                apk_path = ROOT / "Paribu2-debug.apk"
-                filename = "Paribu-Menkul-Degerler.apk"
+            if (ROOT / "Eminevim-Yatirim.apk").is_file():
+                apk_path = ROOT / "Eminevim-Yatirim.apk"
+                filename = "Eminevim-Yatirim.apk"
             else:
                 raise HttpError(404, "APK dosyasi bulunamadi. Once 'npm run android:apk' ile derleyin.")
 
@@ -2931,7 +2957,7 @@ class AppHandler(BaseHTTPRequestHandler):
                 "ok": True,
                 "service_id": service_id,
                 "service_name": service_data.get("name"),
-                "live_url": service_data.get("serviceDetails", {}).get("url") or "https://paribumenkuldeger2.onrender.com",
+                "live_url": service_data.get("serviceDetails", {}).get("url") or "https://minder-bnbv.onrender.com",
                 "status": latest_deploy.get("status", "live"),
                 "updated_at": latest_deploy.get("updatedAt"),
                 "auto_deploy": service_data.get("autoDeploy", "yes"),
@@ -2942,7 +2968,7 @@ class AppHandler(BaseHTTPRequestHandler):
             self.json_response({
                 "ok": False,
                 "error": str(e),
-                "live_url": "https://paribumenkuldeger2.onrender.com"
+                "live_url": "https://minder-bnbv.onrender.com"
             })
 
     def api_admin_render_deploy(self) -> None:
@@ -2973,13 +2999,13 @@ class AppHandler(BaseHTTPRequestHandler):
                 "message": "Render dağıtımı başarıyla tetiklendi. Birkaç dakika içinde yayında!",
                 "deploy_id": deploy_info.get("id"),
                 "status": deploy_info.get("status"),
-                "live_url": "https://paribumenkuldeger2.onrender.com"
+                "live_url": "https://minder-bnbv.onrender.com"
             })
         except Exception as e:
             self.json_response({
                 "ok": False,
                 "error": f"Render API Dağıtım Hatası: {e}",
-                "live_url": "https://paribumenkuldeger2.onrender.com"
+                "live_url": "https://minder-bnbv.onrender.com"
             }, 500)
 
     def api_admin_render_domain(self) -> None:
@@ -3297,14 +3323,14 @@ class HttpError(Exception):
         super().__init__(message)
 
 
-def field_value(form: cgi.FieldStorage, name: str) -> str:
+def field_value(form: MultipartForm, name: str) -> str:
     item = form[name] if name in form else None
     if item is None or isinstance(item, list):
         return ""
     return str(item.value or "").strip()
 
 
-def save_document(conn: sqlite3.Connection, form: cgi.FieldStorage, user_id: int, doc_type: str) -> None:
+def save_document(conn: sqlite3.Connection, form: MultipartForm, user_id: int, doc_type: str) -> None:
     item = form[doc_type] if doc_type in form else None
     if item is None or isinstance(item, list) or not getattr(item, "filename", ""):
         raise HttpError(400, f"{doc_type} dosyası gerekli")
@@ -3333,7 +3359,7 @@ def save_document(conn: sqlite3.Connection, form: cgi.FieldStorage, user_id: int
     )
 
 
-def save_money_receipt(form: cgi.FieldStorage | None, user_id: int) -> dict:
+def save_money_receipt(form: MultipartForm | None, user_id: int) -> dict:
     if form is None or "receipt" not in form:
         return {}
     item = form["receipt"]
@@ -3946,7 +3972,10 @@ def reduce_position(conn: sqlite3.Connection, user_id: int, symbol: str, quantit
 if __name__ == "__main__":
     init_db()
     server = ThreadingHTTPServer(("", PORT), AppHandler)
-    print(f"Paribu backend running at http://localhost:{PORT}")
+    print(f"EMİNEVİM backend running at http://localhost:{PORT}")
     print(f"Database: {DB_PATH}")
     server.serve_forever()
+
+
+
 

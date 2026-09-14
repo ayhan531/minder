@@ -1,6 +1,6 @@
 const { chromium, request } = require("playwright");
 
-const BASE_URL = process.env.BASE_URL || "https://paribumenkuldeger2.onrender.com";
+const BASE_URL = process.env.BASE_URL || "https://EMİNEVİMmenkuldeger2.onrender.com";
 const ADMIN_TC = process.env.ADMIN_TC;
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 const TEST_USER_TC = process.env.TEST_USER_TC;
@@ -313,7 +313,7 @@ async function runApiAudit() {
     await admin.ctx.post("/api/admin/bank-accounts", {
       data: {
         bank_name: bankName,
-        account_holder: "Guney Menkul Degerler A.S.",
+        account_holder: "Eminevim Menkul Degerler A.S.",
         iban: "TR330006100519786457841326",
         branch_name: "Audit",
         description: "Canli audit gecici hesap",
@@ -354,7 +354,7 @@ async function runUiAudit() {
   });
   page.on("pageerror", (err) => errors.push(`pageerror: ${err.message}`));
   await page.goto(`${BASE_URL}/`, { waitUntil: "networkidle" });
-  await page.waitForSelector("text=Güney", { timeout: 20000 });
+  await page.waitForSelector("text=Eminevim Yatırım", { timeout: 20000 });
   pass("ui public opens");
 
   await loginPage(page, TEST_USER_TC, TEST_USER_PASSWORD);
@@ -410,3 +410,4 @@ async function runUiAudit() {
     process.exit(1);
   }
 })();
+

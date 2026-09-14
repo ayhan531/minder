@@ -1,6 +1,6 @@
 {
-  "appId": "com.paribu.menkuldegerler",
-  "appName": "Paribu Menkul Değerler",
+  "appId": "com.EMİNEVİM.menkuldegerler",
+  "appName": "Eminevim Yatırım",
   "webDir": "dist",
   "server": {
     "androidScheme": "https",

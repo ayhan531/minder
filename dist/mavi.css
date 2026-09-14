@@ -1,8 +1,8 @@
-/* Paribu2 reference direction: bright blue mobile-first investment workspace. */
+/* eminevim2 reference direction: bright blue mobile-first investment workspace. */
 :root {
-  --paribu-blue: #075be8;
-  --paribu-blue-deep: #043fba;
-  --paribu-blue-soft: #eaf2ff;
+  --eminevim-blue: #0f6bff;
+  --eminevim-blue-deep: #05336f;
+  --eminevim-blue-soft: #e9f5ff;
 }
 
 .workspace.theme-light,
@@ -13,9 +13,9 @@
   --ui-text: #101d38;
   --ui-muted: #68748a;
   --ui-border: #e2e8f2;
-  --ui-accent: var(--paribu-blue);
-  --ui-accent-strong: var(--paribu-blue-deep);
-  --ui-accent-soft: var(--paribu-blue-soft);
+  --ui-accent: var(--eminevim-blue);
+  --ui-accent-strong: var(--eminevim-blue-deep);
+  --ui-accent-soft: var(--eminevim-blue-soft);
 }
 
 .workspace.theme-dark,
@@ -41,7 +41,7 @@
 
 .workspace .primary-button,
 .auth-shell .primary-button {
-  border-color: var(--paribu-blue);
+  border-color: var(--eminevim-blue);
   background: linear-gradient(135deg, #0868f6, #0754d5);
   color: #fff;
 }
@@ -103,8 +103,8 @@
 .page-hero,
 .cta-band,
 .footer {
-  --brand-green-strong: var(--paribu-blue);
-  --brand-green-deep: var(--paribu-blue-deep);
+  --brand-green-strong: var(--eminevim-blue);
+  --brand-green-deep: var(--eminevim-blue-deep);
 }
 
 .institutional-hero {
@@ -221,7 +221,7 @@
 
 .workspace .segmented button.active {
   background: #fff;
-  color: var(--paribu-blue);
+  color: var(--eminevim-blue);
   box-shadow: 0 2px 8px rgb(24 61 113 / 12%);
 }
 
@@ -317,7 +317,7 @@
   position: relative;
   border: 0;
   background: transparent;
-  color: var(--paribu-blue);
+  color: var(--eminevim-blue);
 }
 
 .notice-dot {
@@ -374,7 +374,7 @@
   align-items: end;
   gap: 5px;
   padding: 12px 8px 0;
-  border-bottom: 2px solid color-mix(in srgb, var(--paribu-blue) 18%, transparent);
+  border-bottom: 2px solid color-mix(in srgb, var(--eminevim-blue) 18%, transparent);
   transform: skewY(-9deg);
 }
 
@@ -424,7 +424,7 @@
   place-items: center;
   border: 2px solid currentColor;
   border-radius: 50%;
-  color: var(--paribu-blue);
+  color: var(--eminevim-blue);
 }
 
 .action-icon.buy { color: #12aa4d; }
@@ -710,7 +710,7 @@
   .workspace .bottom-nav a.active,
   .workspace .bottom-nav button.active {
     background: transparent;
-    color: var(--paribu-blue);
+    color: var(--eminevim-blue);
   }
 
   .workspace .toolbar {
@@ -2077,22 +2077,22 @@ body, button, input, select, textarea { font-family: var(--studio-font), Inter, 
 /* ==========================================================================
    PARIBU THEME STYLES (DİNAMİK FİNTECH)
    ========================================================================== */
-.theme-paribu-view {
+.theme-eminevim-view {
   background: #061942;
   color: #f8fafc;
 }
-.paribu-hero {
+.eminevim-hero {
   padding: 70px 0 60px;
   background: radial-gradient(circle at 70% 30%, rgba(0, 103, 232, 0.25), transparent 60%), #061942;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
-.paribu-hero-inner {
+.eminevim-hero-inner {
   display: grid;
   grid-template-columns: 1.2fr 1fr;
   gap: 40px;
   align-items: center;
 }
-.paribu-glow-pill {
+.eminevim-glow-pill {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -2106,25 +2106,25 @@ body, button, input, select, textarea { font-family: var(--studio-font), Inter, 
   border-radius: 999px;
   margin-bottom: 20px;
 }
-.paribu-hero-title {
+.eminevim-hero-title {
   font-size: clamp(32px, 4.5vw, 52px);
   font-weight: 900;
   line-height: 1.15;
   color: #ffffff;
   margin-bottom: 18px;
 }
-.paribu-hero-subtitle {
+.eminevim-hero-subtitle {
   font-size: 17px;
   color: #94a3b8;
   line-height: 1.6;
   margin-bottom: 30px;
 }
-.paribu-hero-buttons {
+.eminevim-hero-buttons {
   display: flex;
   gap: 14px;
   margin-bottom: 36px;
 }
-.paribu-btn-blue {
+.eminevim-btn-blue {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -2135,7 +2135,7 @@ body, button, input, select, textarea { font-family: var(--studio-font), Inter, 
   border-radius: 14px;
   box-shadow: 0 8px 24px rgba(0, 103, 232, 0.4);
 }
-.paribu-btn-ghost {
+.eminevim-btn-ghost {
   display: inline-flex;
   align-items: center;
   background: rgba(255, 255, 255, 0.06);
@@ -2145,23 +2145,23 @@ body, button, input, select, textarea { font-family: var(--studio-font), Inter, 
   padding: 14px 26px;
   border-radius: 14px;
 }
-.paribu-stats-row {
+.eminevim-stats-row {
   display: flex;
   gap: 30px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   padding-top: 24px;
 }
-.paribu-stats-row strong {
+.eminevim-stats-row strong {
   display: block;
   font-size: 20px;
   font-weight: 800;
   color: #38bdf8;
 }
-.paribu-stats-row span {
+.eminevim-stats-row span {
   font-size: 12px;
   color: #94a3b8;
 }
-.paribu-trade-card {
+.eminevim-trade-card {
   background: rgba(10, 29, 68, 0.85);
   backdrop-filter: blur(16px);
   border: 1px solid rgba(0, 103, 232, 0.35);
@@ -2260,7 +2260,7 @@ body, button, input, select, textarea { font-family: var(--studio-font), Inter, 
   color: #38bdf8;
   font-weight: 700;
 }
-.paribu-btn-trade-now {
+.eminevim-btn-trade-now {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2282,17 +2282,17 @@ body, button, input, select, textarea { font-family: var(--studio-font), Inter, 
   font-size: 11px;
   color: #94a3b8;
 }
-.paribu-trending-strip {
+.eminevim-trending-strip {
   padding: 40px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
-.paribu-stocks-grid {
+.eminevim-stocks-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 14px;
   margin-top: 18px;
 }
-.paribu-stock-item {
+.eminevim-stock-item {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
@@ -2302,12 +2302,12 @@ body, button, input, select, textarea { font-family: var(--studio-font), Inter, 
   align-items: center;
   transition: background 0.2s ease;
 }
-.paribu-stock-item:hover {
+.eminevim-stock-item:hover {
   background: rgba(0, 103, 232, 0.15);
   border-color: #0067e8;
 }
-.paribu-stock-item .stock-main strong { display: block; font-size: 15px; color: #ffffff; }
-.paribu-stock-item .stock-main small { font-size: 11px; color: #94a3b8; }
+.eminevim-stock-item .stock-main strong { display: block; font-size: 15px; color: #ffffff; }
+.eminevim-stock-item .stock-main small { font-size: 11px; color: #94a3b8; }
 .badge-tag {
   display: inline-block;
   font-size: 11px;
@@ -2317,18 +2317,76 @@ body, button, input, select, textarea { font-family: var(--studio-font), Inter, 
 }
 .badge-tag.up { background: rgba(0, 169, 107, 0.2); color: #34d399; }
 .badge-tag.down { background: rgba(239, 51, 64, 0.2); color: #f87171; }
-.paribu-card-feature {
+.eminevim-card-feature {
   background: rgba(10, 29, 68, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
   padding: 30px;
 }
-.paribu-card-feature .feature-icon {
+.eminevim-card-feature .feature-icon {
   color: #38bdf8;
   margin-bottom: 16px;
 }
-.paribu-card-feature h3 { font-size: 18px; color: #ffffff; margin-bottom: 10px; }
-.paribu-card-feature p { font-size: 14px; color: #94a3b8; line-height: 1.6; }
+.eminevim-card-feature h3 { font-size: 18px; color: #ffffff; margin-bottom: 10px; }
+.eminevim-card-feature p { font-size: 14px; color: #94a3b8; line-height: 1.6; }
+
+@media (max-width: 768px) {
+  .theme-eminevim-view,
+  .eminevim-hero,
+  .eminevim-trending-strip,
+  .eminevim-advantages-section {
+    overflow-x: hidden;
+  }
+  .eminevim-hero {
+    padding: 34px 0 42px;
+  }
+  .eminevim-hero-inner {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .eminevim-hero-title {
+    font-size: 30px;
+  }
+  .eminevim-hero-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .eminevim-btn-blue,
+  .eminevim-btn-ghost {
+    justify-content: center;
+    min-height: 54px;
+    padding: 12px 14px;
+    text-align: center;
+  }
+  .eminevim-stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .eminevim-stats-row strong {
+    font-size: 18px;
+    word-break: normal;
+  }
+  .eminevim-hero-right {
+    width: 100%;
+    min-width: 0;
+  }
+  .eminevim-trade-card {
+    width: 100%;
+    max-width: 100%;
+    padding: 18px;
+    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.26);
+  }
+  .selected-stock-row,
+  .card-top {
+    gap: 12px;
+  }
+  .stock-nm {
+    max-width: 150px;
+    white-space: normal;
+  }
+}
 
 /* ==========================================================================
    AURA THEME STYLES (PRIVATE WEALTH & FAMILY OFFICE)
@@ -2711,7 +2769,7 @@ body, button, input, select, textarea { font-family: var(--studio-font), Inter, 
   background: rgba(255, 255, 255, 0.08);
 }
 .theme-chip.zenith { border-left: 4px solid #0f52ba; }
-.theme-chip.paribu { border-left: 4px solid #0067e8; }
+.theme-chip.eminevim { border-left: 4px solid #0067e8; }
 .theme-chip.aura { border-left: 4px solid #d97706; }
 .theme-chip strong { display: block; font-size: 13px; color: #ffffff; }
 .theme-chip small { font-size: 11px; color: #94a3b8; }
@@ -2955,4 +3013,5 @@ body, button, input, select, textarea { font-family: var(--studio-font), Inter, 
   border-radius: 36px;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
 }
+
 

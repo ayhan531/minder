@@ -10,7 +10,7 @@
     history.replaceState({}, "", "/esube/giris");
   }
 
-  const KEY = "minder-native-store-v1";
+  const KEY = "Eminevim Yatırım-native-store-v1";
   const nowLabel = () => new Date().toLocaleString("tr-TR");
   const clone = (value) => JSON.parse(JSON.stringify(value));
   const quotes = [
@@ -26,7 +26,7 @@
       session: new URLSearchParams(location.search).get("native-demo") === "user" ? "user" : null,
       users: {
         user: { id: 4, role: "user", status: "approved", status_label: "Onaylandı", account_no: "MD000004", full_name: "Mert Yılmaz", email: "mert.yilmaz@example.com", phone: "05•• ••• •• 42", tc: "20000000000" },
-        admin: { id: 1, role: "admin", status: "approved", status_label: "Onaylandı", account_no: "MD000001", full_name: "Minder Admin", email: "admin@minder.local", tc: "10000000000" },
+        admin: { id: 1, role: "admin", status: "approved", status_label: "Onaylandı", account_no: "MD000001", full_name: "Eminevim Yatırım Admin", email: "admin@Eminevim Yatırım.local", tc: "10000000000" },
       },
       credentials: { "20000000000": "TestPass!2026", "10000000000": "AdminPass!2026" },
       account: { cash_balance: 123456.78, blocked_balance: 0, pending_balance: 0, credit_limit: 0 },
@@ -39,48 +39,48 @@
         { id: 1, type_label: "Açılış Bakiyesi", transaction_type: "balance_open", reference: "MD-HRK-00000001", code: "", quantity: 0, total: 123456.78, created_at_label: nowLabel() },
       ],
                                                                         branding: {
-        name: "MINDER",
-        descriptor: "OTTOMAN",
+        name: "EMİNEVİM",
+        descriptor: "YATIRIM",
         symbol: "M",
-        logo_url: "/assets/paribu-logo.svg",
+        logo_url: "/assets/eminevim-yatirim-logo.svg",
         tagline: "Referanslı yatırım deneyimi",
         primary: "#4f79d9",
         accent: "#0fbf7a",
         danger: "#ef3340",
         font: "Inter",
         radius: "18",
-        support_email: "destek@minder.local",
+        support_email: "bilgi@eminevimyatirim.com",
         support_phone: "0850 303 6000",
       },
       company: {
-        name: "Minder Ottoman",
+        name: "Eminevim Yatırım",
         registry_number: "849204",
         mersis_number: "072108920400001",
         address: "Finans Merkezi, Barbaros Mah. Ataşehir / İstanbul",
         phone: "0850 303 6000",
-        email: "destek@paribu.local",
+        email: "bilgi@eminevimyatirim.com",
         license_text: "SPK Geniş Yetkili Aracı Kurum Lisansı No: G-042/2026",
       },
       settings: {
         trading_enabled: "1",
         maintenance_mode: "0",
         t2_enabled: "0",
-        brand_name: "MINDER",
-        brand_descriptor: "OTTOMAN",
+        brand_name: "EMİNEVİM",
+        brand_descriptor: "YATIRIM",
         brand_symbol: "M",
-        brand_logo_url: "/assets/paribu-logo.svg",
+        brand_logo_url: "/assets/eminevim-yatirim-logo.svg",
         brand_tagline: "Referanslı yatırım deneyimi",
         ui_primary_color: "#4f79d9",
         ui_accent_color: "#0fbf7a",
         ui_danger_color: "#ef3340",
         ui_font_family: "Inter",
         ui_radius: "18",
-        official_company_name: "Minder Ottoman",
+        official_company_name: "Eminevim Yatırım",
         official_registry_number: "849204",
         official_mersis_number: "072108920400001",
         official_address: "Finans Merkezi, Barbaros Mah. Ataşehir / İstanbul",
         official_phone: "0850 303 6000",
-        official_email: "destek@paribu.local",
+        official_email: "bilgi@eminevimyatirim.com",
         official_license_text: "SPK Geniş Yetkili Aracı Kurum Lisansı No: G-042/2026",
       },
       nextId: 10,
@@ -132,7 +132,7 @@
       account: clone(store.account), positions: hydratedPositions(store), orders: clone(store.orders),
       money_requests: clone(store.money_requests), transactions: clone(store.transactions), t2_settlements: clone(store.t2_settlements),
       settlement_settings: { t2_enabled: false },
-      system_bank_accounts: [{ id: 1, bank_name: "Minder Demo Bankası", account_holder: "Minder Ottoman", iban: "TR330006100519786457841326", branch_name: "Dijital Şube", description: "Demo transfer hesabı", is_active: 1 }],
+      system_bank_accounts: [{ id: 1, bank_name: "Eminevim Yatırım Demo Bankası", account_holder: "Eminevim Yatırım", iban: "TR330006100519786457841326", branch_name: "Dijital Şube", description: "Demo transfer hesabı", is_active: 1 }],
     };
   }
   function orderLabels(order) {
@@ -143,7 +143,7 @@
     return { ...request, type_label: labels[request.request_type], status_label: request.status === "pending" ? "Bekliyor" : request.status === "approved" ? "Onaylandı" : "İptal" };
   }
 
-  window.__paribuNativeApi = async function nativeApi(path, options = {}) {
+  window.__EMİNEVİMNativeApi = async function nativeApi(path, options = {}) {
     const store = load();
     const method = String(options.method || "GET").toUpperCase();
     const body = payload(options);
@@ -181,7 +181,7 @@
       return { quote, profile: { sector: "Borsa İstanbul", industry: "Halka Açık Şirket", description: `${quote.name} şirket özeti.` }, history: Array.from({ length: 24 }, (_, index) => ({ price: quote.price * (.94 + index * .005 + Math.sin(index) * .01), recorded_at_label: `${index + 1}:00` })), news: [], disclosures: [] };
     }
     if (route === "/api/profile/security") { requireUser(store); return { two_factor_enabled: false, sessions: [{ id: "native", current: true, ip_address: "Yerel APK", last_seen_at_label: nowLabel() }], documents: [] }; }
-    if (route.startsWith("/api/profile/")) { requireUser(store); return { ok: true, message: "İşlem tamamlandı", secret: "PARIBU2DEMO", otpauth_url: "otpauth://totp/Paribu2" }; }
+    if (route.startsWith("/api/profile/")) { requireUser(store); return { ok: true, message: "İşlem tamamlandı", secret: "EMINEVIM2DEMO", otpauth_url: "otpauth://totp/EMİNEVİM2" }; }
     if (route === "/api/portfolio") { requireUser(store); return portfolio(store); }
     if (route === "/api/orders" && method === "GET") { requireUser(store); return { orders: store.orders.map(orderLabels) }; }
     if (route === "/api/orders" && method === "POST") {
@@ -251,3 +251,6 @@
     return {};
   };
 })();
+
+
+

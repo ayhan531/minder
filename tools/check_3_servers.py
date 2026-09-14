@@ -7,7 +7,7 @@ if hasattr(sys.stdout, "reconfigure"):
 
 servers = [
     ("Zenith", "http://localhost:5001"),
-    ("Paribu", "http://localhost:5002"),
+    ("EMİNEVİM", "http://localhost:5002"),
     ("Aura",   "http://localhost:5003")
 ]
 
@@ -29,3 +29,4 @@ for name, base in servers:
         print(f"[ERROR] {name} ({base}): {e}")
 
 print("===========================================")
+

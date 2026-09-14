@@ -15,7 +15,7 @@ BASE = os.getenv("AUDIT_BASE", "http://localhost:4173")
 ROOT = Path(__file__).resolve().parents[1]
 IMG = ROOT / "6623161b5735463242da489b96c9120e.jpg"
 OUT = ROOT / "audit-current" / "full-endpoint-audit.json"
-AUDIT_DB = Path(os.getenv("AUDIT_DB_PATH", ROOT / "data" / "guney.db"))
+AUDIT_DB = Path(os.getenv("AUDIT_DB_PATH", ROOT / "data" / "Eminevim.db"))
 
 
 def bootstrap_admin() -> tuple[str, str]:
@@ -115,7 +115,7 @@ def register_user(opener, label: str):
 
 
 def live_bundle_map() -> dict:
-    path = ROOT / "audit-live" / "guney-esube-app.js"
+    path = ROOT / "audit-live" / "Eminevim-esube-app.js"
     text = path.read_text(encoding="utf-8", errors="ignore") if path.exists() else ""
     checks = [
         "/stocks",
@@ -268,7 +268,7 @@ def main() -> None:
             admin,
             "POST",
             "/api/admin/bank-accounts",
-            {"bank_name": "Audit Bank", "account_holder": "Guney Menkul Degerler", "iban": "TR330006100519786457841326", "branch_name": "Audit", "description": "Endpoint audit hesabi", "is_active": "1", "sort_order": 99},
+            {"bank_name": "Audit Bank", "account_holder": "Eminevim Menkul Degerler", "iban": "TR330006100519786457841326", "branch_name": "Audit", "description": "Endpoint audit hesabi", "is_active": "1", "sort_order": 99},
         )
         bank_id = max(item["id"] for item in bank["bank_accounts"] if item["bank_name"] == "Audit Bank")
 
@@ -367,4 +367,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
 

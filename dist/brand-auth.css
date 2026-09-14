@@ -1,11 +1,11 @@
-.paribu-auth.auth-shell-v2 {
+.eminevim-auth.auth-shell-v2 {
   min-height: 100dvh;
   padding: 24px;
   background: #041535;
   color: #fff;
 }
 
-.paribu-login-frame {
+.eminevim-login-frame {
   display: grid;
   width: min(404px, 100%);
   min-height: min(760px, calc(100dvh - 48px));
@@ -17,7 +17,7 @@
   box-shadow: 0 28px 80px rgba(0, 5, 20, .36);
 }
 
-.paribu-security-note {
+.eminevim-security-note {
   display: inline-flex;
   align-items: center;
   justify-self: center;
@@ -33,21 +33,22 @@
   text-transform: uppercase;
 }
 
-.paribu-auth .mobile-login-brand { margin-bottom: 30px; }
-.paribu-auth .mobile-login-brand > div { display: grid; justify-items: center; }
-.paribu-auth .auth-brand-logo { width: 74px; height: 74px; margin-bottom: 16px; }
-.paribu-auth .mobile-login-brand strong { color: #fff; font-size: 23px; letter-spacing: .1em; }
-.paribu-auth .mobile-login-brand span { margin-top: 4px; color: #00d58a; font-size: 9px; font-weight: 800; letter-spacing: .2em; }
-.paribu-auth .mobile-login-brand p { margin-top: 20px; color: #dbe8ff; font-size: 15px; }
-.paribu-auth .auth-input > span:first-child { color: #b7c7e4; }
-.paribu-auth .auth-input input,
-.paribu-auth .auth-input .password-wrap input { border-color: rgba(185, 210, 255, .24); border-radius: 11px; background: #0a255b; }
-.paribu-auth .auth-input input:focus { border-color: #408dff; box-shadow: 0 0 0 3px rgba(45, 125, 255, .2); }
-.paribu-auth .login-submit { border-radius: 11px; background: #0b6ef3 !important; }
-.paribu-auth .login-submit:hover { background: #2680f5 !important; transform: translateY(-1px); }
-.paribu-auth .biometric-button { color: #c7d8f5; }
+.eminevim-auth .mobile-login-brand { margin-bottom: 30px; }
+.eminevim-auth .mobile-login-brand > div { display: grid; justify-items: center; }
+.eminevim-auth .auth-brand-logo { width: 74px; height: 74px; margin-bottom: 16px; }
+.eminevim-auth .mobile-login-brand strong { color: #fff; font-size: 23px; letter-spacing: .1em; }
+.eminevim-auth .mobile-login-brand span { margin-top: 4px; color: #00d58a; font-size: 9px; font-weight: 800; letter-spacing: .2em; }
+.eminevim-auth .mobile-login-brand p { margin-top: 20px; color: #dbe8ff; font-size: 15px; }
+.eminevim-auth .auth-input > span:first-child { color: #b7c7e4; }
+.eminevim-auth .auth-input input,
+.eminevim-auth .auth-input .password-wrap input { border-color: rgba(185, 210, 255, .24); border-radius: 11px; background: #0a255b; }
+.eminevim-auth .auth-input input:focus { border-color: #408dff; box-shadow: 0 0 0 3px rgba(45, 125, 255, .2); }
+.eminevim-auth .login-submit { border-radius: 11px; background: #0b6ef3 !important; }
+.eminevim-auth .login-submit:hover { background: #2680f5 !important; transform: translateY(-1px); }
+.eminevim-auth .biometric-button { color: #c7d8f5; }
 
 @media (max-width: 620px) {
-  .paribu-auth.auth-shell-v2 { padding: 0; }
-  .paribu-login-frame { width: 100%; min-height: 100dvh; padding: 34px 24px 22px; border: 0; border-radius: 0; box-shadow: none; }
+  .eminevim-auth.auth-shell-v2 { padding: 0; }
+  .eminevim-login-frame { width: 100%; min-height: 100dvh; padding: 34px 24px 22px; border: 0; border-radius: 0; box-shadow: none; }
 }
+
