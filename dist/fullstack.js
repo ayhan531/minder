@@ -672,7 +672,7 @@ function publicHeader() {
     ["SSS", "/sss"],
     ["İletişim", "/iletisim"],
   ];
-  return `${marketRail()}<header class="site-header ${state.publicMenuOpen ? "open" : ""}"><div class="container site-header-inner">
+  return `<header class="site-header ${state.publicMenuOpen ? "open" : ""}"><div class="container site-header-inner">
     <a href="/" data-link class="brand" aria-label="Eminevim Yatırım ana sayfa">${brandLockup()}</a>
     <div class="public-nav-panel"><nav class="site-nav">${nav.map(([label, href]) => `<a href="${href}" data-link class="${state.path === href ? "active" : ""}">${label}</a>`).join("")}</nav>
     <div class="header-actions"><a href="/esube/giris" data-link class="ghost-button">Giriş Yap</a><a href="/esube/giris?mode=register" data-link class="primary-button">Kayıt Ol</a></div></div>
@@ -706,7 +706,7 @@ function renderLegacyHomeA() {
     { code: "ZGF", name: "Eminevim Yatırım Kıymetli Madenler & Altın Sepeti", yield: "%74.8", risk: "Enflasyon Korumalı", desc: "Fiziki saklama güvenceli altın, gümüş ve kıymetli maden fonu." },
     { code: "ZDF", name: "Eminevim Yatırım Serbest Döviz & Eurobond Fonu", yield: "%11.8 $", risk: "Döviz Getirili", desc: "T.C. Hazine Müsteşarlığı ve birinci sınıf kurumsal Eurobond varlıkları." }
   ];
-  return `<main class="public-main theme-Eminevim Yatırım-view">
+  return `<main class="public-main theme-eminevim-view">
     <section class="eminevim-hero">
       <div class="container Eminevim Yatırım-hero-inner">
         <div class="eminevim-hero-badge"><span class="live-dot"></span> TİER-1 GENİŞ YETKİLİ ARACI KURUM · SPK LİSANS NO: Z-088</div>
@@ -802,101 +802,46 @@ function renderEMİNEVİMHome() {
   const brand = state.publicConfig?.branding || {};
   const heroQuotes = state.market.filter((item) => (item.asset_class || "stock") === "stock").slice(0, 8);
   const q0 = heroQuotes[0] || { symbol: "THYAO", name: "Türk Hava Yolları", price: 312.50, change_pct: 2.45 };
+  const miniQuotes = heroQuotes.slice(0, 5);
   return `<main class="public-main theme-eminevim-view">
     <section class="eminevim-hero">
       <div class="container eminevim-hero-inner">
-        <div class="eminevim-hero-left">
-          <span class="eminevim-glow-pill">⚡ YENİ NESİL DİJİTAL BORSA &amp; YATIRIM</span>
-          <h1 class="eminevim-hero-title">Borsaya Hızlı, Güçlü ve Kesintisiz Bağlan</h1>
-          <p class="eminevim-hero-subtitle">Borsa İstanbul hisselerinde sıfır gecikmeli kotasyon, akıllı al/sat emirleri ve anında takas ile yatırımın tadını çıkarın.</p>
+        <div class="eminevim-hero-copy">
+          <span class="eminevim-kicker">E-ŞUBE DENEYİMİ</span>
+          <h1>Eminevim Yatırım</h1>
+          <p>APK ekranındaki portföy, piyasa ve işlem akışını web üzerinde aynı sade mavi ton, aynı okunaklı kart yapısı ve aynı mobil öncelikli düzenle kullanın.</p>
           <div class="eminevim-hero-buttons">
-            <a href="/esube/giris?mode=register" data-link class="eminevim-btn-blue">Hesap Oluştur ${icon("arrow", 18)}</a>
-            <a href="/esube/giris" data-link class="eminevim-btn-ghost">E-Şubeye Giriş</a>
-          </div>
-          <div class="eminevim-stats-row">
-            <div><strong>0 Gecikme</strong><span>Canlı BIST Kotasyonu</span></div>
-            <div><strong>Binde 1</strong><span>Düşük Komisyon</span></div>
-            <div><strong>Anında</strong><span>Nakit Yükleme &amp; Çekim</span></div>
+            <a href="/esube/giris" data-link class="eminevim-primary">E-Şubeye Giriş ${icon("arrow", 17)}</a>
+            <a href="/esube/giris?mode=register" data-link class="eminevim-secondary">Hesap Oluştur</a>
           </div>
         </div>
-        <div class="eminevim-hero-right">
-          <div class="eminevim-trade-card">
-            <div class="card-top">
-              <span class="badge-live"><span class="blink-dot"></span> BIST CANLI PİYASA</span>
-              <span class="brand-code">${brand.name || "EMİNEVİM"}</span>
-            </div>
-            <div class="selected-stock-row">
-              <div class="stock-id">
-                <span class="stock-sym">${esc(q0.symbol)}</span>
-                <span class="stock-nm">${esc(q0.name)}</span>
-              </div>
-              <div class="stock-val">
-                <strong>${money(q0.price)}</strong>
-                <span class="stock-chg ${q0.change_pct >= 0 ? "up" : "down"}">${q0.change_pct >= 0 ? "+" : ""}${number(q0.change_pct)}%</span>
-              </div>
-            </div>
-            <div class="trade-tabs-pill">
-              <button class="active">Hızlı Alış</button>
-              <button>Hızlı Satış</button>
-            </div>
-            <div class="quick-input-group">
-              <label>İşlem Tutarı (TL)</label>
-              <div class="input-wrap">
-                <input type="text" value="10.000 TL" readonly />
-                <span class="approx">≈ ${Math.floor(10000 / (q0.price || 100))} Adet</span>
-              </div>
-            </div>
-            <a href="/esube/giris" data-link class="eminevim-btn-trade-now">Tek Tıkla Hisse Al ${icon("arrow", 16)}</a>
-            <div class="secure-label">${icon("shield", 14)} SPK ve Takasbank Güvencesiyle</div>
+        <div class="eminevim-app-preview" aria-label="Eminevim Yatırım e-şube önizlemesi">
+          <div class="preview-top">
+            <span class="preview-avatar">is</span>
+            <span class="preview-logo"><img src="/assets/eminevim-yatirim-logo.svg" alt="" /> Eminevim Yatırım</span>
+            <span class="preview-icons">${icon("bell", 21)}${icon("moon", 21)}</span>
+          </div>
+          <div class="preview-search">${icon("search", 20)} <span>Ara</span></div>
+          <div class="preview-tabs"><span class="active">BIST Tüm</span><span>BIST 100</span><span>Halka Arz</span><span>Fonlar</span><span>Döviz</span></div>
+          <div class="preview-card">
+            <button type="button" aria-label="Bakiyeyi gizle">${icon("eye", 17)}</button>
+            <span>Portföy özeti</span>
+            <strong>${money(192300)}</strong>
+            <small>+₺7.432,50 (%4,63) toplam kâr</small>
+            <div class="preview-card-bottom"><span>Kullanılabilir<b>₺24.200,00</b></span><span>T+2 Bakiye<b>₺24.200,00</b></span><i>%84</i></div>
+          </div>
+          <div class="preview-actions"><a href="/esube/giris" data-link>Pozisyonlar</a><a href="/esube/giris" data-link>Emirler</a><a href="/esube/giris" data-link>Geçmiş</a></div>
+          <div class="preview-list">
+            ${miniQuotes.map((q) => `<a href="/esube/giris" data-link><span><b>${esc(q.symbol)}</b><small>${esc(q.name)}</small></span><strong>${money(q.price)}</strong><em class="${q.change_pct >= 0 ? "up" : "down"}">${q.change_pct >= 0 ? "+" : ""}${number(q.change_pct)}%</em></a>`).join("")}
           </div>
         </div>
       </div>
     </section>
-
-    <!-- EMİNEVİM Trending Stocks Strip -->
-    <section class="eminevim-trending-strip">
+    <section class="eminevim-feature-strip">
       <div class="container">
-        <div class="trending-head">
-          <span class="kicker">Piyasa Nabzı</span>
-          <h2>En Çok İşlem Gören Hisseler</h2>
-        </div>
-        <div class="eminevim-stocks-grid">
-          ${heroQuotes.slice(0, 6).map((q) => `
-            <a href="/esube/giris" data-link class="eminevim-stock-item">
-              <div class="stock-main">
-                <strong>${esc(q.symbol)}</strong>
-                <small>${esc(q.name)}</small>
-              </div>
-              <div class="stock-numbers">
-                <b>${money(q.price)}</b>
-                <span class="badge-tag ${q.change_pct >= 0 ? "up" : "down"}">${q.change_pct >= 0 ? "+" : ""}${number(q.change_pct)}%</span>
-              </div>
-            </a>
-          `).join("")}
-        </div>
-      </div>
-    </section>
-
-    <!-- EMİNEVİM 4 FinTech Advantages -->
-    <section class="section eminevim-advantages-section">
-      <div class="container">
-        <div class="grid grid-3">
-          <div class="eminevim-card-feature">
-            <div class="feature-icon">${icon("activity", 28)}</div>
-            <h3>Yüksek Hızlı Emir Motoru</h3>
-            <p>Milisaniyeler içinde Borsa İstanbul işlem sistemine iletilen piyasa ve limit emirleri.</p>
-          </div>
-          <div class="eminevim-card-feature">
-            <div class="feature-icon">${icon("bank", 28)}</div>
-            <h3>7/24 Kesintisiz Para Transferi</h3>
-            <p>Anlaşmalı bankalardan saniyeler içinde hesabınıza yansıyan FAST/Havale altyapısı.</p>
-          </div>
-          <div class="eminevim-card-feature">
-            <div class="feature-icon">${icon("lock", 28)}</div>
-            <h3>Kurumsal Güvenlik ve Oturum Koruması</h3>
-            <p>Şifre, cihaz oturumu ve bildirim kontrolleriyle hesabınızı güvenli şekilde yönetin.</p>
-          </div>
-        </div>
+        <article>${icon("wallet", 22)}<strong>Portföy kartı</strong><span>APK ile aynı kart mantığı, daha net mavi ton.</span></article>
+        <article>${icon("chart", 22)}<strong>Piyasa sekmeleri</strong><span>Kaymayan tab bar ve hızlı kategori geçişleri.</span></article>
+        <article>${icon("user", 22)}<strong>Referans akışı</strong><span>Profil, bildirim ve referans fırsatları tek yerde.</span></article>
       </div>
     </section>
   </main>`;
@@ -905,11 +850,11 @@ function renderEMİNEVİMHome() {
 function renderLegacyHomeB() {
   const brand = state.publicConfig?.branding || {};
   const heroQuotes = state.market.filter((item) => (item.asset_class || "stock") === "stock").slice(0, 6);
-  return `<main class="public-main theme-Eminevim Yatırım-view">
+  return `<main class="public-main theme-eminevim-view">
     <section class="eminevim-hero">
       <div class="container Eminevim Yatırım-hero-inner">
         <div class="eminevim-crest">
-          <img src="/assets/Eminevim Yatırım-logo.svg" alt="Eminevim Yatırım Crest" class="eminevim-hero-logo" />
+          <img src="/assets/eminevim-yatirim-logo.svg" alt="Eminevim Yatırım Crest" class="eminevim-hero-logo" />
         </div>
         <span class="eminevim-eyebrow">ÖZEL VARLIK YÖNETİMİ &amp; AİLE OFİSİ</span>
         <h1 class="eminevim-title">Eminevim Yatırım ÖZEL PORTFÖY &amp; YATIRIM</h1>
@@ -3238,6 +3183,7 @@ setInterval(async () => {
   }
 }, 45000);
 route();
+
 
 
 
