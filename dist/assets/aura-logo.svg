@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="auraBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="50%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#090d16" />
+    </linearGradient>
+    <linearGradient id="auraGold1" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#b45309" />
+      <stop offset="45%" stop-color="#d97706" />
+      <stop offset="70%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#fef08a" />
+    </linearGradient>
+    <linearGradient id="auraGold2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a" />
+      <stop offset="30%" stop-color="#fbbf24" />
+      <stop offset="70%" stop-color="#d97706" />
+      <stop offset="100%" stop-color="#78350f" />
+    </linearGradient>
+    <linearGradient id="auraDiamond" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="60%" stop-color="#fef08a" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+    <filter id="goldGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="16" flood-color="#d97706" flood-opacity="0.35" />
+    </filter>
+  </defs>
+
+  <!-- Container -->
+  <rect width="512" height="512" rx="112" fill="url(#auraBg)" />
+  <rect width="504" height="504" x="4" y="4" rx="108" fill="none" stroke="url(#auraGold1)" stroke-width="2.5" opacity="0.4" />
+
+  <!-- Luxury Geometric A Monogram -->
+  <g filter="url(#goldGlow)">
+    <!-- Left Leg of A -->
+    <path d="M 256 96 L 128 392 L 194 392 L 256 244 L 284 310 L 220 310 L 208 340 L 300 340 L 322 392 L 384 392 Z" fill="url(#auraGold1)" />
+
+    <!-- Right Facet of A -->
+    <path d="M 256 96 L 256 244 L 284 310 L 348 310 L 384 392 L 322 392 L 300 340 L 256 340 L 256 392 L 256 392 Z" fill="url(#auraGold2)" opacity="0.95" />
+
+    <!-- Apex Diamond Jewel -->
+    <polygon points="256,120 274,168 256,216 238,168" fill="url(#auraDiamond)" />
+  </g>
+</svg>

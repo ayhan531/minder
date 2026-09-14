@@ -1,0 +1,34 @@
+services:
+  - type: web
+    runtime: python
+    name: minder-ottoman-web
+    buildCommand: python --version && python -m py_compile tools/backend_server.py
+    startCommand: python tools/backend_server.py
+    healthCheckPath: /healthz
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.15
+      - key: DATA_DIR
+        value: /var/data
+      - key: PORT
+        value: "5002"
+      - key: PUBLIC_BASE_URL
+        sync: false
+      - key: ADMIN_TC
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: REQUIRE_LIVE_MARKET_FOR_TRADING
+        value: "1"
+      - key: ALLOW_PRICE_SIMULATION
+        value: "0"
+      - key: OFFICIAL_COMPANY_NAME
+        value: "Minder Ottoman"
+      - key: OFFICIAL_EMAIL
+        value: "destek@minder.local"
+      - key: OFFICIAL_PHONE
+        value: "0850 303 6000"
+    disk:
+      name: minder-ottoman-data
+      mountPath: /var/data
+      sizeGB: 1

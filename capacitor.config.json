@@ -1,0 +1,13 @@
+{
+  "appId": "com.paribu.menkuldegerler",
+  "appName": "Paribu Menkul Değerler",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https",
+    "cleartext": true
+  },
+  "android": {
+    "allowMixedContent": true,
+    "backgroundColor": "#061942"
+  }
+}

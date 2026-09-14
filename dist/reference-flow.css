@@ -1,0 +1,714 @@
+@font-face {
+  font-family: 'Dancing Script';
+  src: url('/assets/fonts/DancingScript.ttf') format('truetype');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+/* Minder Ottoman Web Custom Flow Styles */
+.workspace{--rf-accent:var(--studio-primary,#0067e8);--rf-green:var(--studio-accent,#00a96b);--rf-red:var(--studio-danger,#ef3340);--rf-ink:#12203b;--rf-muted:#73809a;--rf-line:#e6ebf3;--rf-card:#fff;--rf-bg:#f5f7fb;background:var(--rf-bg)}
+.theme-dark.workspace{--rf-ink:#f5f7fb;--rf-muted:#aab4c8;--rf-line:#29354b;--rf-card:#162137;--rf-bg:#0c1424}
+.rf-dashboard,.rf-stocks,.rf-portfolio,.rf-history,.rf-profile{max-width:1180px;margin:0 auto;padding:22px;animation:rf-enter .45s cubic-bezier(.2,.75,.25,1) both}.rf-pulse,.rf-market-block,.rf-summary-card,.rf-financial,.rf-tab-body,.rf-profile-links{background:var(--rf-card);border:1px solid var(--rf-line);border-radius:22px;box-shadow:0 12px 38px rgba(24,41,72,.06)}
+.rf-pulse{display:grid;grid-template-columns:minmax(170px,.7fr) 1.4fr minmax(180px,.6fr);align-items:center;gap:28px;padding:28px}.rf-pulse>div:first-child{display:grid;gap:5px}.rf-pulse span,.rf-summary-grid span,.rf-financial span{color:var(--rf-muted)}.rf-pulse strong{font-size:34px;color:var(--rf-ink)}.rf-pulse-chart{height:90px}.rf-breadth{display:grid;gap:8px}.rf-breadth b{font-size:14px}.rf-market-block{padding:22px;margin-top:20px;overflow:hidden}.rf-market-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.rf-section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.rf-section-head h2{margin:0;color:var(--rf-ink);font-size:20px}.rf-section-head a{color:var(--rf-accent);font-weight:700;text-decoration:none;font-size:13px}.rf-stock-row{width:100%;border:0;border-top:1px solid var(--rf-line);background:transparent;padding:14px 4px;display:grid;grid-template-columns:minmax(150px,1.3fr) minmax(85px,.55fr) minmax(80px,.5fr);align-items:center;gap:14px;text-align:left;cursor:pointer;transition:.2s}.rf-stock-row:hover{transform:translateX(3px);background:color-mix(in srgb,var(--rf-accent) 4%,transparent)}.rf-stock-price{display:grid;text-align:right;color:var(--rf-ink)}.rf-stock-price small{font-weight:700}.rf-spark{height:36px}.rf-stock-tools{display:flex;gap:12px;margin-bottom:16px}.rf-stock-tools label{flex:1;background:var(--rf-card);border:1px solid var(--rf-line);border-radius:14px;display:flex;align-items:center;padding:0 14px}.rf-stock-tools input,.rf-stock-tools select,.rf-stock-tools label input{border:0;background:transparent;color:var(--rf-ink);padding:14px;width:100%;outline:0}.rf-stock-tools select{width:auto;background:var(--rf-card);border:1px solid var(--rf-line);border-radius:14px;padding:0 18px}.rf-trade-modal{max-width:460px;padding:0;overflow:hidden}.rf-trade-modal>header{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;padding:20px;border-bottom:1px solid var(--rf-line)}.rf-live-price{display:grid;text-align:right}.rf-trade-modal form{padding:18px 20px 22px;display:grid;gap:14px}.rf-trade-tabs,.rf-order-types,.rf-percentages,.rf-tabs{display:flex;gap:6px}.rf-trade-tabs button,.rf-order-types button,.rf-percentages button,.rf-tabs button{flex:1;border:0;border-radius:10px;padding:11px;background:#eef2f7;color:var(--rf-muted);font-weight:800;cursor:pointer;transition:all .2s ease}.rf-trade-tabs .active.buy,.rf-tabs .active{background:color-mix(in srgb,var(--rf-accent) 13%,white);color:var(--rf-accent)}.rf-trade-tabs .active.sell{background:#fff0f2;color:var(--rf-red)}.rf-order-types select{position:absolute;opacity:0;pointer-events:none}.rf-trade-field{display:grid;gap:7px;color:var(--rf-muted);font-weight:700}.rf-trade-field>span{display:flex;justify-content:space-between}.rf-trade-field>span:last-child{border:1px solid var(--rf-line);border-radius:12px;padding:0 12px;background:var(--rf-card)}.rf-trade-field input{width:100%;border:0;background:transparent;padding:13px 0;font-size:17px;outline:0;color:var(--rf-ink)}.rf-trade-field em{align-self:center;font-style:normal}.rf-available,.rf-total{display:flex;justify-content:space-between;gap:12px;padding:12px 0;color:var(--rf-muted)}.rf-available strong,.rf-total strong{color:var(--rf-ink);text-align:right}.rf-total{border-top:1px solid var(--rf-line);font-size:18px}.rf-risk{text-align:center;color:var(--rf-muted)}.rf-summary-card{padding:24px}.rf-summary-card h2,.rf-financial h3{margin:0 0 18px;color:var(--rf-ink)}.rf-summary-grid,.rf-financial>div{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.rf-summary-grid span,.rf-financial span{display:grid;gap:7px;padding:16px;background:var(--rf-bg);border-radius:14px}.rf-summary-grid strong,.rf-financial strong{font-size:18px;color:var(--rf-ink)}.rf-portfolio>.rf-tabs,.rf-history>.rf-tabs{margin:18px 0}.rf-tab-body{overflow:hidden}.rf-position>div:last-child{display:flex;justify-content:space-between;padding:0 18px 14px;color:var(--rf-muted)}.rf-history-count{margin:0 0 10px;color:var(--rf-muted);font-weight:700}.rf-profile{max-width:760px}.rf-profile-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}.rf-profile-actions button{border:1px solid var(--rf-line);border-radius:16px;background:var(--rf-card);padding:18px;color:var(--rf-accent);font-weight:800;display:flex;gap:10px;justify-content:center}.rf-financial{padding:22px;margin:16px 0}.rf-financial>div{grid-template-columns:1fr 1fr}.rf-profile-links{overflow:hidden}.rf-profile-links .reference-menu-link{border-top:1px solid var(--rf-line)}
+@keyframes rf-enter{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+@media(max-width:860px){.rf-dashboard,.rf-stocks,.rf-portfolio,.rf-history,.rf-profile{padding:12px 14px 100px}.rf-mobile-header{padding:12px 16px;display:flex;align-items:center;justify-content:space-between}.rf-mobile-header.home{align-items:center}.rf-mobile-header h1{font-size:22px;line-height:1.05}.rf-pulse{grid-template-columns:1fr 1fr;padding:18px;gap:12px;border-radius:18px}.rf-pulse-chart{height:68px}.rf-breadth{grid-column:1/-1;grid-template-columns:1fr auto auto;border-top:1px solid var(--rf-line);padding-top:12px}.rf-pulse strong{font-size:26px}.rf-market-grid{grid-template-columns:1fr;gap:0}.rf-market-block{margin-top:14px;padding:16px;border-radius:18px}.rf-stock-row{grid-template-columns:minmax(125px,1.2fr) minmax(74px,.6fr) 74px;padding:13px 0;gap:8px}.rf-stock-row .market-identity small{max-width:125px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rf-spark{height:32px}.rf-summary-grid{grid-template-columns:1fr 1fr}.rf-summary-card{padding:18px}.rf-profile{padding-top:6px}.rf-trade-modal{width:calc(100% - 24px);max-height:92vh;overflow:auto}.rf-percentages{flex-wrap:wrap}.rf-percentages button{min-width:17%;padding:9px 4px}.rf-bottom-nav a span{font-size:10px}.app-main{padding-bottom:84px}}
+@media(min-width:861px){.rf-dashboard>.rf-market-block{margin-top:22px}.rf-mobile-header{display:none}}
+@media(prefers-reduced-motion:reduce){.rf-dashboard,.rf-stocks,.rf-portfolio,.rf-history,.rf-profile{animation:none}.rf-stock-row{transition:none}}
+@media(max-width:860px){.workspace{overflow-x:hidden}.rf-breadth{grid-template-columns:1fr 1fr}.rf-breadth>span{grid-column:1/-1}.rf-breadth b:last-child{text-align:right}}
+@media(max-width:420px){.rf-pulse{grid-template-columns:1fr}.rf-pulse-chart{display:none}.rf-breadth{grid-column:1}.rf-stock-row{grid-template-columns:minmax(118px,1fr) 78px 68px}.rf-stock-row .market-identity small{max-width:112px}}
+.modal-backdrop{z-index:2200}.bottom-nav{z-index:1200}
+
+/* Header Styles & Ottoman Script */
+.ottoman-script-title {
+  font-family: 'Dancing Script', cursive, 'Brush Script MT', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: #3b71ca;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 10px rgba(59, 113, 202, 0.15);
+  display: inline-block;
+  user-select: none;
+}
+.theme-dark .ottoman-script-title {
+  color: #6ea8fe;
+  text-shadow: 0 2px 12px rgba(110, 168, 254, 0.25);
+}
+
+.rf-mobile-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.rf-header-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #eef2f7;
+  color: #2b4c7e;
+  font-weight: 700;
+  font-size: 14px;
+  display: grid;
+  place-items: center;
+  border: 1.5px solid #d8e2ee;
+  cursor: pointer;
+  overflow: hidden;
+  padding: 0;
+  flex-shrink: 0;
+}
+.theme-dark .rf-header-avatar {
+  background: #1c273c;
+  color: #a5c2eb;
+  border-color: #2d3e5c;
+}
+.rf-header-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.rf-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.rf-admin-badge-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #0fbf7a;
+  color: #fff;
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 2px 8px rgba(15, 191, 122, 0.25);
+}
+
+/* Category horizontal scrolling bar */
+.rf-category-tabs {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  margin: 6px 0 14px;
+  padding: 0 4px 4px;
+}
+.rf-category-tabs::-webkit-scrollbar { display: none; }
+.rf-category-tabs button {
+  flex: 0 0 auto;
+  min-width: max-content;
+  border: 0;
+  border-bottom: 2.5px solid transparent;
+  background: transparent;
+  color: var(--rf-muted);
+  padding: 8px 6px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+}
+.rf-category-tabs button.active {
+  color: var(--rf-accent);
+  border-bottom-color: var(--rf-accent);
+}
+.referral-alert {
+  border-radius: 14px;
+  margin-bottom: 12px;
+}
+
+/* Portfolio Card Carousel & Dark Navy Gradient */
+.rf-carousel-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 20px;
+  margin-bottom: 8px;
+}
+.rf-carousel-track {
+  display: flex;
+  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+  width: 200%;
+}
+.rf-carousel-slide {
+  width: 50%;
+  flex-shrink: 0;
+}
+.rf-slider-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin: 10px 0 14px;
+}
+.rf-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #cbd5e1;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  border: 0;
+  padding: 0;
+}
+.theme-dark .rf-dot { background: #334155; }
+.rf-dot.active {
+  background: #2563eb;
+  width: 18px;
+  border-radius: 999px;
+}
+
+.bank-card {
+  position: relative;
+  min-height: 205px;
+  aspect-ratio: 1.62 / 1;
+  max-height: 235px;
+  overflow: hidden;
+  background: linear-gradient(140deg, #2b4f8d 0%, #1a386d 55%, #10254b 100%);
+  color: #fff;
+  border: 0;
+  border-radius: 18px;
+  box-shadow: 0 14px 28px rgba(16, 37, 75, 0.3);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.bank-card h2,
+.bank-card .portfolio-total,
+.bank-card .rf-summary-grid strong,
+.bank-card .rf-summary-grid span { color: #fff; }
+.bank-card h2 {
+  margin: 0 0 6px;
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0.88;
+}
+.portfolio-total {
+  display: block;
+  font-size: clamp(26px, 6.5vw, 36px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+}
+.bank-card > small,
+.bank-card .rf-profit-sub {
+  display: block;
+  margin-top: 4px;
+  font-weight: 700;
+  font-size: 13px;
+  color: #6ee7b7;
+}
+.bank-card .rf-profit-sub.down { color: #fca5a5; }
+
+.bank-card .rf-summary-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+.bank-card .rf-summary-grid span {
+  padding: 0;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 11.5px;
+  opacity: 0.85;
+}
+.bank-card .rf-summary-grid strong {
+  font-size: 14px;
+  font-weight: 700;
+  opacity: 1;
+}
+.privacy-eye {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  border: 0;
+  cursor: pointer;
+  z-index: 5;
+}
+
+/* Donut Chart & Legend in Card 1 */
+.rf-donut-wrapper {
+  position: absolute;
+  right: 16px;
+  top: 44px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.profit-ring {
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: conic-gradient(#38bdf8 0 84%, #fbbf24 84% 97%, #34d399 97% 100%);
+  flex-shrink: 0;
+}
+.profit-ring span {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #152d58;
+  color: #fff;
+  font-weight: 800;
+  font-size: 13px;
+}
+.rf-card-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.82);
+}
+.rf-card-legend span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+.rf-card-legend i {
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+/* Card 2: Getiri Grafiği */
+.rf-chart-card {
+  position: relative;
+  min-height: 205px;
+  aspect-ratio: 1.62 / 1;
+  max-height: 235px;
+  background: linear-gradient(140deg, #2b4f8d 0%, #1a386d 55%, #10254b 100%);
+  color: #fff;
+  border-radius: 18px;
+  padding: 16px 18px;
+  box-shadow: 0 14px 28px rgba(16, 37, 75, 0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.rf-chart-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+.rf-chart-card-head strong { font-weight: 700; color: #93c5fd; }
+.rf-chart-card-head span { opacity: 0.85; }
+.rf-interactive-chart-box {
+  position: relative;
+  width: 100%;
+  height: 95px;
+  margin: 6px 0;
+}
+.rf-chart-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.rf-chart-tooltip {
+  position: absolute;
+  top: 2px;
+  right: 18px;
+  background: rgba(255, 255, 255, 0.94);
+  color: #0f172a;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  pointer-events: none;
+}
+.rf-chart-card-foot {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  opacity: 0.85;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding-top: 6px;
+}
+
+/* History Toolbar & Date Button Fitting */
+.rf-history-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 12px 0 14px;
+}
+.rf-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--rf-card);
+  border: 1px solid var(--rf-line);
+  border-radius: 12px;
+  padding: 0 14px;
+}
+.theme-dark .rf-search-bar { background: #162137; border-color: #29354b; }
+.rf-search-bar input {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  padding: 11px 0;
+  color: var(--rf-ink);
+  outline: 0;
+  font-size: 14px;
+}
+.rf-filter-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+}
+.rf-filter-chips {
+  display: flex;
+  gap: 6px;
+  flex: 1;
+}
+.rf-filter-chips button {
+  flex: 1;
+  max-width: 90px;
+  border: 0;
+  border-radius: 999px;
+  padding: 7px 12px;
+  background: #eef2f7;
+  color: var(--rf-muted);
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.theme-dark .rf-filter-chips button { background: #1f2d47; color: #8fa0bd; }
+.rf-filter-chips button.active {
+  background: #2563eb;
+  color: #fff;
+}
+.rf-calendar-btn {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid var(--rf-line);
+  background: var(--rf-card);
+  color: var(--rf-muted);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  padding: 0;
+}
+.theme-dark .rf-calendar-btn { background: #162137; border-color: #29354b; color: #a5b4fc; }
+
+/* Transaction Row Styling */
+.rf-tx-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 14px;
+  border-bottom: 1px solid var(--rf-line);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.rf-tx-item:hover { background: color-mix(in srgb, var(--rf-accent) 4%, transparent); }
+.rf-tx-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.rf-tx-logo {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+.theme-dark .rf-tx-logo { background: #1e293b; color: #cbd5e1; }
+.rf-tx-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.rf-tx-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.rf-tx-title strong { font-size: 14px; color: var(--rf-ink); }
+.rf-tx-badge {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+.rf-tx-badge.sell { background: #fee2e2; color: #dc2626; }
+.rf-tx-badge.buy { background: #dcfce7; color: #16a34a; }
+.rf-tx-subtitle {
+  font-size: 12px;
+  color: var(--rf-muted);
+}
+.rf-tx-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+.rf-tx-pnl {
+  font-size: 12px;
+  font-weight: 700;
+}
+.rf-tx-pnl.up { color: #16a34a; }
+.rf-tx-pnl.down { color: #dc2626; }
+.rf-tx-total {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--rf-ink);
+}
+.rf-tx-date {
+  font-size: 11px;
+  color: var(--rf-muted);
+}
+
+/* Transaction Detail Modal */
+.rf-tx-modal {
+  max-width: 440px;
+  padding: 20px;
+  border-radius: 20px;
+}
+.rf-tx-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.rf-tx-modal-status-badge {
+  display: inline-block;
+  background: #dcfce7;
+  color: #16a34a;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+.rf-tx-pnl-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+}
+.rf-tx-pnl-box.down {
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+.rf-tx-pnl-box-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.rf-tx-pnl-box-left span {
+  font-size: 12px;
+  color: #4b5563;
+  font-weight: 600;
+}
+.rf-tx-pnl-box-left strong {
+  font-size: 15px;
+  color: #16a34a;
+  font-weight: 800;
+}
+.rf-tx-pnl-box.down .rf-tx-pnl-box-left strong { color: #dc2626; }
+.rf-tx-pnl-box-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+.rf-tx-pnl-box-right span {
+  font-size: 12px;
+  color: #4b5563;
+  font-weight: 600;
+}
+.rf-tx-pnl-badge {
+  display: inline-block;
+  background: #16a34a;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+.rf-tx-pnl-badge.down { background: #dc2626; }
+
+.rf-tx-detail-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.rf-tx-detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13.5px;
+  color: var(--rf-muted);
+}
+.rf-tx-detail-row strong {
+  color: var(--rf-ink);
+  font-weight: 700;
+}
+
+/* Profile Dropdown Menu & App Install Modal */
+.rf-profile-menu-modal {
+  position: absolute;
+  top: 60px;
+  left: 14px;
+  width: 290px;
+  background: var(--rf-card);
+  border: 1px solid var(--rf-line);
+  border-radius: 18px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+  padding: 16px;
+  z-index: 2500;
+  animation: rf-enter 0.2s ease both;
+}
+.rf-menu-user-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--rf-line);
+  margin-bottom: 10px;
+}
+.rf-menu-avatar-wrap {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #e0e7ff;
+  color: #3730a3;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 16px;
+  cursor: pointer;
+  overflow: hidden;
+}
+.rf-menu-user-info h3 {
+  margin: 0;
+  font-size: 15px;
+  color: var(--rf-ink);
+}
+.rf-menu-user-info p {
+  margin: 2px 0 0;
+  font-size: 11.5px;
+  color: var(--rf-muted);
+}
+.rf-menu-links {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.rf-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  color: var(--rf-ink);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 600;
+  background: transparent;
+  border: 0;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.rf-menu-item:hover { background: #f1f5f9; }
+.theme-dark .rf-menu-item:hover { background: #1e293b; }
+.rf-menu-item.danger { color: #ef4444; }
+
+/* Install App Modal */
+.rf-install-modal {
+  max-width: 420px;
+  padding: 22px;
+  border-radius: 20px;
+}
+.rf-install-choice-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 18px 0;
+}
+.rf-install-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  padding: 16px;
+  border: 1.5px solid var(--rf-line);
+  border-radius: 14px;
+  cursor: pointer;
+  background: var(--rf-card);
+  transition: all 0.2s ease;
+}
+.rf-install-card:hover {
+  border-color: #2563eb;
+  transform: translateY(-2px);
+}
+.rf-install-card strong { font-size: 14px; color: var(--rf-ink); }
+.rf-install-card small { font-size: 11px; color: var(--rf-muted); }
+
+/* Email Warning Banner */
+.rf-warning-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fde68a;
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.theme-dark .rf-warning-banner {
+  background: #78350f;
+  color: #fef3c7;
+  border-color: #92400e;
+}
+
+@media(max-width:420px){
+  .bank-card, .rf-chart-card { min-height: 195px; border-radius: 16px; padding: 14px 16px; }
+  .profit-ring { width: 56px; height: 56px; }
+  .profit-ring span { width: 38px; height: 38px; font-size: 11.5px; }
+  .portfolio-total { font-size: 27px; }
+  .rf-donut-wrapper { right: 12px; top: 40px; }
+}
