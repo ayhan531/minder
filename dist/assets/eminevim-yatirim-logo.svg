@@ -1,20 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-labelledby="title desc">
   <title id="title">Eminevim Yatırım</title>
-  <desc id="desc">Eminevim Yatırım için yükselen yatırım çizgisi ve güven halkası taşıyan kurumsal işaret.</desc>
+  <desc id="desc">Eminevim Yatırım için yükselen çizgi ve güven halkası taşıyan marka işareti.</desc>
   <defs>
-    <linearGradient id="markBg" x1="20" y1="12" x2="98" y2="108" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#2f8ff0"/>
-      <stop offset="1" stop-color="#1f54b8"/>
+    <linearGradient id="bg" x1="12" y1="10" x2="106" y2="112" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0f6bff"/>
+      <stop offset="1" stop-color="#05336f"/>
     </linearGradient>
-    <linearGradient id="markAccent" x1="28" y1="86" x2="92" y2="31" gradientUnits="userSpaceOnUse">
+    <linearGradient id="leaf" x1="28" y1="84" x2="90" y2="30" gradientUnits="userSpaceOnUse">
       <stop stop-color="#20c997"/>
-      <stop offset="1" stop-color="#b7f7df"/>
+      <stop offset="1" stop-color="#a7f3d0"/>
     </linearGradient>
   </defs>
-  <rect x="14" y="14" width="92" height="92" rx="24" fill="#ffffff"/>
-  <rect x="20" y="20" width="80" height="80" rx="20" fill="url(#markBg)"/>
-  <path d="M34 74h52" fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round"/>
-  <path d="M36 68l16-16 13 12 22-28" fill="none" stroke="url(#markAccent)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="88" cy="36" r="7" fill="#ffffff"/>
-  <circle cx="88" cy="36" r="4" fill="#20c997"/>
+  <rect x="8" y="8" width="104" height="104" rx="26" fill="url(#bg)"/>
+  <path d="M31 76c15-5 26-14 36-29 4-6 9-10 18-11-3 14-10 27-22 37-10 8-21 11-32 3Z" fill="url(#leaf)"/>
+  <path d="M29 86h62" stroke="#ffffff" stroke-width="8" stroke-linecap="round"/>
+  <path d="M34 73 51 58l13 10 23-31" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="88" cy="36" r="7" fill="#20c997" stroke="#fff" stroke-width="4"/>
 </svg>
