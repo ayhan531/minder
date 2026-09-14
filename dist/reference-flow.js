@@ -309,7 +309,7 @@ document.addEventListener("change", (event) => {
       reader.onload = (e) => {
         state.customAvatar = e.target.result;
         localStorage.setItem("minder_avatar", state.customAvatar);
-        toast("Profil fotoğrafı güncellendi", "ok");
+        showToast("Profil fotoğrafı güncellendi");
         render({ motion: false, preserveScroll: true });
       };
       reader.readAsDataURL(file);
@@ -320,13 +320,13 @@ document.addEventListener("change", (event) => {
     state.fontSizeMode = event.target.value;
     localStorage.setItem("minder_font_size", state.fontSizeMode);
     document.documentElement.style.fontSize = state.fontSizeMode === "small" ? "14px" : state.fontSizeMode === "large" ? "18px" : "16px";
-    toast("Yazı boyutu güncellendi", "ok");
+    showToast("Yazı boyutu güncellendi");
   }
 
   if (event.target.id === "rf-lang-select") {
     state.userLanguage = event.target.value;
     localStorage.setItem("minder_lang", state.userLanguage);
-    toast("Dil tercihi güncellendi", "ok");
+    showToast("Dil tercihi güncellendi");
   }
 });
 
@@ -349,7 +349,7 @@ if (typeof originalSubmitTrade === "function") {
     const res = await originalSubmitTrade.apply(this, args);
     if (state.orderSide === "sell") {
       setTimeout(() => {
-        toast("T+2 Takasta", "ok");
+        showToast("T+2 Takasta");
       }, 400);
     }
     return res;

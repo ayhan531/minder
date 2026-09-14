@@ -1717,6 +1717,10 @@ function accountIdentityPage() {
   return subpageFrame(`${warningBanner}<div class="reference-list-card identity-facts">${facts.map(([key, value]) => `<div><span>${key}</span><strong>${esc(value)}</strong>${icon("arrow", 15)}</div>`).join("")}</div>`);
 }
 
+function renderSettingsPage() {
+  return subpageFrame(`<div class="reference-list-card settings-compact"><label class="reference-menu-link">${icon("sun", 21)}<span><strong>Tema</strong><small>${state.theme === "dark" ? "Koyu" : "Açık"}</small></span><button type="button" class="small-button" data-theme-toggle>${state.theme === "dark" ? "Açık" : "Koyu"}</button></label><label class="reference-menu-link">${icon("font", 21)}<span><strong>Yazı boyutu</strong><small>Arayüz bozulmadan uygulanır</small></span><select id="rf-font-size-select"><option value="small" ${state.fontSizeMode === "small" ? "selected" : ""}>Küçük</option><option value="medium" ${state.fontSizeMode === "medium" ? "selected" : ""}>Orta</option><option value="large" ${state.fontSizeMode === "large" ? "selected" : ""}>Büyük</option></select></label><label class="reference-menu-link">${icon("palette", 21)}<span><strong>Renk modu</strong><small>Mavi</small></span><span class="status ok">Mavi</span></label><label class="reference-menu-link">${icon("bell", 21)}<span><strong>Bildirim tercihleri</strong><small>Referans bildirimi</small></span><a href="/esube/notifications" data-link class="small-button">Aç</a></label><label class="reference-menu-link">${icon("language", 21)}<span><strong>Dil ve Bölge</strong><small>Türkçe</small></span><select id="rf-lang-select"><option value="tr" selected>Türkçe</option></select></label><div class="reference-menu-link">${icon("info", 21)}<span><strong>Uygulama</strong><small>1.6.3</small></span></div></div>`);
+}
+
 function accountDocumentsPage() {
   const docs = state.portfolio?.documents || [];
   const links = [["Sözleşmelerim", "file"], ["Hesap Dökümleri", "report"], ["Vergi Formları", "file"], ["İşlem Dekontları", "file"], ["Diğer Belgeler", "list"]];

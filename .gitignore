@@ -2,6 +2,7 @@ data/
 android/
 artifacts/
 *.apk
+*.png
 node_modules/
 __pycache__/
 *.pyc

@@ -563,7 +563,7 @@ def migrate_brand_data(conn: sqlite3.Connection) -> None:
         SET full_name=?
         WHERE role='admin' AND (full_name='Sistem Admin' OR full_name='Güney Admin' OR full_name LIKE ? OR full_name LIKE ?)
         """,
-        ("Paribu Admin", f"%{legacy}%", f"%{legacy_public}%"),
+        ("Minder Admin", f"%{legacy}%", f"%{legacy_public}%"),
     )
     conn.execute(
         """
@@ -571,7 +571,7 @@ def migrate_brand_data(conn: sqlite3.Connection) -> None:
         SET email=?
         WHERE role='admin' AND (email='' OR email='admin@local' OR email='admin@guneymenkuldegerler.com' OR email LIKE ?)
         """,
-        ("admin@paribumenkuldeger.com", f"%{legacy.lower()}%"),
+        ("admin@minder.local", f"%{legacy.lower()}%"),
     )
     conn.execute(
         """
@@ -581,16 +581,40 @@ def migrate_brand_data(conn: sqlite3.Connection) -> None:
         """,
         (
             legacy_company,
-            "Paribu Menkul Değerler",
+            "Minder Ottoman",
             legacy_public,
-            "Paribu Menkul Değerler",
+            "Minder Ottoman",
             f"{legacy_company} A.Ş.",
-            "Paribu Menkul Değerler A.Ş.",
+            "Minder Ottoman",
             legacy_company,
-            "Paribu Menkul Değerler",
+            "Minder Ottoman",
         ),
     )
-    conn.execute("UPDATE users SET account_no='PM' || substr(account_no, 3) WHERE account_no LIKE 'GM%'")
+    conn.execute("UPDATE users SET account_no='MD' || substr(account_no, 3) WHERE account_no LIKE 'GM%' OR account_no LIKE 'PM%'")
+    replacements = {
+        "brand_name": "MINDER",
+        "brand_descriptor": "OTTOMAN",
+        "brand_symbol": "M",
+        "brand_tagline": "Referanslı yatırım deneyimi",
+        "ui_primary_color": "#4f79d9",
+        "ui_accent_color": "#0fbf7a",
+        "content_support_email": "destek@minder.local",
+        "official_company_name": "Minder Ottoman",
+        "official_email": "destek@minder.local",
+    }
+    for key, value in replacements.items():
+        conn.execute(
+            """
+            UPDATE system_settings
+            SET setting_value=?, updated_at=?
+            WHERE setting_key=? AND (
+              setting_value LIKE '%Paribu%' OR setting_value LIKE '%PARİBU%' OR
+              setting_value LIKE '%paribu%' OR setting_value LIKE '%Güney%' OR
+              setting_value LIKE '%Fuzul%' OR setting_value=''
+            )
+            """,
+            (value, now(), key),
+        )
 
 
 def ensure_column(conn: sqlite3.Connection, table: str, column: str, ddl: str) -> None:
@@ -713,8 +737,8 @@ def seed_admin(conn: sqlite3.Connection) -> None:
     existing = conn.execute("SELECT id FROM users WHERE tc=?", (admin_tc,)).fetchone()
     if existing:
         updates = [
-            os.environ.get("ADMIN_NAME", "Paribu Admin")[:120],
-            os.environ.get("ADMIN_EMAIL", "admin@paribumenkuldeger.com")[:120],
+            os.environ.get("ADMIN_NAME", "Minder Admin")[:120],
+            os.environ.get("ADMIN_EMAIL", "admin@minder.local")[:120],
             now(),
             existing["id"],
         ]
@@ -737,7 +761,7 @@ def seed_admin(conn: sqlite3.Connection) -> None:
             """,
             updates,
         )
-        conn.execute("UPDATE users SET account_no=printf('PM%06d', id) WHERE id=? AND (account_no IS NULL OR account_no='')", (existing["id"],))
+        conn.execute("UPDATE users SET account_no=printf('MD%06d', id) WHERE id=? AND (account_no IS NULL OR account_no='' OR account_no LIKE 'PM%')", (existing["id"],))
         conn.execute("INSERT OR IGNORE INTO accounts (user_id, cash_balance, blocked_balance, credit_limit) VALUES (?, 0, 0, 0)", (existing["id"],))
         conn.commit()
         return
@@ -751,9 +775,9 @@ def seed_admin(conn: sqlite3.Connection) -> None:
           (tc, password_salt, password_hash, full_name, phone, email, city, role, status, kyc_status, created_at, approved_at)
         VALUES (?, ?, ?, ?, ?, ?, ?, 'admin', 'approved', 'approved', ?, ?)
         """,
-        (admin_tc, salt, digest, os.environ.get("ADMIN_NAME", "Paribu Admin")[:120], "0000000000", os.environ.get("ADMIN_EMAIL", "admin@paribumenkuldeger.com")[:120], "Istanbul", now(), now()),
+        (admin_tc, salt, digest, os.environ.get("ADMIN_NAME", "Minder Admin")[:120], "0000000000", os.environ.get("ADMIN_EMAIL", "admin@minder.local")[:120], "Istanbul", now(), now()),
     )
-    conn.execute("UPDATE users SET account_no=printf('PM%06d', id) WHERE id=?", (cur.lastrowid,))
+    conn.execute("UPDATE users SET account_no=printf('MD%06d', id) WHERE id=?", (cur.lastrowid,))
     conn.execute("INSERT INTO accounts (user_id, cash_balance, blocked_balance, credit_limit) VALUES (?, 0, 0, 0)", (cur.lastrowid,))
     conn.commit()
     if generated:

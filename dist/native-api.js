@@ -131,8 +131,8 @@
     return {
       account: clone(store.account), positions: hydratedPositions(store), orders: clone(store.orders),
       money_requests: clone(store.money_requests), transactions: clone(store.transactions), t2_settlements: clone(store.t2_settlements),
-      settlement_settings: { t2_enabled: true },
-      system_bank_accounts: [{ id: 1, bank_name: "Paribu Demo Bankası", account_holder: "Paribu Menkul Değerler A.Ş.", iban: "TR330006100519786457841326", branch_name: "Dijital Şube", description: "Demo transfer hesabı", is_active: 1 }],
+      settlement_settings: { t2_enabled: false },
+      system_bank_accounts: [{ id: 1, bank_name: "Minder Demo Bankası", account_holder: "Minder Ottoman", iban: "TR330006100519786457841326", branch_name: "Dijital Şube", description: "Demo transfer hesabı", is_active: 1 }],
     };
   }
   function orderLabels(order) {
