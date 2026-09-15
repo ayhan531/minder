@@ -970,3 +970,343 @@ body.theme-dark .modal-backdrop .modal{
 #rf-chart-drag-point {
   transition: cx 0.05s linear, cy 0.05s linear;
 }
+
+/* Final APK match for the pages requested: home recent list, news, portfolio, dark mode. */
+.rf-portfolio .bank-card {
+  background: linear-gradient(145deg, #075be8 0%, #177cff 100%) !important;
+  color: #fff !important;
+  box-shadow: 0 18px 44px rgba(7, 91, 232, .24) !important;
+}
+.rf-portfolio .bank-card *,
+.rf-portfolio .privacy-eye {
+  color: #fff !important;
+}
+.rf-portfolio .rf-profit-sub,
+.rf-portfolio .rf-card-legend,
+.rf-portfolio .rf-card-legend span {
+  color: rgba(255,255,255,.84) !important;
+}
+.rf-portfolio .profit-ring span {
+  color: #5b52e0 !important;
+}
+.rf-portfolio .rf-tabs button {
+  border-radius: 12px !important;
+}
+.rf-portfolio .rf-tabs .active {
+  border-color: rgba(7, 91, 232, .34) !important;
+  background: #eaf2ff !important;
+  color: #075be8 !important;
+}
+.rf-search-bar {
+  border-radius: 13px !important;
+  background: #fff !important;
+}
+.rf-stock-row,
+.rf-tx-item {
+  min-height: 72px;
+  border-color: #edf1f6 !important;
+  background: transparent !important;
+}
+.rf-stock-row strong,
+.rf-tx-title strong,
+.rf-tx-total {
+  color: #13213a !important;
+}
+.rf-stock-row small,
+.rf-tx-subtitle,
+.rf-tx-date {
+  color: #738197 !important;
+}
+.rf-tx-item {
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding: 13px 0 !important;
+}
+.rf-tx-logo {
+  width: 38px !important;
+  height: 38px !important;
+}
+.recent-card .request-row,
+.apk-recent-card .request-row,
+.apk-tx-row {
+  display: grid !important;
+  min-height: 70px !important;
+  grid-template-columns: 40px minmax(0, 1fr) auto !important;
+  align-items: center !important;
+  gap: 12px !important;
+  border: 0 !important;
+  border-top: 1px solid #edf1f6 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 11px 0 !important;
+}
+.recent-card .request-row:first-child,
+.apk-recent-card .request-row:first-child,
+.apk-tx-row:first-child {
+  border-top: 0 !important;
+}
+.recent-card .request-row > div strong,
+.apk-tx-row > div strong {
+  color: #13213a !important;
+}
+.recent-card .request-row p,
+.apk-tx-row p {
+  overflow: hidden;
+  color: #738197 !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tx-icon {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: 50%;
+  background: #eaf2ff;
+  color: #075be8;
+}
+.tx-icon.in {
+  background: #e8f8ef;
+  color: #12a64d;
+}
+.tx-icon.out {
+  background: #fff0f2;
+  color: #e52d3d;
+}
+.official-source-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.official-source-strip a {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid #dfe7f1;
+  border-radius: 999px !important;
+  background: #fff;
+  color: #50627a;
+  padding: 0 12px;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.apk-filter-toolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 190px;
+  gap: 10px;
+}
+.apk-news-card {
+  overflow: hidden;
+  padding: 0 !important;
+  border-radius: 16px !important;
+}
+.apk-news-card .news-list {
+  display: grid;
+  padding: 14px 18px;
+}
+.apk-news-row {
+  display: grid;
+  min-height: 74px;
+  grid-template-columns: 94px minmax(0, 1fr) 22px;
+  align-items: center;
+  gap: 14px;
+  border-top: 1px solid #edf1f6;
+  color: #1b2940;
+  text-decoration: none;
+}
+.apk-news-row:first-child {
+  border-top: 0;
+}
+.apk-news-row .news-source {
+  display: inline-flex;
+  width: 86px;
+  min-height: 32px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #eaf2ff;
+  color: #075be8;
+  font-size: 11px;
+  font-weight: 850;
+}
+.apk-news-row .news-copy {
+  display: grid;
+  min-width: 0;
+  gap: 4px;
+}
+.apk-news-row .news-copy strong {
+  overflow: hidden;
+  color: #13213a;
+  font-size: 12.5px !important;
+  line-height: 1.25 !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.apk-news-row .news-copy small {
+  color: #738197;
+  font-size: 15px !important;
+  line-height: 1.3 !important;
+}
+.watch-card .watch-row strong,
+.watch-card h2,
+.recent-card h2 {
+  color: #13213a !important;
+}
+.watch-card .watch-row small,
+.watch-card .muted,
+.recent-card .muted {
+  color: #738197 !important;
+}
+.workspace.theme-dark,
+body:has(.workspace.theme-dark) {
+  --rf-ink: #eef6ff !important;
+  --rf-muted: #91a5be !important;
+  --rf-line: #203d5f !important;
+  --rf-card: #0d2138 !important;
+  --rf-bg: #061528 !important;
+  background: #061528 !important;
+}
+.workspace.theme-dark {
+  background: #061528 !important;
+  color: #eef6ff !important;
+}
+.workspace.theme-dark .app-main {
+  background:
+    radial-gradient(circle at 94% 0%, rgba(25, 118, 255, .18), transparent 30%),
+    #061528 !important;
+}
+.workspace.theme-dark .mobile-app-header,
+.workspace.theme-dark .mobile-app-header.quiet {
+  background: #111c31 !important;
+  border-bottom-color: #203d5f !important;
+  color: #eef6ff !important;
+}
+.workspace.theme-dark .content-card,
+.workspace.theme-dark .watch-card,
+.workspace.theme-dark .recent-card,
+.workspace.theme-dark .reference-list-card,
+.workspace.theme-dark .rf-tab-body,
+.workspace.theme-dark .rf-search-bar,
+.workspace.theme-dark .news-page-card,
+.workspace.theme-dark .official-source-strip a,
+.workspace.theme-dark .search-box {
+  border-color: #203d5f !important;
+  background: #0d2138 !important;
+  color: #eef6ff !important;
+  box-shadow: 0 14px 32px rgba(0,0,0,.26) !important;
+}
+.workspace.theme-dark .rf-mobile-header.home {
+  background: linear-gradient(145deg, #5b52e0 0%, #5b52e0 100%) !important;
+}
+.workspace.theme-dark h1,
+.workspace.theme-dark h2,
+.workspace.theme-dark h3,
+.workspace.theme-dark .watch-card .watch-row strong,
+.workspace.theme-dark .watch-price strong,
+.workspace.theme-dark .recent-card .request-row > div strong,
+.workspace.theme-dark .rf-stock-row strong,
+.workspace.theme-dark .rf-tx-title strong,
+.workspace.theme-dark .rf-tx-total,
+.workspace.theme-dark .apk-news-row .news-copy strong {
+  color: #eef6ff !important;
+}
+.workspace.theme-dark small,
+.workspace.theme-dark .muted,
+.workspace.theme-dark .watch-card .watch-row small,
+.workspace.theme-dark .watch-price small,
+.workspace.theme-dark .recent-card .request-row p,
+.workspace.theme-dark .rf-stock-row small,
+.workspace.theme-dark .rf-tx-subtitle,
+.workspace.theme-dark .rf-tx-date,
+.workspace.theme-dark .apk-news-row .news-copy small {
+  color: #91a5be !important;
+}
+.workspace.theme-dark .watch-row,
+.workspace.theme-dark .recent-card .request-row,
+.workspace.theme-dark .rf-stock-row,
+.workspace.theme-dark .rf-tx-item,
+.workspace.theme-dark .apk-news-row {
+  border-color: #203d5f !important;
+  background: transparent !important;
+}
+.workspace.theme-dark .watch-row:hover,
+.workspace.theme-dark .recent-card .request-row:hover,
+.workspace.theme-dark .rf-stock-row:hover,
+.workspace.theme-dark .rf-tx-item:hover,
+.workspace.theme-dark .apk-news-row:hover {
+  background: #102947 !important;
+}
+.workspace.theme-dark .rf-portfolio .bank-card {
+  background: linear-gradient(145deg, #0647bf 0%, #096af0 100%) !important;
+}
+.workspace.theme-dark .rf-portfolio .rf-tabs button {
+  background: #102947 !important;
+  color: #a8bad1 !important;
+}
+.workspace.theme-dark .rf-portfolio .rf-tabs .active {
+  border-color: #3e7fe6 !important;
+  background: #173967 !important;
+  color: #80b5ff !important;
+}
+.workspace.theme-dark .change-pill.up {
+  background: #e8f8ef !important;
+  color: #12a64d !important;
+}
+.workspace.theme-dark .change-pill.down {
+  background: #fff0f2 !important;
+  color: #e52d3d !important;
+}
+.workspace.theme-dark .news-source,
+.workspace.theme-dark .tx-icon,
+.workspace.theme-dark .rf-tx-logo {
+  background: #14355c !important;
+  color: #80b5ff !important;
+}
+.workspace.theme-dark .search-box,
+.workspace.theme-dark .rf-search-bar input,
+.workspace.theme-dark .apk-filter-toolbar select {
+  color: #eef6ff !important;
+}
+@media (max-width: 720px) {
+  .apk-filter-toolbar {
+    grid-template-columns: 1fr;
+  }
+  .official-source-strip {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 2px;
+  }
+  .official-source-strip a {
+    flex: 0 0 auto;
+  }
+  .apk-news-card .news-list {
+    padding: 12px 20px;
+  }
+  .apk-news-row {
+    min-height: 76px;
+    grid-template-columns: 78px minmax(0, 1fr) 18px;
+    gap: 10px;
+  }
+  .apk-news-row .news-source {
+    width: 70px;
+    font-size: 14px;
+  }
+  .apk-news-row .news-copy strong {
+    font-size: 12px !important;
+    white-space: normal;
+  }
+  .recent-card .request-row,
+  .apk-recent-card .request-row,
+  .apk-tx-row {
+    min-height: 68px !important;
+    grid-template-columns: 38px minmax(0, 1fr) auto !important;
+    gap: 10px !important;
+  }
+  .rf-portfolio .portfolio-total {
+    font-size: 28px !important;
+    white-space: nowrap;
+  }
+}
