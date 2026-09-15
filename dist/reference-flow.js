@@ -39,6 +39,7 @@ mobileHeaderBar = function () {
     "/esube/profile": "Profil",
     "/esube/profile/security": "Güvenlik",
     "/esube/profile/identity": "İletişim Bilgileri",
+    "/esube/profile/personal": "Kişisel Bilgiler",
     "/esube/profile/documents": "Sözleşmeler",
     "/esube/settings": "Ayarlar",
     "/esube/notifications": "Bildirim Ayarları",
