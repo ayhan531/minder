@@ -137,15 +137,18 @@ function referenceStockButton(q, index = 0) {
 function customTxRow(t) {
   const isSell = String(t.transaction_type || "").includes("sell");
   const isBuy = String(t.transaction_type || "").includes("buy");
-  const symbol = t.code || t.symbol || (isSell ? "TUPRS" : "THYAO");
+  const isTrade = isSell || isBuy;
+  const symbol = t.code || t.symbol || (isTrade ? (isSell ? "TUPRS" : "THYAO") : "");
   const badgeLabel = isSell ? "SATIŞ" : isBuy ? "ALIŞ" : (t.type_label || "İŞLEM");
   const badgeClass = isSell ? "sell" : isBuy ? "buy" : "";
   const pnlPct = t.pnl_pct !== undefined ? t.pnl_pct : (isSell ? 4.55 : 0);
   const pnlAmount = t.pnl_amount !== undefined ? t.pnl_amount : (isSell ? 391.00 : 0);
-  const qty = t.quantity || (isSell ? 50 : 150);
-  const price = t.price || (isSell ? 180.00 : 288.00);
+  const qty = t.quantity || (isTrade ? 150 : 0);
+  const price = t.price || (isTrade ? 288.00 : 0);
+  const logo = symbol ? stockLogo(symbol, symbol) : `<span style="display:grid;width:100%;height:100%;place-items:center;background:#eef2f7;color:#64748b;border-radius:50%;">${icon("bank", 18)}</span>`;
+  const subtitle = isTrade ? `${qty} lot · ₺${number(price)}` : esc(t.note || badgeLabel);
 
-  return `<article class="rf-tx-item" data-tx-detail-id="${t.id || 1}" data-symbol="${esc(symbol)}" data-type="${isSell ? 'sell' : 'buy'}" data-qty="${qty}" data-price="${price}" data-pnl="${pnlAmount}" data-pnlpct="${pnlPct}" data-total="${t.total || (qty * price)}" data-date="${esc(t.created_at_label || '14 Eylül 2026 10:22')}"><div class="rf-tx-left"><div class="rf-tx-logo">${stockLogo(symbol, symbol)}</div><div class="rf-tx-info"><div class="rf-tx-title"><strong>${esc(symbol)}</strong><span class="rf-tx-badge ${badgeClass}">${badgeLabel}</span></div><span class="rf-tx-subtitle">${qty} lot · ₺${number(price)}</span></div></div><div class="rf-tx-right">${isSell ? `<span class="rf-tx-pnl up">+₺${number(pnlAmount)} (%${number(pnlPct)})</span>` : ""}<strong class="rf-tx-total">₺${number(t.total || (qty * price))}</strong><span class="rf-tx-date">${esc(t.created_at_label || "9 Eyl 10:42")}</span></div></article>`;
+  return `<article class="rf-tx-item" data-tx-detail-id="${t.id || 1}" data-symbol="${esc(symbol)}" data-type="${isSell ? 'sell' : 'buy'}" data-qty="${qty}" data-price="${price}" data-pnl="${pnlAmount}" data-pnlpct="${pnlPct}" data-total="${t.total || (qty * price)}" data-date="${esc(t.created_at_label || '14 Eylül 2026 10:22')}"><div class="rf-tx-left"><div class="rf-tx-logo">${logo}</div><div class="rf-tx-info"><div class="rf-tx-title"><strong>${symbol ? esc(symbol) : esc(badgeLabel)}</strong>${isTrade ? `<span class="rf-tx-badge ${badgeClass}">${badgeLabel}</span>` : ""}</div><span class="rf-tx-subtitle">${subtitle}</span></div></div><div class="rf-tx-right">${isSell ? `<span class="rf-tx-pnl up">+₺${number(pnlAmount)} (%${number(pnlPct)})</span>` : ""}<strong class="rf-tx-total">₺${number(t.total || (qty * price))}</strong><span class="rf-tx-date">${esc(t.created_at_label || "9 Eyl 10:42")}</span></div></article>`;
 }
 
 stocksPage = function () {
@@ -176,6 +179,23 @@ stocksPage = function () {
   const notice = ["ipo", "fund", "fx"].includes(tab) ? `<div class="approval-alert referral-alert">${icon("bell", 18)} <span>Referansınız ile iletişime geçiniz. Bu ürün grubu için temsilciniz yönlendirme yapacaktır.</span></div>` : "";
 
   return `<section class="rf-stocks"><div class="rf-stock-tools"><label>${icon("search", 19)}<input data-search="stocks" value="${esc(state.stockQuery || "")}" placeholder="Ara..." /></label><select data-stock-sort aria-label="Sıralama"><option value="az" ${state.stockSort === "az" ? "selected" : ""}>A-Z</option><option value="gain" ${state.stockSort === "gain" ? "selected" : ""}>Yükselen</option><option value="loss" ${state.stockSort === "loss" ? "selected" : ""}>Düşen</option></select></div><div class="market-category-tabs rf-category-tabs" id="rf-category-scroll-bar">${tabs}</div>${notice}<div class="rf-market-list">${visible.map((q, i) => referenceStockButton(q, i)).join("") || `<div class="empty-state">Kayıt bulunamadı.</div>`}</div></section>`;
+};
+
+// Standalone "Geçmiş" page (Hesap > İşlem Geçmişi) - reuse the same styled
+// transaction card used inside the portfolio history tab instead of the old
+// plain text rows.
+transactionsPage = function () {
+  const txs = state.portfolio?.transactions || [];
+  const filter = state.transactionFilter || "all";
+  const query = (state.transactionQuery || "").toLocaleLowerCase("tr-TR");
+  let rows = txs.map((t) => {
+    const type = String(t.transaction_type || "").includes("sell") ? "sell" : String(t.transaction_type || "").includes("buy") ? "buy" : "other";
+    return { ...t, type };
+  });
+  if (filter !== "all") rows = rows.filter((r) => r.type === filter);
+  if (query) rows = rows.filter((r) => `${r.code || ""} ${r.reference || ""} ${r.type_label || ""}`.toLocaleLowerCase("tr-TR").includes(query));
+  const exportQuery = new URLSearchParams({ q: state.transactionQuery || "", from: "", to: "", type: filter === "buy" ? "trade_buy" : filter === "sell" ? "trade_sell" : "all" });
+  return `<div class="toolbar"><div><h1>Hesap Hareketleri</h1><p class="muted">Tarih, referans ve işlem türüyle kayıtlarınızı bulun.</p></div><a class="ghost-button" href="/api/transactions/export?${exportQuery}">${icon("download", 17)} CSV İndir</a></div><div class="rf-history-toolbar"><div class="rf-search-bar">${icon("search", 18)}<input type="text" data-tx-search value="${esc(state.transactionQuery || "")}" placeholder="Referans, sembol veya açıklama ara" /></div><div class="rf-filter-row"><div class="rf-filter-chips"><button type="button" class="${filter === "all" ? "active" : ""}" data-transaction-filter="all">Tümü</button><button type="button" class="${filter === "buy" ? "active" : ""}" data-transaction-filter="buy">Alış</button><button type="button" class="${filter === "sell" ? "active" : ""}" data-transaction-filter="sell">Satış</button></div><button type="button" class="rf-calendar-btn" data-calendar-picker aria-label="Tarih seç">${icon("calendar", 20)}</button></div></div><div class="rf-tab-body">${rows.map(customTxRow).join("") || `<div class="empty-state">Filtreyle eşleşen hareket yok.</div>`}</div>`;
 };
 
 // Global Profile Dropdown Modal Component

@@ -368,7 +368,7 @@ function renderMiniCharts() {
   const series = canvases.map((canvas, index) => {
     const positive = canvas.dataset.direction !== "down";
     const seed = Number(canvas.dataset.seed || index + 1);
-    const points = Array.from({ length: 22 }, (_, i) => 42 + i * (positive ? 1.35 : -.9) + Math.sin((i + seed) * .72) * 4.2 + Math.cos((i + seed) * .31) * 1.8);
+    const points = Array.from({ length: 10 }, (_, i) => 42 + i * (positive ? 2.2 : -1.6) + Math.sin((i / 9) * Math.PI * 1.3 + seed) * 3);
     return { canvas, positive, points };
   });
   if (!window.Chart) {
@@ -385,7 +385,7 @@ function renderMiniCharts() {
   series.forEach(({ canvas, positive, points }) => {
     miniCharts.push(new Chart(canvas, {
       type: "line",
-      data: { labels: points.map((_, i) => i), datasets: [{ data: points, borderColor: positive ? "#12aa4d" : "#e52d3d", borderWidth: 2, pointRadius: 0, tension: .34, fill: false }] },
+      data: { labels: points.map((_, i) => i), datasets: [{ data: points, borderColor: positive ? "#12aa4d" : "#e52d3d", borderWidth: 2, pointRadius: 0, pointHoverRadius: 0, tension: .35, fill: false }] },
       options: { responsive: true, maintainAspectRatio: false, animation: { duration: 650, easing: "easeOutQuart" }, plugins: { legend: { display: false }, tooltip: { enabled: false } }, scales: { x: { display: false }, y: { display: false } }, interaction: { intersect: false } }
     }));
   });
@@ -397,8 +397,8 @@ function renderMiniCharts() {
         values.shift();
         const last = Number(values.at(-1) || 42);
         const direction = chart.canvas.dataset.direction === "down" ? -1 : 1;
-        values.push(last + direction * 1.15 + Math.sin(Date.now() / 850 + chartIndex) * 2.4);
-        chart.update("active");
+        values.push(last + direction * 0.9 + Math.sin(Date.now() / 850 + chartIndex) * 1.1);
+        chart.update();
       });
     }, 2200);
   }
@@ -1093,7 +1093,7 @@ function appLayout(content, admin = false) {
   const themeButton = `<button class="ghost-button theme-toggle" type="button" data-theme-toggle>${icon(state.theme === "dark" ? "sun" : "moon", 17)} <span>${state.theme === "dark" ? "Açık" : "Koyu"}</span></button>`;
   const accountChip = `<span class="account-chip">${icon("user", 17)}<span><strong>${esc(state.me?.full_name || "Hesabım")}</strong><small>${esc(state.account?.account_no || state.me?.account_no || "")}</small></span></span>`;
   if (!admin) content = mobileHeaderBar() + content;
-  return `<main class="workspace green-workspace theme-${state.theme}"><header class="app-topbar"><div class="app-topbar-inner"><a href="${admin ? "/esube/admin" : "/esube"}" data-link class="app-brand">${brandLockup(true)}</a><div class="app-topbar-actions"><button class="ghost-button" type="button" data-search-open aria-label="Hisse ara">${icon("search", 18)} <span>Ara</span></button>${themeButton}<span class="status ok">${icon("check", 14)} ${esc(state.me?.status_label || "Onaylı")}</span>${accountChip}${logoutButton}</div></div></header><div class="${admin ? "admin-layout" : "app-shell"}"><aside class="sidebar"><a href="${admin ? "/esube/admin" : "/esube"}" data-link class="sidebar-brand">${brandLockup()}</a>${renderSidebarNav(admin)}${admin ? riskMini() : `<div class="approval-mini">${icon("activity")}<strong>Piyasa ve portföy</strong><span>Hızlı işlemler tek çalışma alanında.</span></div>`}</aside><section class="app-main">${content}</section></div>${bottomNav(admin)}${admin ? adminMobileMenu() : ""}${searchOverlay()}${companyDetailModal()}${quickTradeModal()}${documentPreviewModal()}</main>`;
+  return `<main class="workspace green-workspace theme-${state.theme}"><header class="app-topbar"><div class="app-topbar-inner"><a href="${admin ? "/esube/admin" : "/esube"}" data-link class="app-brand">${brandLockup(true)}</a><div class="app-topbar-actions"><button class="ghost-button" type="button" data-search-open aria-label="Hisse ara">${icon("search", 18)} <span>Ara</span></button>${themeButton}<span class="status ok">${icon("check", 14)} ${esc(state.me?.status_label || "Onaylı")}</span>${accountChip}${logoutButton}</div></div></header><div class="${admin ? "admin-layout" : "app-shell"}"><aside class="sidebar"><a href="${admin ? "/esube/admin" : "/esube"}" data-link class="sidebar-brand">${brandLockup()}</a>${renderSidebarNav(admin)}${admin ? riskMini() : `<div class="approval-mini">${icon("activity")}<strong>Piyasa ve portföy</strong><span>Hızlı işlemler tek çalışma alanında.</span></div>`}</aside><section class="app-main">${content}</section></div>${bottomNav(admin)}${admin ? adminMobileMenu() : ""}${searchOverlay()}${companyDetailModal()}${quickTradeModal()}${orderConfirmModal()}${documentPreviewModal()}</main>`;
 }
 
 function navLink([label, href, ico]) {
@@ -1244,6 +1244,14 @@ function normalizeOrderForm(form) {
     form.quantity = String(estimate.quantity);
   }
   return form;
+}
+
+function orderConfirmModal() {
+  const data = state.orderConfirm;
+  if (!data) return "";
+  const { form, estimate } = data;
+  const isBuy = form.side === "buy";
+  return `<div class="modal-backdrop open" data-close-order-confirm><div class="modal rf-tx-modal" data-modal-stop><div class="rf-tx-modal-head"><div><h3 style="margin:0;font-size:17px;">${esc(form.symbol)} ${isBuy ? "Alış" : "Satış"}</h3><small class="muted">${number(estimate.quantity)} adet × ${money(estimate.price)}</small></div><button type="button" class="icon-button" data-close-order-confirm aria-label="Kapat">${icon("close", 20)}</button></div><div class="rf-tx-detail-list" style="margin:16px 0;"><div class="rf-tx-detail-row"><span>İşlem tutarı</span><strong>${money(estimate.gross)}</strong></div><div class="rf-tx-detail-row"><span>Komisyon</span><strong style="color:#16a34a;">${money(estimate.commission)}</strong></div><div class="rf-tx-detail-row" style="border-top:1px solid var(--rf-line,#e6ebf3);padding-top:8px;"><span>${isBuy ? "Toplam ödeme" : "Net satış"}</span><strong>${money(estimate.total)}</strong></div></div><div style="display:flex;gap:10px;"><button type="button" class="ghost-button" style="flex:1;" data-close-order-confirm>Vazgeç</button><button type="button" class="primary-button" style="flex:1;" data-confirm-order>${isBuy ? "Alışı" : "Satışı"} Onayla</button></div></div></div>`;
 }
 
 function quickTradeModal() {
@@ -2804,6 +2812,20 @@ document.addEventListener("click", async (event) => {
   if (stock) { state.selectedSymbol = stock.dataset.stock; state.orderSide = stock.dataset.side || "buy"; state.orderAmountMode = state.orderSide === "buy" ? "cash" : "quantity"; state.tradeOpen = true; render(); return; }
   const tradeClose = modalCloseTarget(event, "data-trade-close");
   if (tradeClose) { state.tradeOpen = false; render(); return; }
+  const orderConfirmClose = modalCloseTarget(event, "data-close-order-confirm");
+  if (orderConfirmClose) { state.orderConfirm = null; render({ motion: false, preserveScroll: true }); return; }
+  const orderConfirmButton = event.target.closest("[data-confirm-order]");
+  if (orderConfirmButton) {
+    const data = state.orderConfirm;
+    state.orderConfirm = null;
+    if (data) {
+      await api("/api/orders", { method: "POST", body: JSON.stringify(data.form) });
+      showToast(data.form.order_type === "limit" ? "Limit emri başarıyla oluşturuldu." : "Piyasa işlemi tamamlandı.");
+      state.tradeOpen = false;
+      navigate("/esube/portfolio");
+    }
+    return;
+  }
   const docPreview = event.target.closest("[data-doc-preview]");
   if (docPreview) { state.docPreview = { url: docPreview.dataset.docPreview, title: docPreview.dataset.docTitle, subtitle: docPreview.dataset.docSubtitle, content_type: docPreview.dataset.docType }; render(); return; }
   const docClose = modalCloseTarget(event, "data-doc-close");
@@ -3037,12 +3059,8 @@ document.addEventListener("submit", async (event) => {
     } else if (event.target.id === "order-form" || event.target.id === "quick-order-form") {
       const form = normalizeOrderForm(Object.fromEntries(new FormData(event.target).entries()));
       const estimate = orderEstimate(form);
-      const summary = `${form.symbol} ${form.side === "buy" ? "ALIŞ" : "SATIŞ"}\n${estimate.quantity} adet × ${money(estimate.price)}\nİşlem tutarı: ${money(estimate.gross)}\nKomisyon: ${money(estimate.commission)}\n${form.side === "buy" ? "Toplam ödeme" : "Net satış"}: ${money(estimate.total)}`;
-      if (!confirm(`${summary}\n\nEmri onaylıyor musunuz?`)) return;
-      await api("/api/orders", { method: "POST", body: JSON.stringify(form) });
-      showToast(form.order_type === "limit" ? "Limit emri başarıyla oluşturuldu." : "Piyasa işlemi tamamlandı.");
-      state.tradeOpen = false;
-      navigate("/esube/portfolio");
+      state.orderConfirm = { form, estimate };
+      render({ motion: false, preserveScroll: true });
     } else if (event.target.id === "support-form") {
       const input = event.target.elements.message;
       const message = String(input.value || "").trim();
