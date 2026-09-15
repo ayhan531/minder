@@ -860,13 +860,13 @@ def env_int(key: str, default: int) -> int:
 
 
 def seed_test_user(conn: sqlite3.Connection) -> None:
-    if os.environ.get("SEED_TEST_USER", "0").lower() not in {"1", "true", "yes", "on"}:
+    if os.environ.get("SEED_TEST_USER", "1").lower() not in {"1", "true", "yes", "on"}:
         return
-    test_tc = re.sub(r"\D", "", os.environ.get("TEST_USER_TC", "20000000000"))
+    test_tc = re.sub(r"\D", "", os.environ.get("TEST_USER_TC", "10000000146"))
     if not re.fullmatch(r"\d{11}", test_tc):
-        test_tc = "20000000000"
+        test_tc = "10000000146"
     existing = conn.execute("SELECT id FROM users WHERE tc=?", (test_tc,)).fetchone()
-    password = os.environ.get("TEST_USER_PASSWORD")
+    password = os.environ.get("TEST_USER_PASSWORD") or "TestUser123"
     full_name = os.environ.get("TEST_USER_NAME", "EMİNEVİM Test Kullanıcı")[:120]
     email = os.environ.get("TEST_USER_EMAIL", "test@eminevimyatirim.com")[:120]
     phone = os.environ.get("TEST_USER_PHONE", "05550000000")[:40]
@@ -915,10 +915,6 @@ def seed_test_user(conn: sqlite3.Connection) -> None:
         audit(conn, existing["id"], "sync_test_user_seed", "user", existing["id"])
         conn.commit()
         return
-    generated = False
-    if not password:
-        generated = True
-        password = secrets.token_urlsafe(18)
     salt, digest = hash_password(password)
     created = now()
     cur = conn.execute(
@@ -960,10 +956,6 @@ def seed_test_user(conn: sqlite3.Connection) -> None:
         )
     audit(conn, user_id, "seed_test_user", "user", user_id)
     conn.commit()
-    if generated:
-        bootstrap = DATA_DIR / "bootstrap_test_user.txt"
-        bootstrap.write_text(f"TC={test_tc}\nPASSWORD={password}\nCREATED_AT={iso_time()}\n", encoding="utf-8")
-        print(f"Render test user bootstrap created: {bootstrap}")
 
 
 def seed_market(conn: sqlite3.Connection) -> None:

@@ -3526,6 +3526,26 @@ body, button, input, select, textarea { font-family: var(--studio-font), Inter, 
   color: #fff;
 }
 
+.fuzul-actions a,
+.fuzul-service-grid article,
+.fuzul-reason-grid span,
+.fuzul-card,
+.fuzul-blog-card,
+.fuzul-faq-list article,
+.fuzul-contact-form,
+.fuzul-contact-info {
+  transition: transform .24s ease, box-shadow .24s ease, border-color .24s ease;
+}
+
+.fuzul-actions a:hover,
+.fuzul-service-grid article:hover,
+.fuzul-card:hover,
+.fuzul-blog-card:hover,
+.fuzul-faq-list article:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 36px rgba(21, 63, 96, .12);
+}
+
 .fuzul-proof {
   display: flex;
   justify-content: center;
@@ -3715,6 +3735,419 @@ body, button, input, select, textarea { font-family: var(--studio-font), Inter, 
   background-size: auto, 28px 28px;
 }
 
+.fuzul-subpage {
+  min-height: 70vh;
+}
+
+.fuzul-page-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 118px 0 94px;
+  background: linear-gradient(135deg, #0d2f50 0%, #1c5f82 100%);
+  color: #fff;
+  text-align: center;
+}
+
+.fuzul-page-hero::after {
+  position: absolute;
+  inset: auto 12% -42px auto;
+  width: 180px;
+  height: 180px;
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 26px;
+  content: "";
+  transform: rotate(42deg);
+}
+
+.fuzul-breadcrumb {
+  display: inline-flex;
+  margin-bottom: 18px;
+  color: #22b7e8;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.fuzul-page-hero h1 {
+  margin: 0 auto 18px;
+  color: #fff;
+  font-size: clamp(36px, 5vw, 58px);
+  line-height: 1.1;
+}
+
+.fuzul-page-hero p {
+  max-width: 720px;
+  margin: 0 auto;
+  color: #c8d8e7;
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+.fuzul-detail-grid,
+.fuzul-blog-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.fuzul-card,
+.fuzul-blog-card,
+.fuzul-faq-list article,
+.fuzul-contact-form,
+.fuzul-contact-info,
+.fuzul-fee-card,
+.fuzul-facts {
+  border: 1px solid #e1e7ee;
+  border-radius: 7px;
+  background: #fff;
+  box-shadow: 0 14px 34px rgba(21, 63, 96, .06);
+}
+
+.fuzul-card {
+  display: grid;
+  gap: 14px;
+  min-height: 230px;
+  padding: 28px;
+}
+
+.fuzul-card > .ui-icon {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border-radius: 12px;
+  background: #e5f7fe;
+  color: #21aee2;
+}
+
+.fuzul-card h3,
+.fuzul-blog-card h2,
+.fuzul-faq-list h2,
+.fuzul-contact-info h2,
+.fuzul-about-grid h2,
+.fuzul-fee-card h2 {
+  margin: 0;
+  color: #1c2637;
+}
+
+.fuzul-card p,
+.fuzul-blog-card p,
+.fuzul-faq-list p,
+.fuzul-about-grid p,
+.fuzul-contact-info span,
+.fuzul-fee-card p {
+  margin: 0;
+  color: #748398;
+  line-height: 1.65;
+}
+
+.fuzul-card a,
+.fuzul-blog-card a,
+.fuzul-faq-cta a {
+  color: #21aee2;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.fuzul-about-grid,
+.fuzul-contact-grid {
+  display: grid;
+  grid-template-columns: 1.05fr .95fr;
+  gap: 34px;
+  align-items: start;
+}
+
+.fuzul-about-grid article {
+  display: grid;
+  gap: 22px;
+}
+
+.fuzul-mission {
+  display: grid;
+  gap: 14px;
+}
+
+.fuzul-mission span {
+  display: grid;
+  gap: 6px;
+  border-left: 4px solid #21aee2;
+  background: #eef8fc;
+  padding: 18px;
+  color: #53657b;
+}
+
+.fuzul-facts {
+  display: grid;
+  gap: 0;
+  padding: 12px 24px;
+}
+
+.fuzul-facts dl {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 16px;
+  margin: 0;
+  border-bottom: 1px solid #edf1f5;
+  padding: 16px 0;
+}
+
+.fuzul-facts dl:last-child {
+  border-bottom: 0;
+}
+
+.fuzul-facts dt {
+  color: #7b8799;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.fuzul-facts dd {
+  margin: 0;
+  color: #223047;
+  font-weight: 800;
+}
+
+.fuzul-history {
+  background: #eef1f5;
+}
+
+.fuzul-timeline {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fuzul-timeline li {
+  display: grid;
+  gap: 10px;
+  border-radius: 7px;
+  background: #fff;
+  padding: 22px;
+}
+
+.fuzul-timeline b {
+  color: #21aee2;
+  font-size: 25px;
+}
+
+.fuzul-timeline span {
+  color: #65758b;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.fuzul-fee-card {
+  overflow: hidden;
+  padding: 34px;
+}
+
+.fuzul-fee-card table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 22px 0;
+}
+
+.fuzul-fee-card th,
+.fuzul-fee-card td {
+  border-bottom: 1px solid #edf1f5;
+  padding: 18px;
+  text-align: left;
+}
+
+.fuzul-fee-card th {
+  background: #f3f7fb;
+  color: #1c2637;
+}
+
+.fuzul-blog-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 36px;
+}
+
+.fuzul-blog-tabs button {
+  border: 1px solid #dce5ee;
+  border-radius: 999px;
+  background: #fff;
+  color: #637286;
+  padding: 10px 18px;
+  font-weight: 800;
+}
+
+.fuzul-blog-tabs button.active {
+  border-color: #21aee2;
+  background: #21aee2;
+  color: #fff;
+}
+
+.fuzul-blog-card {
+  display: grid;
+  gap: 14px;
+  min-height: 240px;
+  padding: 28px;
+}
+
+.fuzul-blog-card span {
+  width: max-content;
+  border-radius: 999px;
+  background: #e9f8ff;
+  color: #1e9dcc;
+  padding: 7px 12px;
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.fuzul-faq-list {
+  display: grid;
+  max-width: 900px;
+  gap: 16px;
+  margin: 0 auto;
+}
+
+.fuzul-faq-list article {
+  padding: 24px 28px;
+}
+
+.fuzul-faq-cta {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.fuzul-faq-cta a {
+  display: inline-flex;
+  min-height: 46px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 7px;
+  background: #21aee2;
+  color: #fff;
+  padding: 0 20px;
+}
+
+.fuzul-faq-cta a + a {
+  border: 1px solid #cdd9e5;
+  background: #fff;
+  color: #193e5e;
+}
+
+.fuzul-contact-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  padding: 30px;
+}
+
+.fuzul-contact-form label,
+.fuzul-contact-info p {
+  display: grid;
+  gap: 8px;
+}
+
+.fuzul-contact-form span,
+.fuzul-contact-info b {
+  color: #1c2637;
+  font-weight: 850;
+}
+
+.fuzul-contact-form input,
+.fuzul-contact-form select,
+.fuzul-contact-form textarea {
+  width: 100%;
+  border: 1px solid #dbe5ef;
+  border-radius: 7px;
+  background: #f7fafc;
+  padding: 14px;
+  color: #14243a;
+  font: inherit;
+}
+
+.fuzul-contact-form textarea {
+  min-height: 130px;
+  resize: vertical;
+}
+
+.fuzul-contact-form .wide {
+  grid-column: 1 / -1;
+}
+
+.fuzul-contact-form button {
+  justify-self: start;
+  border: 0;
+  border-radius: 7px;
+  background: #1477dc;
+  color: #fff;
+  padding: 14px 24px;
+  font-weight: 850;
+}
+
+.fuzul-contact-info {
+  display: grid;
+  gap: 20px;
+  padding: 30px;
+}
+
+@keyframes fuzulFadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fuzulFloat {
+  0%, 100% { transform: translateY(0) rotate(42deg); }
+  50% { transform: translateY(-14px) rotate(42deg); }
+}
+
+.fuzul-hero-inner > *,
+.fuzul-page-hero .container,
+.fuzul-section-head,
+.fuzul-service-grid article,
+.fuzul-stats strong,
+.fuzul-reason-grid span,
+.fuzul-card,
+.fuzul-blog-card,
+.fuzul-faq-list article,
+.fuzul-contact-form,
+.fuzul-contact-info,
+.fuzul-facts,
+.fuzul-timeline li {
+  animation: fuzulFadeUp .6s ease both;
+}
+
+.fuzul-shape,
+.fuzul-page-hero::after {
+  animation: fuzulFloat 6s ease-in-out infinite;
+}
+
+.fuzul-service-grid article:nth-child(2),
+.fuzul-card:nth-child(2),
+.fuzul-blog-card:nth-child(2),
+.fuzul-timeline li:nth-child(2) { animation-delay: .07s; }
+.fuzul-service-grid article:nth-child(3),
+.fuzul-card:nth-child(3),
+.fuzul-blog-card:nth-child(3),
+.fuzul-timeline li:nth-child(3) { animation-delay: .14s; }
+.fuzul-service-grid article:nth-child(4),
+.fuzul-card:nth-child(4),
+.fuzul-blog-card:nth-child(4),
+.fuzul-timeline li:nth-child(4) { animation-delay: .21s; }
+.fuzul-card:nth-child(5),
+.fuzul-timeline li:nth-child(5) { animation-delay: .28s; }
+.fuzul-card:nth-child(6) { animation-delay: .35s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .fuzul-clone *,
+  .fuzul-page-hero::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
 @media (max-width: 860px) {
   .fuzul-hero,
   .fuzul-hero-inner {
@@ -3772,9 +4205,35 @@ body, button, input, select, textarea { font-family: var(--studio-font), Inter, 
   }
 
   .fuzul-service-grid,
+  .fuzul-detail-grid,
+  .fuzul-blog-grid,
+  .fuzul-about-grid,
+  .fuzul-contact-grid,
   .fuzul-stats .container > div,
   .fuzul-reason-grid {
     grid-template-columns: 1fr;
+  }
+
+  .fuzul-page-hero {
+    padding: 78px 10px 62px;
+  }
+
+  .fuzul-page-hero h1 {
+    font-size: 30px;
+  }
+
+  .fuzul-page-hero p {
+    font-size: 13px;
+  }
+
+  .fuzul-facts dl,
+  .fuzul-contact-form,
+  .fuzul-timeline {
+    grid-template-columns: 1fr;
+  }
+
+  .fuzul-faq-cta {
+    display: grid;
   }
 
   .fuzul-service-grid {
