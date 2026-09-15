@@ -12,8 +12,8 @@ APK referansı korunarak web projesine dönüştürülmüş yatırım, e-şube v
    `http://localhost:5002/esube`
 
 ### Varsayılan Giriş Bilgileri:
-- **Yönetici:** T.C. `10000000000` / Şifre: `AdminPass!2026`
-- **Müşteri:** T.C. `20000000000` / Şifre: `TestPass!2026`
+- **Yönetici:** T.C. `10000000000` / Şifre: sunucu ilk açılışta `data/bootstrap_admin.txt` içine yazılır (veya `ADMIN_PASSWORD` ortam değişkeniyle sabitlenebilir).
+- **Müşteri:** T.C. `10000000146` / Şifre: `TestUser123` (varsayılan; `TEST_USER_TC` / `TEST_USER_PASSWORD` ile özelleştirilebilir).
 
 ## Render 1-Click Dağıtım
 Proje kök dizininde hazır `render.yaml` bulunmaktadır.

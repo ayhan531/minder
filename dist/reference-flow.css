@@ -748,3 +748,56 @@
   filter: none !important;
   opacity: 1;
 }
+
+/* Portfolio header should stay neutral like the market/settings pages, not the blue home hero */
+.rf-mobile-header:not(.home):not(.quiet) {
+  background: #fff !important;
+}
+.theme-dark .rf-mobile-header:not(.home):not(.quiet) {
+  background: #101a2f !important;
+}
+.rf-mobile-header:not(.home):not(.quiet) .icon-button {
+  color: #34445e;
+}
+.theme-dark .rf-mobile-header:not(.home):not(.quiet) .icon-button {
+  color: #a5c2eb;
+}
+
+/* Compact settings rows (Ayarlar / Bildirim Ayarları) */
+.settings-compact .reference-menu-link {
+  min-height: 44px;
+  padding: 8px 16px;
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+}
+.settings-compact .reference-menu-link select {
+  max-width: 108px;
+  font-size: 12.5px;
+}
+.settings-compact .reference-menu-link .status,
+.settings-compact .reference-menu-link .small-button {
+  white-space: nowrap;
+}
+.settings-compact .reference-menu-link small {
+  font-size: 11px;
+}
+.settings-compact .reference-list-card + .settings-section-label,
+.settings-section-label {
+  display: block;
+  margin: 18px 4px 8px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--rf-muted, #73809a);
+}
+.settings-compact .toggle-control {
+  justify-self: end;
+}
+
+/* Chart drag tooltip smoothing */
+.rf-chart-tooltip {
+  transition: left 0.12s ease;
+}
+#rf-chart-drag-point {
+  transition: cx 0.05s linear, cy 0.05s linear;
+}

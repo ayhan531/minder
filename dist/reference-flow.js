@@ -8,6 +8,15 @@ state.specialNoticeOpen = false;
 state.userLanguage = localStorage.getItem("eminevim_lang") || "tr";
 state.fontSizeMode = localStorage.getItem("eminevim_font_size") || "medium";
 state.customAvatar = localStorage.getItem("eminevim_avatar") || "";
+state.notifPrefs = (() => {
+  const defaults = { all: true, price: true, news: true, trade: true, referral: true, weekly: true };
+  try {
+    const saved = JSON.parse(localStorage.getItem("eminevim_notif_prefs") || "{}");
+    return { ...defaults, ...saved };
+  } catch (e) {
+    return defaults;
+  }
+})();
 
 function getCustomAvatarHtml() {
   if (state.customAvatar) {
@@ -58,15 +67,27 @@ portfolioPageV2 = function () {
   const value = positions.reduce((sum, p) => sum + Number(p.market_value || 0), 0);
   const pnl = positions.reduce((sum, p) => sum + Number(p.pnl || 0), 0);
   const total = Number(account.cash_balance || 0) + Number(account.pending_balance || 0) + value;
-  const pctValue = value ? (pnl / Math.max(value - pnl, 1)) * 100 : 4.63;
+  const pctValue = value ? (pnl / Math.max(value - pnl, 1)) * 100 : 0;
+  const posPct = total > 0 ? Math.max(0, Math.min(100, (value / total) * 100)) : 0;
+  const cashPct = Math.max(0, 100 - posPct);
+  const ringSplit = Math.max(0, Math.min(100, posPct));
 
   const cardSlide = state.portfolioCardSlide || 0;
 
   // Card 1: Portföy Özeti
-  const card1Html = `<div class="bank-card"><button type="button" class="privacy-eye" data-balance-toggle aria-label="Bakiyeyi gizle">${icon(state.hideBalance ? "eyeOff" : "eye", 18)}</button><h2>Portföy özeti</h2><strong class="portfolio-total">${state.hideBalance ? "******" : money(total)}</strong><small class="rf-profit-sub ${pnl >= 0 ? "" : "down"}">${state.hideBalance ? "***" : `+${money(pnl >= 0 ? pnl : 7432.50)} (%${number(Math.abs(pctValue))}) toplam kâr`}</small><div class="rf-donut-wrapper"><div class="profit-ring"><span>${state.hideBalance ? "**" : `%${Math.round(Math.abs(pctValue || 84))}`}</span></div><div class="rf-card-legend"><span><i style="background:#38bdf8;"></i> Pozisyonlar · %84</span><span><i style="background:#fbbf24;"></i> Bakiye · %13</span><span><i style="background:#34d399;"></i> Kâr · +%4,63</span></div></div><div class="rf-summary-grid"><span>Kullanılabilir<strong>${state.hideBalance ? "******" : money(account.cash_balance)}</strong></span><span>T+2 Bakiye<strong>${state.hideBalance ? "******" : money(account.pending_balance)}</strong></span></div></div>`;
+  const card1Html = `<div class="bank-card"><button type="button" class="privacy-eye" data-balance-toggle aria-label="Bakiyeyi gizle">${icon(state.hideBalance ? "eyeOff" : "eye", 18)}</button><h2>Portföy özeti</h2><strong class="portfolio-total">${state.hideBalance ? "******" : money(total)}</strong><small class="rf-profit-sub ${pnl >= 0 ? "" : "down"}">${state.hideBalance ? "***" : `${pnl >= 0 ? "+" : ""}${money(pnl)} (%${number(Math.abs(pctValue))}) toplam kâr`}</small><div class="rf-donut-wrapper"><div class="profit-ring" style="background:conic-gradient(#38bdf8 0 ${ringSplit}%, #fbbf24 ${ringSplit}% 100%);"><span>${state.hideBalance ? "**" : `%${Math.round(posPct)}`}</span></div><div class="rf-card-legend"><span><i style="background:#38bdf8;"></i> Pozisyonlar · %${number(posPct)}</span><span><i style="background:#fbbf24;"></i> Bakiye · %${number(cashPct)}</span><span><i style="background:#34d399;"></i> Kâr · ${pnl >= 0 ? "+" : ""}%${number(pctValue)}</span></div></div><div class="rf-summary-grid"><span>Kullanılabilir<strong>${state.hideBalance ? "******" : money(account.cash_balance)}</strong></span><span>T+2 Bakiye<strong>${state.hideBalance ? "******" : money(account.pending_balance)}</strong></span></div></div>`;
 
-  // Card 2: Getiri Grafiği (interactive)
-  const card2Html = `<div class="rf-chart-card"><div class="rf-chart-card-head"><strong>${icon("chart", 16)} Pozisyon sayısı: ${positions.length || 3}</strong><span>1 Ay</span></div><div class="rf-interactive-chart-box"><div class="rf-chart-tooltip" id="rf-chart-tooltip">Cum 11 Eyl · -%0,53</div><svg class="rf-chart-svg" viewBox="0 0 300 85" preserveAspectRatio="none"><defs><linearGradient id="rfGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#34d399" stop-opacity="0.4"/><stop offset="100%" stop-color="#34d399" stop-opacity="0.0"/></linearGradient></defs><path d="M0,70 Q40,65 70,45 T140,40 T210,35 T260,20 T300,15 L300,85 L0,85 Z" fill="url(#rfGrad)"/><path d="M0,70 Q40,65 70,45 T140,40 T210,35 T260,20 T300,15" fill="none" stroke="#34d399" stroke-width="3" stroke-linecap="round"/><circle cx="260" cy="20" r="6" fill="#fff" stroke="#34d399" stroke-width="3" style="cursor:pointer;" id="rf-chart-drag-point"/></svg></div><div class="rf-chart-card-foot"><span>Toplam getiri: <strong>${money(pnl || 7432.50)}</strong></span><span>En yüksek getiri: <strong style="color:#34d399;">+%12,40</strong></span></div></div>`;
+  // Card 2: Getiri Grafiği (interactive drag-to-scrub)
+  const chartPoints = [
+    { x: 0, y: 70, date: "14 Ağu", pct: -2.10 },
+    { x: 70, y: 45, date: "19 Ağu", pct: -0.85 },
+    { x: 140, y: 40, date: "28 Ağu", pct: 1.35 },
+    { x: 210, y: 35, date: "2 Eyl", pct: 2.40 },
+    { x: 260, y: 20, date: "11 Eyl", pct: -0.53 },
+    { x: 300, y: 15, date: "13 Eyl", pct: Number(number(pctValue)) || 4.63 }
+  ];
+  const pointsAttr = esc(JSON.stringify(chartPoints));
+  const card2Html = `<div class="rf-chart-card"><div class="rf-chart-card-head"><strong>${icon("chart", 16)} Pozisyon sayısı: ${positions.length || 3}</strong><span>1 Ay</span></div><div class="rf-interactive-chart-box" id="rf-chart-drag-box" data-points="${pointsAttr}"><div class="rf-chart-tooltip" id="rf-chart-tooltip">Cum 11 Eyl · -%0,53</div><svg class="rf-chart-svg" viewBox="0 0 300 85" preserveAspectRatio="none"><defs><linearGradient id="rfGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#34d399" stop-opacity="0.4"/><stop offset="100%" stop-color="#34d399" stop-opacity="0.0"/></linearGradient></defs><path d="M0,70 Q40,65 70,45 T140,40 T210,35 T260,20 T300,15 L300,85 L0,85 Z" fill="url(#rfGrad)"/><path d="M0,70 Q40,65 70,45 T140,40 T210,35 T260,20 T300,15" fill="none" stroke="#34d399" stroke-width="3" stroke-linecap="round"/><circle cx="260" cy="20" r="7" fill="#fff" stroke="#34d399" stroke-width="3" style="cursor:grab;touch-action:none;" id="rf-chart-drag-point"/></svg></div><div class="rf-chart-card-foot"><span>Toplam getiri: <strong>${money(pnl || 7432.50)}</strong></span><span>En yüksek getiri: <strong style="color:#34d399;">+%12,40</strong></span></div></div>`;
 
   const carouselHtml = `<div class="rf-carousel-container"><div class="rf-carousel-track" style="transform: translateX(-${cardSlide * 50}%);"><div class="rf-carousel-slide">${card1Html}</div><div class="rf-carousel-slide">${card2Html}</div></div></div><div class="rf-slider-dots"><button type="button" class="rf-dot ${cardSlide === 0 ? "active" : ""}" data-card-slide="0" aria-label="Portföy Özeti"></button><button type="button" class="rf-dot ${cardSlide === 1 ? "active" : ""}" data-card-slide="1" aria-label="Getiri Grafiği"></button></div>`;
 
@@ -104,7 +125,9 @@ function referenceStockButton(q, index = 0) {
   const line2 = q.quantity
     ? `${number(q.quantity)} lot · Ort. ₺${number(q.avg_price || price)}`
     : name;
-  return `<button type="button" class="rf-stock-row" data-trade-symbol="${esc(symbol)}" style="--row-index:${index}">
+  const assetClass = q.asset_class || "stock";
+  const isSpecial = ["ipo", "fund", "fx"].includes(assetClass);
+  return `<button type="button" class="rf-stock-row" ${isSpecial ? "data-special-market-click" : `data-trade-symbol="${esc(symbol)}"`} data-asset-class="${esc(assetClass)}" style="--row-index:${index}">
     <span class="market-identity">${stockLogo(symbol, name)}<span><strong>${esc(symbol)}</strong><small>${esc(line2)}</small></span></span>
     <span class="rf-stock-price"><strong>${money(price)}</strong><small>${q.quantity ? money(q.market_value || price * Number(q.quantity || 0)) : "Güncel"}</small></span>
     <span class="change-pill ${change >= 0 ? "up" : "down"}">${change >= 0 ? "+" : ""}${number(change)}%</span>
@@ -297,6 +320,19 @@ document.addEventListener("click", (event) => {
     return;
   }
 
+  // Open buy/sell modal for a regular BIST stock row
+  const tradeSymbolBtn = event.target.closest("[data-trade-symbol]");
+  if (tradeSymbolBtn) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    state.selectedSymbol = tradeSymbolBtn.dataset.tradeSymbol;
+    state.orderSide = "buy";
+    state.orderAmountMode = "cash";
+    state.tradeOpen = true;
+    render({ motion: false, preserveScroll: true });
+    return;
+  }
+
   // Percent trade button
   const percent = event.target.closest("[data-rf-percent]");
   if (percent) {
@@ -343,7 +379,59 @@ document.addEventListener("change", (event) => {
     localStorage.setItem("eminevim_lang", state.userLanguage);
     showToast("Dil tercihi güncellendi");
   }
+
+  const notifPref = event.target.closest("[data-notif-pref]");
+  if (notifPref) {
+    const key = notifPref.dataset.notifPref;
+    state.notifPrefs[key] = notifPref.checked;
+    if (key === "all") {
+      ["price", "news", "trade", "referral", "weekly"].forEach((k) => { state.notifPrefs[k] = notifPref.checked; });
+    } else if (notifPref.checked) {
+      state.notifPrefs.all = true;
+    }
+    localStorage.setItem("eminevim_notif_prefs", JSON.stringify(state.notifPrefs));
+    render({ motion: false, preserveScroll: true });
+  }
 });
+
+// Interactive chart drag-to-scrub (card 2)
+let rfChartDragging = false;
+function rfUpdateChartPoint(clientX) {
+  const box = document.getElementById("rf-chart-drag-box");
+  const svg = box?.querySelector(".rf-chart-svg");
+  const dot = document.getElementById("rf-chart-drag-point");
+  const tooltip = document.getElementById("rf-chart-tooltip");
+  if (!box || !svg || !dot || !tooltip) return;
+  let points;
+  try { points = JSON.parse(box.dataset.points || "[]"); } catch (e) { points = []; }
+  if (!points.length) return;
+  const rect = svg.getBoundingClientRect();
+  const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+  const targetX = ratio * 300;
+  let nearest = points[0];
+  let bestDist = Infinity;
+  for (const p of points) {
+    const d = Math.abs(p.x - targetX);
+    if (d < bestDist) { bestDist = d; nearest = p; }
+  }
+  dot.setAttribute("cx", nearest.x);
+  dot.setAttribute("cy", nearest.y);
+  const pct = Number(nearest.pct);
+  tooltip.textContent = `${nearest.date} · ${pct >= 0 ? "+" : "-"}%${number(Math.abs(pct))}`;
+  tooltip.style.right = "";
+  tooltip.style.left = `${Math.max(4, Math.min(94, (nearest.x / 300) * 100 - 10))}%`;
+}
+document.addEventListener("pointerdown", (event) => {
+  if (event.target.closest("#rf-chart-drag-point") || event.target.closest("#rf-chart-drag-box")) {
+    rfChartDragging = true;
+    rfUpdateChartPoint(event.clientX);
+  }
+});
+document.addEventListener("pointermove", (event) => {
+  if (rfChartDragging) rfUpdateChartPoint(event.clientX);
+});
+document.addEventListener("pointerup", () => { rfChartDragging = false; });
+document.addEventListener("pointercancel", () => { rfChartDragging = false; });
 
 // Search input handling
 document.addEventListener("input", (event) => {
