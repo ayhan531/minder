@@ -940,7 +940,47 @@ function renderLegacyHomeB() {
 }
 
 function publicHome() {
-  return renderEMİNEVİMHome();
+  const services = [
+    ["bank", "Borsa İstanbul", "Hisse senedi işlemleri, emir yönetimi ve canlı piyasa takibi tek panelde."],
+    ["pie", "Portföy Yönetimi", "Varlık dağılımı, pozisyon ve hesap hareketleri e-şube düzeninde izlenir."],
+    ["shield", "Güvenli Operasyon", "Kimlik, sözleşme, para transferi ve işlem onay adımları kayıt altındadır."],
+    ["activity", "Yatırım Masası", "Referans ve temsilci süreçleriyle profesyonel yatırım akışı kurulur."]
+  ];
+  const stats = [["₺250M+", "İzlenen portföy hacmi"], ["T+2", "Takas bakiyesi takibi"], ["7/24", "Dijital e-şube erişimi"], ["%99.9", "Platform sürekliliği"]];
+  const quotes = state.market.filter((item) => (item.asset_class || "stock") === "stock").slice(0, 5);
+  return `<main class="public-main corporate-public">
+    <section class="corporate-hero">
+      <div class="corporate-hero-bg" aria-hidden="true"></div>
+      <div class="container corporate-hero-grid">
+        <div class="corporate-hero-copy">
+          <span class="corporate-kicker">${icon("shield", 15)} Güvenli dijital yatırım platformu</span>
+          <h1>Eminevim Yatırım</h1>
+          <p>E-şube deneyimiyle aynı mavi finans dili üzerine kurulmuş, portföy, emir, haber ve hesap süreçlerini tek merkezde toplayan kurumsal yatırım arayüzü.</p>
+          <div class="corporate-actions"><a href="/esube/giris" data-link>Giriş Yap ${icon("arrow", 16)}</a><a href="/esube/giris?mode=register" data-link>Hesap Oluştur</a></div>
+          <div class="corporate-proof">${stats.map(([v, l]) => `<span><strong>${v}</strong><small>${l}</small></span>`).join("")}</div>
+        </div>
+        <aside class="corporate-terminal" aria-label="E-şube portföy özeti">
+          <div class="terminal-top"><span>${brandLockup(true)}</span><b>Canlı Panel</b></div>
+          <div class="terminal-balance"><small>Toplam Portföy Değeri</small><strong>₺250.695,50</strong><em>+₺19,00 (%2,81)</em></div>
+          <div class="terminal-chart"><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="terminal-list">${quotes.map((q) => `<span><b>${esc(q.symbol)}</b><strong>${money(q.price)}</strong><em class="${q.change_pct >= 0 ? "up" : "down"}">${q.change_pct >= 0 ? "+" : ""}${number(q.change_pct)}%</em></span>`).join("")}</div>
+        </aside>
+      </div>
+    </section>
+    <section class="corporate-section">
+      <div class="container">
+        <div class="corporate-section-head"><span>Hizmetler</span><h2>E-şubeyle aynı profesyonel yatırım altyapısı</h2><p>Public site ve e-şube artık aynı görsel aileden konuşur: net mavi ton, güçlü tipografi, kontrollü animasyon ve finans odaklı ekran dili.</p></div>
+        <div class="corporate-service-grid">${services.map(([ic, title, copy]) => `<article>${icon(ic, 28)}<h3>${title}</h3><p>${copy}</p><a href="/hizmetlerimiz" data-link>Detay ${icon("arrow", 13)}</a></article>`).join("")}</div>
+      </div>
+    </section>
+    <section class="corporate-band">
+      <div class="container corporate-band-grid">
+        <div><span>Kurumsal süreç</span><h2>Hesap açılışından portföy takibine kadar tek akış</h2></div>
+        <ol><li><b>01</b><span>Hesap başvurusu ve uygunluk</span></li><li><b>02</b><span>Para transferi ve bakiye yönetimi</span></li><li><b>03</b><span>Emir, portföy ve geçmiş takibi</span></li></ol>
+      </div>
+    </section>
+    <section class="corporate-cta"><div class="container"><h2>Yatırım hesabınıza güvenli e-şubeden bağlanın</h2><a href="/esube/giris" data-link>Güvenli Giriş ${icon("arrow", 16)}</a></div></section>
+  </main>`;
 }
 
 function publicFooter() {

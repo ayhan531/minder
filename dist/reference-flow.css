@@ -1438,10 +1438,12 @@ body:has(.workspace.theme-dark) {
 .apk-summary-card small {
   display: block;
   margin-top: 18px;
-  max-width: 185px;
+  max-width: 150px;
+  overflow: hidden;
   color: #6df2b4;
   font-size: 11px !important;
   font-weight: 800;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
@@ -1459,8 +1461,8 @@ body:has(.workspace.theme-dark) {
 
 .apk-ring {
   position: absolute;
-  top: 59px;
-  right: 128px;
+  top: 66px;
+  right: 126px;
   display: grid;
   width: 58px;
   height: 58px;
@@ -1485,7 +1487,7 @@ body:has(.workspace.theme-dark) {
 
 .apk-legend {
   position: absolute;
-  top: 64px;
+  top: 66px;
   right: 12px;
   display: grid;
   width: 112px;
@@ -1519,7 +1521,7 @@ body:has(.workspace.theme-dark) {
   left: 22px;
   bottom: 28px;
   display: flex;
-  gap: 26px;
+  gap: 32px;
   padding-top: 18px;
   border-top: 1px solid rgb(255 255 255 / 17%);
 }
@@ -1528,12 +1530,29 @@ body:has(.workspace.theme-dark) {
   display: grid;
   gap: 7px;
   color: rgb(255 255 255 / 86%);
-  font-size: 17px !important;
+  font-size: 15px !important;
 }
 
 .apk-cash-row strong {
   max-width: none;
-  font-size: 22px !important;
+  font-size: 19px !important;
+}
+
+.apk-summary-card .up,
+.apk-summary-card .down {
+  position: relative;
+  z-index: 2;
+}
+
+.workspace .bottom-nav {
+  box-shadow: 0 -10px 28px rgb(15 30 55 / 8%);
+}
+
+.workspace .bottom-nav a.active,
+.workspace .bottom-nav button.active {
+  border-color: #b9d8f7;
+  background: #efecff;
+  color: #111a31;
 }
 
 .apk-dots {
@@ -2079,17 +2098,18 @@ body:has(.workspace.theme-dark) {
     font-size: 21px !important;
   }
   .apk-ring {
-    right: 118px;
+    top: 68px;
+    right: 114px;
     width: 54px;
     height: 54px;
   }
   .apk-legend {
-    top: 63px;
+    top: 68px;
     right: 12px;
     width: 102px;
     font-size: 9px !important;
   }
-  .apk-cash-row strong { font-size: 20px !important; }
+  .apk-cash-row strong { font-size: 18px !important; }
   .apk-account-actions {
     grid-template-columns: repeat(2, 1fr);
   }
