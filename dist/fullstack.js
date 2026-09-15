@@ -217,7 +217,7 @@ function brandLockup(compact = false) {
 function applyBranding() {
   const brand = state.publicConfig?.branding || {};
   const root = document.documentElement;
-  root.style.setProperty("--studio-primary", brand.primary || "#0067e8");
+  root.style.setProperty("--studio-primary", brand.primary || "#5b52e0");
   root.style.setProperty("--studio-accent", brand.accent || "#00a96b");
   root.style.setProperty("--studio-danger", brand.danger || "#ef3340");
   root.style.setProperty("--studio-radius", `${Math.max(4, Math.min(36, Number(brand.radius || 18)))}px`);
@@ -1167,8 +1167,8 @@ function bottomNav(admin) {
     const nav = [["Özet", "/esube/admin", "home"], ["Kullanıcı", "/esube/admin/users", "user"], ["Emir", "/esube/admin/orders", "chart"], ["Para", "/esube/admin/money", "bank"]];
     return `<nav class="bottom-nav admin-bottom-nav" aria-label="Yönetim hızlı menüsü">${nav.map(navLink).join("")}<button type="button" data-admin-menu aria-expanded="${state.adminMenuOpen}" aria-label="Tüm yönetim modüllerini aç">${icon("menu", 18)}<span>Tümü</span></button></nav>`;
   }
-  const nav = [["Ana Sayfa", "/esube", "home"], ["Piyasalar", "/esube/stocks", "chart"], ["Portföy", "/esube/portfolio", "wallet"], ["Emir", "/esube/trade", "file"], ["Hesap", "/esube/profile", "user"]];
-  return `<nav class="bottom-nav">${nav.map(navLink).join("")}</nav>`;
+  const nav = [["Ana Sayfa", "/esube", "home"], ["Haberler", "/esube/news", "news"], ["Al/Sat", "/esube/trade", "activity"], ["Portföy", "/esube/portfolio", "wallet"], ["Hesap", "/esube/profile", "user"]];
+  return `<nav class="bottom-nav">${nav.map(([label, href, ico], i) => i === 2 ? `<a href="${href}" data-link class="${active(href)} bottom-nav-highlight">${icon(ico, 18)}<span>${label}</span></a>` : navLink([label, href, ico])).join("")}</nav>`;
 }
 
 function adminMobileMenu() {

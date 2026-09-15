@@ -736,7 +736,24 @@
   .workspace .bottom-nav a.active,
   .workspace .bottom-nav button.active {
     background: transparent;
-    color: var(--eminevim-blue);
+    color: var(--studio-primary, var(--eminevim-blue));
+  }
+
+  .workspace .bottom-nav-highlight .ui-icon {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 30px;
+    border-radius: 11px;
+    background: var(--studio-primary, #5b52e0);
+    color: #fff !important;
+  }
+  .workspace .bottom-nav-highlight.active .ui-icon,
+  .workspace .bottom-nav-highlight .ui-icon {
+    color: #fff !important;
+  }
+  .workspace .bottom-nav-highlight span {
+    color: var(--studio-primary, #5b52e0);
   }
 
   .workspace .toolbar {
@@ -1333,7 +1350,7 @@
 
 /* White-label tokens controlled by Uygulama Stüdyosu. */
 :root {
-  --studio-primary: #0067e8;
+  --studio-primary: #5b52e0;
   --studio-accent: #00a96b;
   --studio-danger: #ef3340;
   --studio-radius: 18px;
