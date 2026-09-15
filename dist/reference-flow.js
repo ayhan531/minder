@@ -544,4 +544,85 @@ requestAnimationFrame(() => {
   }
 });
 
+function rfApkPortfolioSummary() {
+  const account = state.portfolio?.account || state.account || {};
+  const positions = state.portfolio?.positions || [];
+  const value = positions.reduce((sum, p) => sum + Number(p.market_value || 0), 0);
+  const pnl = positions.reduce((sum, p) => sum + Number(p.pnl || 0), 0);
+  const total = Number(account.cash_balance || 0) + Number(account.pending_balance || 0) + value;
+  const pct = value ? (pnl / Math.max(value - pnl, 1)) * 100 : 0;
+  const posPct = total ? Math.max(0, Math.min(100, (value / total) * 100)) : 0;
+  const cashPct = Math.max(0, 100 - posPct);
+  return `<div class="apk-summary-card"><button type="button" class="apk-eye" data-balance-toggle aria-label="Bakiyeyi gizle">${icon(state.hideBalance ? "eyeOff" : "eye", 17)}</button><h2>Portföy özeti</h2><strong>${state.hideBalance ? "******" : money(total)}</strong><small class="${pnl >= 0 ? "up" : "down"}">${state.hideBalance ? "***" : `${pnl >= 0 ? "+" : ""}${money(pnl)} (%${number(Math.abs(pct))}) toplam kâr`}</small><div class="apk-ring" style="background:conic-gradient(#fff 0 ${posPct}%, #f7c948 ${posPct}% 96%, #37d77b 96% 100%);"><span>%${Math.round(posPct)}</span></div><div class="apk-legend"><span><i></i>Pozisyonlar · %${number(posPct)}</span><span><i></i>Bakiye · %${number(cashPct)}</span><span><i></i>Kâr · +%${number(Math.abs(pct))}</span></div><div class="apk-cash-row"><span>Kullanılabilir<strong>${state.hideBalance ? "******" : money(account.cash_balance)}</strong></span><span>T+2 Bakiye<strong>${state.hideBalance ? "******" : money(account.pending_balance)}</strong></span></div></div>`;
+}
+
+function rfApkPositionRow(p, index = 0) {
+  const price = Number(p.current_price || p.price || 0);
+  const base = Math.max(Number(p.market_value || 0) - Number(p.pnl || 0), 1);
+  const pct = (Number(p.pnl || 0) / base) * 100;
+  return `<button type="button" class="apk-position-row" data-company="${esc(p.symbol)}"><span class="market-identity">${stockLogo(p.symbol, p.name)}<span><strong>${esc(p.symbol)}</strong><small>${number(p.quantity)} lot · Ort. ₺${number(p.avg_price || price)}</small></span></span><span class="apk-position-price"><strong>${money(price)}</strong><small>${money(p.market_value || price * Number(p.quantity || 0))}</small></span><span class="change-pill ${pct >= 0 ? "up" : "down"}">${pct >= 0 ? "+" : ""}${number(pct)}%</span>${icon("arrow", 16)}</button>`;
+}
+
+function rfApkHistoryRow(t) {
+  const raw = String(t.transaction_type || t.type || "").toLowerCase();
+  const isOut = raw.includes("buy") || raw.includes("withdraw");
+  const title = reportLabel(t.type_label || (raw.includes("deposit") ? "Bakiye Yükleme" : t.code || "İşlem"));
+  return `<button type="button" class="apk-history-row" data-tx-detail-id="${t.id || 1}" data-symbol="${esc(t.code || "")}"><span class="tx-icon ${isOut ? "out" : "in"}">${icon(raw.includes("deposit") ? "bank" : raw.includes("sell") ? "download" : raw.includes("buy") ? "upload" : "file", 19)}</span><span><strong>${esc(title)}</strong><small>${esc(t.reference || "")}${t.code ? ` · ${esc(t.code)}` : ""}${t.quantity ? ` ${number(t.quantity)} adet` : ""} · ${esc(t.created_at_label || "")}</small></span><b class="${isOut ? "down" : "up"}">${isOut ? "-" : "+"}${money(Math.abs(Number(t.total || t.amount || 0)))}</b></button>`;
+}
+
+portfolioPageV2 = function () {
+  const positions = state.portfolio?.positions || [];
+  const orders = state.portfolio?.orders || [];
+  const txs = state.portfolio?.transactions || [];
+  const tab = state.portfolioTab || "positions";
+  const q = (state.portfolioSearch || "").toLocaleLowerCase("tr-TR");
+  const filtered = positions.filter((p) => !q || `${p.symbol} ${p.name || ""}`.toLocaleLowerCase("tr-TR").includes(q));
+  const body = tab === "orders"
+    ? `<div class="apk-list-card">${orders.map(orderRow).join("") || `<div class="empty-state">Bekleyen veya tamamlanan emir bulunmuyor.</div>`}</div>`
+    : tab === "history"
+      ? `<div class="apk-list-card">${txs.map(rfApkHistoryRow).join("") || `<div class="empty-state">Geçmiş işlem bulunmuyor.</div>`}</div>`
+      : `<label class="apk-search">${icon("search", 20)}<input type="text" data-portfolio-search value="${esc(state.portfolioSearch || "")}" placeholder="İşlem ara" /></label><div class="apk-section-title"><h2>Pozisyonlarım</h2><span>${filtered.length} pozisyon</span></div><div class="apk-list-card flat">${filtered.map(rfApkPositionRow).join("") || `<div class="empty-state">Portföyünüzde henüz hisse yok.</div>`}</div>`;
+  return `<section class="apk-portfolio-page">${rfApkPortfolioSummary()}<div class="apk-dots"><i class="active"></i><i></i></div><div class="rf-tabs apk-tabs">${[["positions", "Pozisyonlar"], ["orders", "Emirler"], ["history", "Geçmiş"]].map(([key, label]) => `<button type="button" data-rf-portfolio-tab="${key}" class="${tab === key ? "active" : ""}">${label}</button>`).join("")}</div>${body}</section>`;
+};
+
+newsPage = function () {
+  const q = (state.newsQuery || "").toLocaleLowerCase("tr-TR");
+  const news = (state.news || []).filter((item) => `${item.title} ${item.kind} ${item.source}`.toLocaleLowerCase("tr-TR").includes(q));
+  const tabs = ["BIST Tüm", "BIST 100", "BIST 30", "BIST Katılım", "BIST Temettü"];
+  return `<section class="apk-news-screen"><label class="apk-search">${icon("search", 20)}<input data-news-search value="${esc(state.newsQuery || "")}" placeholder="Haber ara" /></label><div class="market-category-tabs apk-news-tabs">${tabs.map((label, i) => `<button type="button" class="${i === 0 ? "active" : ""}">${label}</button>`).join("")}</div><div class="apk-section-title"><h2>BIST Tüm</h2></div><div class="apk-news-list">${news.slice(0, 8).map((item, i) => `<a class="apk-news-item" href="${esc(item.url || "#")}" target="_blank" rel="noopener noreferrer"><span class="apk-news-thumb">${esc((item.source || "B").slice(0, 1))}</span><span><strong>${esc(item.title)}</strong><small>${esc(item.source || "Piyasa")} · ${esc(item.published_at || "Güncel")}</small></span>${icon("external", 16)}</a>`).join("") || `<div class="empty-state">Haber bulunamadı.</div>`}</div></section>`;
+};
+
+transactionsPage = function () {
+  const txs = state.portfolio?.transactions || [];
+  const filter = state.transactionFilter || "all";
+  const query = (state.transactionQuery || "").toLocaleLowerCase("tr-TR");
+  const rows = txs.filter((t) => {
+    const raw = String(t.transaction_type || "").toLowerCase();
+    const type = raw.includes("buy") ? "buy" : raw.includes("sell") ? "sell" : "all";
+    return (filter === "all" || filter === type) && (!query || `${t.reference || ""} ${t.code || ""} ${t.type_label || ""}`.toLocaleLowerCase("tr-TR").includes(query));
+  });
+  const exportQuery = new URLSearchParams({ q: state.transactionQuery || "", from: "", to: "", type: filter });
+  return `<section class="apk-transactions"><div class="apk-page-heading"><h1>Hesap Hareketleri</h1><p>Tarih, referans ve işlem türüyle kayıtlarınızı bulun.</p></div><a class="apk-download" href="/api/transactions/export?${exportQuery}">${icon("download", 20)} CSV İndir</a><label class="apk-search floating">${icon("search", 22)}<input type="text" data-tx-search value="${esc(state.transactionQuery || "")}" placeholder="Referans, sembol veya açıklama ara" /></label><div class="apk-filter-row"><button type="button" class="${filter === "all" ? "active" : ""}" data-transaction-filter="all">Tümü</button><button type="button" class="${filter === "buy" ? "active" : ""}" data-transaction-filter="buy">Alış</button><button type="button" class="${filter === "sell" ? "active" : ""}" data-transaction-filter="sell">Satış</button><button type="button" class="apk-calendar">${icon("calendar", 22)}</button></div><div class="apk-list-card">${rows.map(rfApkHistoryRow).join("") || `<div class="empty-state">Filtreyle eşleşen hareket yok.</div>`}</div></section>`;
+};
+
+profilePageV2 = function () {
+  const initials = state.me.full_name.split(" ").map((part) => part[0]).join("").slice(0, 2);
+  const account = state.portfolio?.account || state.account || {};
+  const positions = state.portfolio?.positions || [];
+  const portfolioValue = positions.reduce((sum, p) => sum + Number(p.market_value || 0), 0);
+  const total = Number(account.cash_balance || 0) + Number(account.pending_balance || 0) + portfolioValue;
+  const mask = (v) => (state.hideBalance ? "******" : money(v));
+  return `<section class="account-profile-card apk-profile-card"><span class="account-avatar">${esc(initials)}</span><div><h2>${esc(state.me.full_name)}</h2><p>Müşteri No: ${esc(state.me.account_no)}</p><span class="verified-badge">${icon("check", 14)} ${esc(state.me.status_label)}</span></div>${icon("arrow", 20)}</section><h3 class="account-section-title apk-account-title">Finansal Özet <button type="button" class="icon-button" data-balance-toggle aria-label="Bakiyeyi gizle">${icon(state.hideBalance ? "eyeOff" : "eye", 18)}</button></h3><section class="reference-list-card apk-finance-card"><div class="identity-facts"><div><span>Kullanılabilir bakiye</span><strong>${mask(account.cash_balance)}</strong></div><div><span>Emirlerdeki bakiye</span><strong>${mask(account.blocked_balance)}</strong></div><div><span>Portföy değeri</span><strong>${mask(portfolioValue)}</strong></div><div><span>Toplam değer</span><strong>${mask(total)}</strong></div></div></section><section class="account-money-actions apk-account-actions"><button type="button" data-money-shortcut="deposit"><span>${icon("upload", 23)}</span>Para yatır</button><button type="button" data-money-shortcut="withdraw"><span>${icon("download", 23)}</span>Para çek</button><button type="button" data-open-bank-accounts><span>${icon("bank", 23)}</span>Banka hesaplarım</button><a href="/esube/transactions" data-link><span>${icon("clock", 23)}</span>İşlem geçmişi</a></section><h3 class="account-section-title">Hesap İşlemleri</h3><section class="reference-list-card apk-menu-card">${referenceMenuLink("/esube/profile/personal", "id", "Kişisel bilgiler")}${referenceMenuLink("/esube/profile/security", "shield", "Güvenlik")}${`<button type="button" class="reference-menu-link" data-open-bank-accounts>${icon("bank", 21)}<span><strong>Banka hesaplarım</strong></span>${icon("arrow", 18)}</button>`}${referenceMenuLink("/esube/profile/documents", "file", "Sözleşmeler")}</section><button type="button" class="account-logout" data-action="logout">${icon("arrow", 20)} Çıkış Yap</button>`;
+};
+
+tradePageV2 = function () {
+  const quote = state.market.find((q) => q.symbol === state.selectedSymbol) || state.market.find((q) => (q.asset_class || "stock") === "stock") || {};
+  const account = state.portfolio?.account || {};
+  const availableQty = sellableQuantity(quote.symbol);
+  const isBuy = state.orderSide === "buy";
+  const qty = isBuy ? 100 : Math.min(100, Math.max(1, availableQty));
+  const total = Number(quote.price || 0) * qty;
+  return `<section class="apk-trade-page"><div class="apk-trade-backdrop">${rfApkPortfolioSummary()}</div><form class="apk-trade-sheet" id="order-form"><i class="apk-sheet-handle"></i><div class="apk-trade-quote"><span class="market-identity">${stockLogo(quote.symbol, quote.name)}<span><strong>${esc(quote.symbol || "THYAO")}</strong><small>${esc(quote.name || "")}</small></span></span><span><strong>${money(quote.price)}</strong><b class="${quote.change_pct >= 0 ? "up" : "down"}">${quote.change_pct >= 0 ? "+" : ""}${number(quote.change_pct)}%</b></span></div><input type="hidden" name="symbol" value="${esc(quote.symbol || "")}" /><input type="hidden" name="amount_mode" value="quantity" /><div class="ticket-row order-type-row"><span>Emir Tipi</span><div class="ticket-segmented"><select name="order_type" data-order-type aria-label="Emir tipi"><option value="market">Piyasa</option><option value="limit">Limit</option></select><button type="button" class="active" data-order-type-choice="market">Piyasa</button><button type="button" data-order-type-choice="limit">Limit</button></div></div><label class="ticket-row"><span>Fiyat</span><span class="ticket-input"><input name="limit_price" data-order-price type="number" step="0.01" min="0.01" value="${Number(quote.price || 0).toFixed(2)}" readonly required /><em>TL</em></span></label><label class="ticket-row"><span>Adet</span><span class="ticket-input"><input name="quantity" type="number" min="1" value="${qty}" ${isBuy ? "" : `max="${Math.max(1, availableQty)}"`} required /><em>Lot</em></span></label><div class="ticket-row"><span>Tutar</span><span class="ticket-input static"><strong data-trade-total>${money(total)}</strong><em>TL</em></span></div><div class="rf-percentages apk-percentages">${[25, 50, 75, 100].map((p) => `<button type="button" data-rf-percent="${p}">%${p}</button>`).join("")}<button type="button" data-rf-percent="100">Tümü</button></div><div class="ticket-row validity-row"><span>Geçerlilik</span><div class="ticket-segmented"><select name="validity"><option value="gtc">GTC</option><option value="day">Günlük</option></select><button type="button" class="active">GTC</button><button type="button">Günlük</button></div></div><div class="ticket-balance"><span>${isBuy ? "Kullanılabilir Bakiye" : "Satılabilir Lot"}</span><strong>${isBuy ? money(Number(account.cash_balance || 0) + Number(account.pending_balance || 0)) : `${number(availableQty)} Lot`}</strong></div><section class="ticket-estimate apk-estimate"><button type="button">Detayları Gizle ${icon("chevron", 14)}</button><div class="trade-estimate" data-order-estimate>${orderEstimateHtml({ symbol: quote.symbol, order_type: "market", amount_mode: "quantity", quantity: qty, limit_price: quote.price })}</div></section><button class="primary-button trade-submit ${state.orderSide}" type="submit" ${state.marketMeta?.ok ? "" : "disabled"}>${icon(isBuy ? "upload" : "download", 20)} ${isBuy ? "Alış Emrini Onayla" : "Satış Emrini Onayla"}</button><p class="trade-risk-note">${icon("shield", 18)} Sermayeniz risk altında olabilir. Emir öncesi işlem özetini kontrol edin.</p></form></section>`;
+};
+
 
