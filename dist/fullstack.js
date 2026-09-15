@@ -812,9 +812,9 @@ function renderEMİNEVİMHome() {
     <section class="landing-esube-hero">
       <div class="container landing-esube-inner">
         <div class="landing-copy">
-          <span class="landing-kicker">EMİNEVİM YATIRIM E-ŞUBE</span>
-          <h1>Portföyünüze mobil şube düzeninde erişin.</h1>
-          <p>Eminevim Yatırım e-şube; portföy, emirler, hesap hareketleri ve bildirimleri APK deneyimiyle aynı çizgide web üzerinde sunar.</p>
+          <span class="landing-kicker">GÜVENLİ E-ŞUBE</span>
+          <h1>Eminevim Yatırım E-Şube</h1>
+          <p>Portföy, emir, T+2 takas, referans bildirimi ve hesap hareketleri için APK deneyimiyle uyumlu dijital yatırım ekranı.</p>
           <div class="landing-actions">
             <a href="/esube/giris" data-link class="eminevim-btn-blue">E-Şubeye Giriş ${icon("arrow", 17)}</a>
             <a href="/esube/giris?mode=register" data-link class="eminevim-btn-ghost">Hesap Oluştur</a>
@@ -848,9 +848,9 @@ function renderEMİNEVİMHome() {
     </section>
     <section class="landing-esube-band">
       <div class="container landing-feature-grid">
-        <article><span>${icon("user", 20)}</span><h2>Referans Akışı</h2><p>Profil, referans fırsatları ve bildirim alanları sade e-şube yapısında toplandı.</p></article>
-        <article><span>${icon("bank", 20)}</span><h2>T+2 Takas</h2><p>Satış sonrası tutar önce T2 takasta görünür, yönetimden açılıp kapatılabilir.</p></article>
-        <article><span>${icon("settings", 20)}</span><h2>APK Uyumlu Arayüz</h2><p>Renk, menü ve kart düzeni şube ekranındaki mobil deneyimle aynı ailede tutuldu.</p></article>
+        <article><span>${icon("user", 20)}</span><h2>Referans Akışı</h2><p>Profil, fırsatlar ve referans bildirimleri tek menü düzeninde.</p></article>
+        <article><span>${icon("bank", 20)}</span><h2>T+2 Takas</h2><p>Satış sonrası bakiye ana hesaptan ayrı, net ve izlenebilir.</p></article>
+        <article><span>${icon("settings", 20)}</span><h2>APK Uyumlu</h2><p>Kart, menü, renk ve font düzeni mobil şube ile aynı ailede.</p></article>
       </div>
     </section>
   </main>`;

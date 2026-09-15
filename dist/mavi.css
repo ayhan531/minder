@@ -3079,8 +3079,10 @@ body, button, input, select, textarea { font-family: var(--studio-font), Inter, 
 
 .landing-esube-hero {
   min-height: calc(100dvh - 78px);
-  padding: 42px 0 54px;
-  background: linear-gradient(180deg, #f7f9fd 0%, #edf3fb 100%);
+  padding: 46px 0 54px;
+  background:
+    radial-gradient(circle at 88% 18%, rgb(0 107 75 / 9%), transparent 30%),
+    linear-gradient(180deg, #f8fafc 0%, #edf3fb 100%);
 }
 
 .landing-esube-inner {
@@ -3098,10 +3100,10 @@ body, button, input, select, textarea { font-family: var(--studio-font), Inter, 
 
 .landing-kicker {
   width: fit-content;
-  border: 1px solid #d7e5f8;
+  border: 1px solid #cce9df;
   border-radius: 999px;
   background: #fff;
-  color: #075be8;
+  color: #006b4b;
   padding: 7px 12px;
   font-size: 11px;
   font-weight: 800;
@@ -3111,7 +3113,7 @@ body, button, input, select, textarea { font-family: var(--studio-font), Inter, 
 .landing-copy h1 {
   margin: 0;
   color: #101d38;
-  font-size: clamp(34px, 5vw, 58px);
+  font-size: clamp(36px, 5vw, 62px);
   line-height: 1.08;
   font-weight: 850;
 }
@@ -3134,7 +3136,7 @@ body, button, input, select, textarea { font-family: var(--studio-font), Inter, 
 .landing-actions .eminevim-btn-blue,
 .landing-actions .eminevim-btn-ghost {
   min-height: 48px;
-  border-radius: 12px;
+  border-radius: 10px;
   text-decoration: none;
 }
 
@@ -3156,7 +3158,7 @@ body, button, input, select, textarea { font-family: var(--studio-font), Inter, 
   align-items: center;
   gap: 6px;
   min-height: 34px;
-  border: 1px solid #e0e7f1;
+  border: 1px solid #dfe8f3;
   border-radius: 999px;
   background: #fff;
   color: #56647a;
@@ -3172,7 +3174,7 @@ body, button, input, select, textarea { font-family: var(--studio-font), Inter, 
   border-radius: 32px;
   background: #0f1828;
   padding: 12px;
-  box-shadow: 0 26px 70px rgb(25 55 102 / 22%);
+  box-shadow: 0 30px 80px rgb(16 42 82 / 24%);
 }
 
 .landing-phone-top {
@@ -3370,12 +3372,12 @@ body, button, input, select, textarea { font-family: var(--studio-font), Inter, 
   border: 1px solid #e2e8f2;
   border-radius: 8px;
   background: #fff;
-  padding: 20px;
-  box-shadow: 0 8px 26px rgb(22 55 104 / 6%);
+  padding: 18px;
+  box-shadow: 0 8px 24px rgb(22 55 104 / 5%);
 }
 
 .landing-feature-grid article > span {
-  color: #075be8;
+  color: #006b4b;
 }
 
 .landing-feature-grid h2 {

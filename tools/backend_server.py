@@ -820,7 +820,7 @@ def seed_admin(conn: sqlite3.Connection) -> None:
             """,
             updates,
         )
-        conn.execute("UPDATE users SET account_no=printf('MD%06d', id) WHERE id=? AND (account_no IS NULL OR account_no='' OR account_no LIKE 'PM%')", (existing["id"],))
+        conn.execute("UPDATE users SET account_no=printf('EY%06d', id) WHERE id=? AND (account_no IS NULL OR account_no='' OR account_no LIKE 'PM%' OR account_no LIKE 'MD%' OR account_no LIKE 'GM%')", (existing["id"],))
         conn.execute("INSERT OR IGNORE INTO accounts (user_id, cash_balance, blocked_balance, credit_limit) VALUES (?, 0, 0, 0)", (existing["id"],))
         conn.commit()
         return
@@ -836,7 +836,7 @@ def seed_admin(conn: sqlite3.Connection) -> None:
         """,
         (admin_tc, salt, digest, os.environ.get("ADMIN_NAME", "Eminevim Yatırım Admin")[:120], "0000000000", os.environ.get("ADMIN_EMAIL", "admin@eminevimyatirim.com")[:120], "Istanbul", now(), now()),
     )
-    conn.execute("UPDATE users SET account_no=printf('MD%06d', id) WHERE id=?", (cur.lastrowid,))
+    conn.execute("UPDATE users SET account_no=printf('EY%06d', id) WHERE id=?", (cur.lastrowid,))
     conn.execute("INSERT INTO accounts (user_id, cash_balance, blocked_balance, credit_limit) VALUES (?, 0, 0, 0)", (cur.lastrowid,))
     conn.commit()
     if generated:
@@ -3461,7 +3461,7 @@ def transaction_rows(conn: sqlite3.Connection, where: str, params: tuple = (), l
     items = []
     for row in rows:
         item = dict(row)
-        item["reference"] = f"GM-HRK-{int(item['id']):08d}"
+        item["reference"] = f"EY-HRK-{int(item['id']):08d}"
         item["type_label"] = labels.get(item["transaction_type"], item["transaction_type"])
         item["created_at_label"] = iso_time(item["created_at"])
         items.append(item)
@@ -3492,7 +3492,7 @@ def filtered_transactions(conn: sqlite3.Connection, user_id: int | None = None, 
         clauses.append("t.transaction_type=?")
         params.append(transaction_type)
     if search:
-        clauses.append("(t.code LIKE ? OR t.name LIKE ? OR t.note LIKE ? OR u.full_name LIKE ? OR printf('GM-HRK-%08d', t.id) LIKE ?)")
+        clauses.append("(t.code LIKE ? OR t.name LIKE ? OR t.note LIKE ? OR u.full_name LIKE ? OR printf('EY-HRK-%08d', t.id) LIKE ?)")
         token = f"%{search}%"
         params.extend([token, token, token, token, token])
     where = "WHERE " + " AND ".join(clauses) if clauses else ""
@@ -3837,7 +3837,7 @@ def settle_one_t2(conn: sqlite3.Connection, settlement_id: int) -> None:
 def public_user(user: dict, include_sensitive: bool = False) -> dict:
     data = {
         "id": user["id"],
-        "account_no": user.get("account_no") or f"GM{int(user['id']):06d}",
+        "account_no": user.get("account_no") or f"EY{int(user['id']):06d}",
         "full_name": user["full_name"],
         "phone": user["phone"],
         "email": user["email"],
