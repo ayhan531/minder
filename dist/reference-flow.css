@@ -5,6 +5,16 @@
   font-style: normal;
   font-display: swap;
 }
+/* Global theme variables so modals appended outside .workspace (profile menu,
+   install modal, tx detail, special notice) still pick up the right colors */
+body{--rf-accent:#0067e8;--rf-green:#00a96b;--rf-red:#ef3340;--rf-ink:#12203b;--rf-muted:#73809a;--rf-line:#e6ebf3;--rf-card:#fff;--rf-bg:#f5f7fb;--ui-panel:#ffffff;--ui-panel-2:#f8faff;--ui-text:#101d38;--ui-border:#e2e8f2;}
+body.theme-dark{--rf-ink:#f5f7fb;--rf-muted:#aab4c8;--rf-line:#29354b;--rf-card:#162137;--rf-bg:#0c1424;--ui-panel:#0b1916;--ui-panel-2:#10221e;--ui-text:#eef8f4;--ui-border:#263b35;}
+body.theme-dark .modal-backdrop .modal{
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ui-panel) 94%, white 6%), var(--ui-panel));
+  color: var(--ui-text);
+  border-color: var(--ui-border);
+}
+
 /* Eminevim Yatırım Web Custom Flow Styles */
 .workspace{--rf-accent:var(--studio-primary,#0067e8);--rf-green:var(--studio-accent,#00a96b);--rf-red:var(--studio-danger,#ef3340);--rf-ink:#12203b;--rf-muted:#73809a;--rf-line:#e6ebf3;--rf-card:#fff;--rf-bg:#f5f7fb;background:var(--rf-bg)}
 .theme-dark.workspace{--rf-ink:#f5f7fb;--rf-muted:#aab4c8;--rf-line:#29354b;--rf-card:#162137;--rf-bg:#0c1424}
@@ -185,7 +195,7 @@
   aspect-ratio: 1.62 / 1;
   max-height: 235px;
   overflow: hidden;
-  background: linear-gradient(140deg, #2b4f8d 0%, #1a386d 55%, #10254b 100%);
+  background: linear-gradient(140deg, #7c8fe3 0%, #5a6cce 45%, #3f4fab 100%);
   color: #fff;
   border: 0;
   border-radius: 18px;
@@ -285,8 +295,8 @@
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: #152d58;
-  color: #fff;
+  background: #fff;
+  color: #33409c;
   font-weight: 800;
   font-size: 13px;
 }
@@ -316,7 +326,7 @@
   min-height: 205px;
   aspect-ratio: 1.62 / 1;
   max-height: 235px;
-  background: linear-gradient(140deg, #2b4f8d 0%, #1a386d 55%, #10254b 100%);
+  background: linear-gradient(140deg, #7c8fe3 0%, #5a6cce 45%, #3f4fab 100%);
   color: #fff;
   border-radius: 18px;
   padding: 16px 18px;
@@ -736,7 +746,7 @@
 }
 
 .rf-portfolio .bank-card {
-  background: linear-gradient(140deg, #284d8d 0%, #18366d 54%, #0d2145 100%) !important;
+  background: linear-gradient(140deg, #7c8fe3 0%, #5a6cce 45%, #3f4fab 100%) !important;
   color: #fff !important;
   filter: none !important;
   opacity: 1 !important;
@@ -761,6 +771,70 @@
 }
 .theme-dark .rf-mobile-header:not(.home):not(.quiet) .icon-button {
   color: #a5c2eb;
+}
+
+/* Subpage headers (Ayarlar, Bildirim Ayarları, Güvenlik, İletişim...) stay
+   hardcoded white in mavi.css regardless of theme; make them respect dark mode. */
+.workspace.theme-dark .mobile-app-header.quiet {
+  background: #101a2f !important;
+  border-bottom-color: #1f2c46;
+  color: #eef2f8;
+}
+.workspace.theme-dark .mobile-app-header.quiet .mobile-brand-title h1 {
+  color: #eef2f8;
+}
+.workspace.theme-dark .mobile-app-header.quiet .mobile-back,
+.workspace.theme-dark .mobile-app-header.quiet .mobile-header-actions .icon-button {
+  color: #a5c2eb;
+}
+
+/* Subpage list/form components (Ayarlar, Güvenlik, İletişim, Referans,
+   Takip Listem, Bildirimler...) are hardcoded white with dark text in the
+   base styles and never had a dark-mode counterpart. */
+.workspace.theme-dark .reference-list-card,
+.workspace.theme-dark .reference-segments,
+.workspace.theme-dark .notification-toolbar button,
+.workspace.theme-dark .reference-menu-link,
+.workspace.theme-dark .favorite-list > button {
+  background: var(--rf-card);
+}
+.workspace.theme-dark .reference-menu-link,
+.workspace.theme-dark .favorite-list > button {
+  border-top-color: var(--rf-line);
+  color: var(--rf-ink);
+}
+.workspace.theme-dark .reference-list-card,
+.workspace.theme-dark .reference-segments {
+  border-color: var(--rf-line);
+}
+.workspace.theme-dark .reference-menu-link small,
+.workspace.theme-dark .identity-facts span,
+.workspace.theme-dark .favorite-list small,
+.workspace.theme-dark .notification-list p,
+.workspace.theme-dark .notification-list time,
+.workspace.theme-dark .reference-form label {
+  color: var(--rf-muted);
+}
+.workspace.theme-dark .identity-facts > div {
+  border-top-color: var(--rf-line);
+}
+.workspace.theme-dark .identity-facts strong {
+  color: var(--rf-ink);
+}
+.workspace.theme-dark .reference-form input {
+  background: var(--rf-card);
+  border-color: var(--rf-line);
+  color: var(--rf-ink);
+}
+.workspace.theme-dark .reference-segments button,
+.workspace.theme-dark .reference-segments a {
+  color: var(--rf-muted);
+}
+.workspace.theme-dark .notification-list article {
+  border-top-color: var(--rf-line);
+}
+.workspace.theme-dark .notification-list article > div strong {
+  color: var(--rf-ink);
 }
 
 /* Compact settings rows (Ayarlar / Bildirim Ayarları) */

@@ -3449,6 +3449,8 @@ def transaction_rows(conn: sqlite3.Connection, where: str, params: tuple = (), l
         "stock_sale": "Hisse Satımı",
         "t2_settlement": "Satış Bakiyesi Aktarımı",
         "credit_limit": "Kredi Limiti",
+        "seed_cash": "Bakiye Yükleme",
+        "seed_position": "Pozisyon Açılışı",
     }
     items = []
     for row in rows:

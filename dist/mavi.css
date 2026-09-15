@@ -32,12 +32,20 @@
   --ui-accent-strong: var(--eminevim-blue-deep);
   --ui-accent-soft: var(--eminevim-blue-soft);
 }
+.workspace.theme-light {
+  --ui-panel: var(--ui-surface);
+  --ui-panel-2: var(--ui-surface-2);
+}
 
 .workspace.theme-dark,
 .auth-shell.theme-dark {
   --ui-accent: #4d91ff;
   --ui-accent-strong: #2e73e8;
   --ui-accent-soft: #132d58;
+}
+.workspace.theme-dark {
+  --ui-panel: var(--ui-surface, #0b1916);
+  --ui-panel-2: var(--ui-surface-2, #10221e);
 }
 
 .workspace,
@@ -3945,6 +3953,8 @@ body, button, input, select, textarea { font-family: var(--studio-font), Inter, 
 
 .fuzul-fee-card table {
   width: 100%;
+  min-width: 0;
+  table-layout: fixed;
   border-collapse: collapse;
   margin: 22px 0;
 }
@@ -3954,6 +3964,12 @@ body, button, input, select, textarea { font-family: var(--studio-font), Inter, 
   border-bottom: 1px solid #edf1f5;
   padding: 18px;
   text-align: left;
+  word-break: break-word;
+}
+
+.fuzul-fee-card th:first-child,
+.fuzul-fee-card td:first-child {
+  width: 42%;
 }
 
 .fuzul-fee-card th {
@@ -4245,12 +4261,25 @@ body, button, input, select, textarea { font-family: var(--studio-font), Inter, 
   }
 
   .fuzul-stats {
-    min-height: 290px;
     padding: 56px 0;
   }
 
-  .fuzul-stats h2,
+  .fuzul-stats h2 {
+    margin-bottom: 30px;
+    font-size: 26px;
+  }
+
   .fuzul-stats .container > div {
-    display: none;
+    gap: 22px;
+  }
+
+  .fuzul-fee-card {
+    padding: 18px;
+  }
+
+  .fuzul-fee-card th,
+  .fuzul-fee-card td {
+    padding: 12px 8px;
+    font-size: 12.5px;
   }
 }

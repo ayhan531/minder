@@ -824,9 +824,9 @@ function renderEMİNEVİMHome() {
         <a class="fuzul-all-link" href="/hizmetlerimiz" data-link>Tüm hizmetlerimizi görüntüleyin ${icon("arrow", 14)}</a>
       </div>
     </section>
-    <section class="fuzul-stats"><div class="container"><h2>Rakamlarla Eminevim Yatırım</h2><div><strong>15.833+<span>Aktif Müşteri</span></strong><strong>₺7 Milyar<span>Yıllık İşlem Hacmi</span></strong><strong>6+ Yıl<span>Sektör Deneyimi</span></strong><strong>31.9%<span>Platform Uptime</span></strong></div></div></section>
+    <section class="fuzul-stats"><div class="container"><h2>Rakamlarla Eminevim Yatırım</h2><div><strong>15.833+<span>Aktif Müşteri</span></strong><strong>₺7 Milyar<span>Yıllık İşlem Hacmi</span></strong><strong>6+ Yıl<span>Sektör Deneyimi</span></strong><strong>%99.9<span>Platform Uptime</span></strong></div></div></section>
     <section class="fuzul-section fuzul-why"><div class="container"><div class="fuzul-section-head"><h2>Neden <span>Eminevim Yatırım?</span></h2><p>Yatırımcılar neden Eminevim Menkul Değerler'i tercih ediyor?</p></div><div class="fuzul-reason-grid">${reasons.map((x) => `<span>${icon("check", 14)} ${x}</span>`).join("")}</div></div></section>
-    <section class="fuzul-cta"></section>
+    <section class="fuzul-cta"><div class="container" style="text-align:center;color:#fff;"><h2 style="margin:0 0 12px;font-size:clamp(24px,4vw,34px);">Yatırıma bugün <span style="color:#5ec8ff;">başlayın</span></h2><p style="margin:0 auto 26px;max-width:560px;opacity:.85;font-size:15px;">Dakikalar içinde hesap açın, portföyünüzü oluşturun ve SPK lisanslı güvenli e-şube üzerinden yatırımlarınızı yönetin.</p><div class="fuzul-actions" style="justify-content:center;display:flex;gap:14px;flex-wrap:wrap;"><a href="/esube/giris?mode=register" data-link>Hemen Başla ${icon("arrow", 15)}</a><a href="/iletisim" data-link>Bize Ulaşın</a></div></div></section>
   </main>`;
 }
 

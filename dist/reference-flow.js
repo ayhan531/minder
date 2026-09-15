@@ -89,7 +89,7 @@ portfolioPageV2 = function () {
   const pointsAttr = esc(JSON.stringify(chartPoints));
   const card2Html = `<div class="rf-chart-card"><div class="rf-chart-card-head"><strong>${icon("chart", 16)} Pozisyon sayısı: ${positions.length || 3}</strong><span>1 Ay</span></div><div class="rf-interactive-chart-box" id="rf-chart-drag-box" data-points="${pointsAttr}"><div class="rf-chart-tooltip" id="rf-chart-tooltip">Cum 11 Eyl · -%0,53</div><svg class="rf-chart-svg" viewBox="0 0 300 85" preserveAspectRatio="none"><defs><linearGradient id="rfGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#34d399" stop-opacity="0.4"/><stop offset="100%" stop-color="#34d399" stop-opacity="0.0"/></linearGradient></defs><path d="M0,70 Q40,65 70,45 T140,40 T210,35 T260,20 T300,15 L300,85 L0,85 Z" fill="url(#rfGrad)"/><path d="M0,70 Q40,65 70,45 T140,40 T210,35 T260,20 T300,15" fill="none" stroke="#34d399" stroke-width="3" stroke-linecap="round"/><circle cx="260" cy="20" r="7" fill="#fff" stroke="#34d399" stroke-width="3" style="cursor:grab;touch-action:none;" id="rf-chart-drag-point"/></svg></div><div class="rf-chart-card-foot"><span>Toplam getiri: <strong>${money(pnl || 7432.50)}</strong></span><span>En yüksek getiri: <strong style="color:#34d399;">+%12,40</strong></span></div></div>`;
 
-  const carouselHtml = `<div class="rf-carousel-container"><div class="rf-carousel-track" style="transform: translateX(-${cardSlide * 50}%);"><div class="rf-carousel-slide">${card1Html}</div><div class="rf-carousel-slide">${card2Html}</div></div></div><div class="rf-slider-dots"><button type="button" class="rf-dot ${cardSlide === 0 ? "active" : ""}" data-card-slide="0" aria-label="Portföy Özeti"></button><button type="button" class="rf-dot ${cardSlide === 1 ? "active" : ""}" data-card-slide="1" aria-label="Getiri Grafiği"></button></div>`;
+  const carouselHtml = `<div class="rf-carousel-container" id="rf-carousel-container"><div class="rf-carousel-track" style="transform: translateX(-${cardSlide * 50}%);"><div class="rf-carousel-slide">${card1Html}</div><div class="rf-carousel-slide">${card2Html}</div></div></div><div class="rf-slider-dots"><button type="button" class="rf-dot ${cardSlide === 0 ? "active" : ""}" data-card-slide="0" aria-label="Portföy Özeti"></button><button type="button" class="rf-dot ${cardSlide === 1 ? "active" : ""}" data-card-slide="1" aria-label="Getiri Grafiği"></button></div>`;
 
   // Tab Body
   let body = "";
@@ -196,7 +196,7 @@ function txDetailModal() {
   const d = state.selectedTxDetail;
   if (!d) return "";
   const isPositive = Number(d.pnl || 0) >= 0;
-  return `<div class="modal-backdrop open" data-close-tx-detail><div class="modal rf-tx-modal" data-modal-stop><div class="rf-tx-modal-head"><div style="display:flex;align-items:center;gap:10px;">${stockLogo(d.symbol, d.symbol)}<div><h3 style="margin:0;font-size:17px;">${esc(d.symbol)}</h3><small class="muted">${esc(d.name || d.symbol)}</small></div></div><button type="button" class="icon-button" data-close-tx-detail aria-label="Kapat">${icon("close", 20)}</button></div><span class="rf-tx-modal-status-badge">● Gerçekleşti</span><div class="rf-tx-pnl-box ${isPositive ? "" : "down"}"><div class="rf-tx-pnl-box-left"><span>Net kâr / zarar</span><strong style="font-size:13px;">${isPositive ? "+" : ""}${money(d.pnl || 391.00)}</strong></div><div class="rf-tx-pnl-box-right"><span>K/Z Oranı</span><strong class="rf-tx-pnl-badge ${isPositive ? "" : "down"}" style="font-size:15px;">${isPositive ? "+" : ""}${number(d.pnlpct || 4.97)}%</strong></div></div><div class="rf-tx-detail-list"><div class="rf-tx-detail-row"><span>Alınan adet</span><strong>${d.qty || 100} lot</strong></div><div class="rf-tx-detail-row"><span>Satış tarihi</span><strong>${esc(d.date || "14 Eylül 2026, 10:22:58")}</strong></div><div class="rf-tx-detail-row"><span>Ort. alış fiyatı</span><strong>${money(d.price || 180.00)}</strong></div><div class="rf-tx-detail-row"><span>Satış fiyatı</span><strong>${money(Number(d.price || 180.00) + (Number(d.pnl || 391) / Math.max(Number(d.qty || 100), 1)))}</strong></div><div class="rf-tx-detail-row"><span>Toplam Maliyet</span><strong>${money(Number(d.qty || 100) * Number(d.price || 180.00))}</strong></div><div class="rf-tx-detail-row"><span>Komisyon</span><strong style="color:#16a34a;">Ücretsiz</strong></div><div class="rf-tx-detail-row" style="border-top:1px solid var(--rf-line);padding-top:8px;"><span>Net Sonuç</span><strong>${money(d.total || 18500.00)}</strong></div></div><button type="button" class="primary-button full" data-close-tx-detail>Devam et</button></div></div>`;
+  return `<div class="modal-backdrop open" data-close-tx-detail><div class="modal rf-tx-modal" data-modal-stop><div class="rf-tx-modal-head"><div style="display:flex;align-items:center;gap:10px;">${stockLogo(d.symbol, d.symbol)}<div><h3 style="margin:0;font-size:17px;">${esc(d.symbol)}</h3><small class="muted">${esc(d.name || d.symbol)}</small></div></div><button type="button" class="icon-button" data-close-tx-detail aria-label="Kapat">${icon("close", 20)}</button></div><span class="rf-tx-modal-status-badge">● Gerçekleşti</span><div class="rf-tx-pnl-box ${isPositive ? "" : "down"}"><div class="rf-tx-pnl-box-left"><span>Net kâr / zarar</span><strong style="font-size:12px;">${isPositive ? "+" : ""}${money(d.pnl || 391.00)}</strong></div><div class="rf-tx-pnl-box-right"><span>K/Z Oranı</span><strong class="rf-tx-pnl-badge ${isPositive ? "" : "down"}" style="font-size:16px;">${isPositive ? "+" : ""}${number(d.pnlpct || 4.97)}%</strong></div></div><div class="rf-tx-detail-list"><div class="rf-tx-detail-row"><span>Alınan adet</span><strong>${d.qty || 100} lot</strong></div><div class="rf-tx-detail-row"><span>Satış tarihi</span><strong>${esc(d.date || "14 Eylül 2026, 10:22:58")}</strong></div><div class="rf-tx-detail-row"><span>Ort. alış fiyatı</span><strong>${money(d.price || 180.00)}</strong></div><div class="rf-tx-detail-row"><span>Satış fiyatı</span><strong>${money(Number(d.price || 180.00) + (Number(d.pnl || 391) / Math.max(Number(d.qty || 100), 1)))}</strong></div><div class="rf-tx-detail-row"><span>Toplam Maliyet</span><strong>${money(Number(d.qty || 100) * Number(d.price || 180.00))}</strong></div><div class="rf-tx-detail-row"><span>Komisyon</span><strong style="color:#16a34a;">Ücretsiz</strong></div><div class="rf-tx-detail-row" style="border-top:1px solid var(--rf-line);padding-top:8px;"><span>Net Sonuç</span><strong>${money(d.total || 18500.00)}</strong></div></div><button type="button" class="primary-button full" data-close-tx-detail>Devam et</button></div></div>`;
 }
 
 // Special Market Item Reference Modal
@@ -209,11 +209,13 @@ function specialNoticeModal() {
 const originalRender = render;
 render = function (options) {
   originalRender(options);
+  document.body.classList.toggle("theme-dark", state.theme === "dark");
   const container = document.getElementById("app");
   if (container) {
     container.insertAdjacentHTML("beforeend", profileDropdownModal() + appInstallModal() + txDetailModal() + specialNoticeModal());
   }
 };
+document.body.classList.toggle("theme-dark", state.theme === "dark");
 
 // Global Event Listeners
 document.addEventListener("click", (event) => {
@@ -393,6 +395,38 @@ document.addEventListener("change", (event) => {
     render({ motion: false, preserveScroll: true });
   }
 });
+
+// Swipe between the two portfolio cards (touch/pointer drag)
+let rfCarouselStartX = null;
+let rfCarouselTrack = null;
+document.addEventListener("pointerdown", (event) => {
+  const container = event.target.closest("#rf-carousel-container");
+  if (!container || event.target.closest("[data-balance-toggle]") || event.target.closest("#rf-chart-drag-box")) return;
+  rfCarouselStartX = event.clientX;
+  rfCarouselTrack = container.querySelector(".rf-carousel-track");
+  if (rfCarouselTrack) rfCarouselTrack.style.transition = "none";
+});
+document.addEventListener("pointermove", (event) => {
+  if (rfCarouselStartX === null || !rfCarouselTrack) return;
+  const delta = event.clientX - rfCarouselStartX;
+  const base = -(state.portfolioCardSlide || 0) * 50;
+  const width = rfCarouselTrack.parentElement.getBoundingClientRect().width || 1;
+  rfCarouselTrack.style.transform = `translateX(${base + (delta / width) * 100}%)`;
+});
+function rfEndCarouselDrag(event) {
+  if (rfCarouselStartX === null || !rfCarouselTrack) return;
+  const delta = (event.clientX || rfCarouselStartX) - rfCarouselStartX;
+  if (delta < -40 && (state.portfolioCardSlide || 0) === 0) {
+    state.portfolioCardSlide = 1;
+  } else if (delta > 40 && (state.portfolioCardSlide || 0) === 1) {
+    state.portfolioCardSlide = 0;
+  }
+  rfCarouselStartX = null;
+  rfCarouselTrack = null;
+  render({ motion: false, preserveScroll: true });
+}
+document.addEventListener("pointerup", rfEndCarouselDrag);
+document.addEventListener("pointercancel", rfEndCarouselDrag);
 
 // Interactive chart drag-to-scrub (card 2)
 let rfChartDragging = false;
