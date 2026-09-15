@@ -45,7 +45,6 @@
 .eminevim-auth .auth-input input:focus { border-color: #408dff; box-shadow: 0 0 0 3px rgba(45, 125, 255, .2); }
 .eminevim-auth .login-submit { border-radius: 11px; background: #0b6ef3 !important; }
 .eminevim-auth .login-submit:hover { background: #2680f5 !important; transform: translateY(-1px); }
-.eminevim-auth .biometric-button { color: #c7d8f5; }
 
 @media (max-width: 620px) {
   .eminevim-auth.auth-shell-v2 { padding: 0; }

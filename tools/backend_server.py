@@ -649,7 +649,7 @@ def migrate_brand_data(conn: sqlite3.Connection) -> None:
         "brand_name": "EMİNEVİM",
         "brand_descriptor": "YATIRIM",
         "brand_symbol": "EY",
-        "brand_logo_url": "/assets/eminevim-yatirim-logo.svg",
+        "brand_logo_url": "/assets/eminevim-logo-square.webp",
         "brand_tagline": "Eminevim Yatırım dijital yatırım deneyimi",
         "ui_primary_color": "#0f6bff",
         "ui_accent_color": "#20c997",
@@ -665,6 +665,9 @@ def migrate_brand_data(conn: sqlite3.Connection) -> None:
             WHERE setting_key=? AND (
               setting_value LIKE '%EMİNEVİM%' OR setting_value LIKE '%EMİNEVİM%' OR
               setting_value LIKE '%EMİNEVİM%' OR setting_value LIKE '%Eminevim Yatırım%' OR
+              setting_value LIKE '%eminevim-yatirim-logo.svg%' OR
+              setting_value LIKE '%paribu-logo.svg%' OR
+              setting_value LIKE '%guney-logo.svg%' OR
               setting_value LIKE '%Fuzul%' OR setting_value=''
             )
             """,
@@ -744,7 +747,7 @@ def seed_system_settings(conn: sqlite3.Connection) -> None:
         "brand_name": "EMİNEVİM",
         "brand_descriptor": "YATIRIM",
         "brand_symbol": "EY",
-        "brand_logo_url": "/assets/eminevim-yatirim-logo.svg",
+        "brand_logo_url": "/assets/eminevim-logo-square.webp",
         "brand_tagline": "Eminevim Yatırım dijital yatırım deneyimi",
         "ui_primary_color": "#0f6bff",
         "ui_accent_color": "#20c997",
@@ -1984,36 +1987,21 @@ class AppHandler(BaseHTTPRequestHandler):
             })
 
     def api_setup_two_factor(self) -> None:
-        payload = self.read_json()
-        password = str(payload.get("current_password", ""))
+        self.read_json()
         with connect_db() as conn:
-            user = self.require_user(conn)
-            if not verify_password(password, user["password_salt"], user["password_hash"]):
-                raise HttpError(401, "Mevcut şifre hatalı")
-            secret = base64.b32encode(secrets.token_bytes(20)).decode("ascii").rstrip("=")
-            conn.execute("UPDATE users SET two_factor_secret=?, two_factor_enabled=0 WHERE id=?", (secret, user["id"]))
-            conn.commit()
-            issuer = quote_plus("Eminevim Yatırım")
-            account = quote_plus(user["email"])
-            self.json_response({"secret": secret, "otpauth_url": f"otpauth://totp/{issuer}:{account}?secret={secret}&issuer={issuer}&digits=6&period=30"})
+            self.require_user(conn)
+        raise HttpError(410, "İki adımlı doğrulama kaldırıldı")
 
     def api_confirm_two_factor(self) -> None:
-        payload = self.read_json()
+        self.read_json()
         with connect_db() as conn:
-            user = self.require_user(conn)
-            if not verify_totp(str(user["two_factor_secret"] or ""), str(payload.get("otp", ""))):
-                raise HttpError(400, "Doğrulama kodu geçersiz")
-            conn.execute("UPDATE users SET two_factor_enabled=1 WHERE id=?", (user["id"],))
-            audit(conn, user["id"], "enable_two_factor", "user", user["id"])
-            conn.commit()
-            self.json_response({"ok": True})
+            self.require_user(conn)
+        raise HttpError(410, "İki adımlı doğrulama kaldırıldı")
 
     def api_disable_two_factor(self) -> None:
-        payload = self.read_json()
+        self.read_json()
         with connect_db() as conn:
             user = self.require_user(conn)
-            if not verify_password(str(payload.get("current_password", "")), user["password_salt"], user["password_hash"]):
-                raise HttpError(401, "Mevcut şifre hatalı")
             conn.execute("UPDATE users SET two_factor_enabled=0, two_factor_secret='' WHERE id=?", (user["id"],))
             audit(conn, user["id"], "disable_two_factor", "user", user["id"])
             conn.commit()

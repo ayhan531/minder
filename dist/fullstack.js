@@ -210,7 +210,7 @@ function icon(name, size = 20) {
 
 function brandLockup(compact = false) {
   const brand = state.publicConfig?.branding || {};
-  const mark = brand.logo_url ? `<img class="brand-custom-logo" src="${esc(brand.logo_url)}" alt="" />` : esc((brand.symbol || "P").slice(0, 3));
+  const mark = `<img class="brand-custom-logo" src="${esc(brand.logo_url || "/assets/eminevim-logo-square.webp")}" alt="" />`;
   return `<span class="brand-lockup ${compact ? "compact" : ""}"><span class="brand-symbol" aria-hidden="true">${mark}</span><span class="brand-wordmark"><strong>${esc(brand.name || "EMİNEVİM")}</strong><small>${esc(brand.descriptor || "YATIRIM")}</small></span></span>`;
 }
 
@@ -672,7 +672,7 @@ function publicHeader() {
     ["SSS", "/sss"],
     ["İletişim", "/iletisim"],
   ];
-  return `${marketRail()}<header class="site-header ${state.publicMenuOpen ? "open" : ""}"><div class="container site-header-inner">
+  return `<header class="site-header ${state.publicMenuOpen ? "open" : ""}"><div class="container site-header-inner">
     <a href="/" data-link class="brand" aria-label="Eminevim Yatırım ana sayfa">${brandLockup()}</a>
     <div class="public-nav-panel"><nav class="site-nav">${nav.map(([label, href]) => `<a href="${href}" data-link class="${state.path === href ? "active" : ""}">${label}</a>`).join("")}</nav>
     <div class="header-actions"><a href="/esube/giris" data-link class="ghost-button">Giriş Yap</a><a href="/esube/giris?mode=register" data-link class="primary-button">Kayıt Ol</a></div></div>
@@ -801,102 +801,56 @@ function renderLegacyHomeA() {
 function renderEMİNEVİMHome() {
   const brand = state.publicConfig?.branding || {};
   const heroQuotes = state.market.filter((item) => (item.asset_class || "stock") === "stock").slice(0, 8);
-  const q0 = heroQuotes[0] || { symbol: "THYAO", name: "Türk Hava Yolları", price: 312.50, change_pct: 2.45 };
-  return `<main class="public-main theme-eminevim-view">
-    <section class="eminevim-hero">
-      <div class="container eminevim-hero-inner">
-        <div class="eminevim-hero-left">
-          <span class="eminevim-glow-pill">⚡ YENİ NESİL DİJİTAL BORSA &amp; YATIRIM</span>
-          <h1 class="eminevim-hero-title">Borsaya Hızlı, Güçlü ve Kesintisiz Bağlan</h1>
-          <p class="eminevim-hero-subtitle">Borsa İstanbul hisselerinde sıfır gecikmeli kotasyon, akıllı al/sat emirleri ve anında takas ile yatırımın tadını çıkarın.</p>
-          <div class="eminevim-hero-buttons">
-            <a href="/esube/giris?mode=register" data-link class="eminevim-btn-blue">Hesap Oluştur ${icon("arrow", 18)}</a>
-            <a href="/esube/giris" data-link class="eminevim-btn-ghost">E-Şubeye Giriş</a>
+  const previewRows = heroQuotes.slice(0, 3).map((q) => `
+    <div class="landing-market-row">
+      <span><strong>${esc(q.symbol)}</strong><small>${esc(q.name)}</small></span>
+      <b>${money(q.price)}</b>
+      <em class="${q.change_pct >= 0 ? "up" : "down"}">${q.change_pct >= 0 ? "+" : ""}${number(q.change_pct)}%</em>
+    </div>
+  `).join("");
+  return `<main class="public-main theme-eminevim-view landing-esube">
+    <section class="landing-esube-hero">
+      <div class="container landing-esube-inner">
+        <div class="landing-copy">
+          <span class="landing-kicker">EMİNEVİM YATIRIM E-ŞUBE</span>
+          <h1>Portföyünüze mobil şube düzeninde erişin.</h1>
+          <p>Eminevim Yatırım e-şube; portföy, emirler, hesap hareketleri ve bildirimleri APK deneyimiyle aynı çizgide web üzerinde sunar.</p>
+          <div class="landing-actions">
+            <a href="/esube/giris" data-link class="eminevim-btn-blue">E-Şubeye Giriş ${icon("arrow", 17)}</a>
+            <a href="/esube/giris?mode=register" data-link class="eminevim-btn-ghost">Hesap Oluştur</a>
           </div>
-          <div class="eminevim-stats-row">
-            <div><strong>0 Gecikme</strong><span>Canlı BIST Kotasyonu</span></div>
-            <div><strong>Binde 1</strong><span>Düşük Komisyon</span></div>
-            <div><strong>Anında</strong><span>Nakit Yükleme &amp; Çekim</span></div>
+          <div class="landing-trust-row">
+            <span>${icon("shield", 15)} Güvenli oturum</span>
+            <span>${icon("bell", 15)} Referans bildirimi</span>
+            <span>${icon("chart", 15)} Canlı piyasa</span>
           </div>
         </div>
-        <div class="eminevim-hero-right">
-          <div class="eminevim-trade-card">
-            <div class="card-top">
-              <span class="badge-live"><span class="blink-dot"></span> BIST CANLI PİYASA</span>
-              <span class="brand-code">${brand.name || "EMİNEVİM"}</span>
-            </div>
-            <div class="selected-stock-row">
-              <div class="stock-id">
-                <span class="stock-sym">${esc(q0.symbol)}</span>
-                <span class="stock-nm">${esc(q0.name)}</span>
-              </div>
-              <div class="stock-val">
-                <strong>${money(q0.price)}</strong>
-                <span class="stock-chg ${q0.change_pct >= 0 ? "up" : "down"}">${q0.change_pct >= 0 ? "+" : ""}${number(q0.change_pct)}%</span>
-              </div>
-            </div>
-            <div class="trade-tabs-pill">
-              <button class="active">Hızlı Alış</button>
-              <button>Hızlı Satış</button>
-            </div>
-            <div class="quick-input-group">
-              <label>İşlem Tutarı (TL)</label>
-              <div class="input-wrap">
-                <input type="text" value="10.000 TL" readonly />
-                <span class="approx">≈ ${Math.floor(10000 / (q0.price || 100))} Adet</span>
-              </div>
-            </div>
-            <a href="/esube/giris" data-link class="eminevim-btn-trade-now">Tek Tıkla Hisse Al ${icon("arrow", 16)}</a>
-            <div class="secure-label">${icon("shield", 14)} SPK ve Takasbank Güvencesiyle</div>
+        <div class="landing-phone" aria-label="Eminevim Yatırım e-şube önizleme">
+          <div class="landing-phone-top">
+            <span class="landing-avatar">E</span>
+            <span class="landing-phone-brand"><strong>EMİNEVİM</strong><small>YATIRIM</small></span>
+            <span class="landing-phone-icon">${icon("moon", 17)}</span>
           </div>
+          <div class="landing-bank-card">
+            <span>Portföy Özeti</span>
+            <strong>₺192.300,00</strong>
+            <small>+₺7.432,50 (%4,63) toplam kâr</small>
+            <div class="landing-card-foot">
+              <b>Kullanılabilir<br />₺24.200,00</b>
+              <b>T+2 Bakiye<br />₺24.200,00</b>
+            </div>
+          </div>
+          <div class="landing-mini-tabs"><span class="active">Pozisyonlar</span><span>Emirler</span><span>Geçmiş</span></div>
+          <div class="landing-search">${icon("search", 14)} İşlem ara</div>
+          <div class="landing-market-list">${previewRows}</div>
         </div>
       </div>
     </section>
-
-    <!-- EMİNEVİM Trending Stocks Strip -->
-    <section class="eminevim-trending-strip">
-      <div class="container">
-        <div class="trending-head">
-          <span class="kicker">Piyasa Nabzı</span>
-          <h2>En Çok İşlem Gören Hisseler</h2>
-        </div>
-        <div class="eminevim-stocks-grid">
-          ${heroQuotes.slice(0, 6).map((q) => `
-            <a href="/esube/giris" data-link class="eminevim-stock-item">
-              <div class="stock-main">
-                <strong>${esc(q.symbol)}</strong>
-                <small>${esc(q.name)}</small>
-              </div>
-              <div class="stock-numbers">
-                <b>${money(q.price)}</b>
-                <span class="badge-tag ${q.change_pct >= 0 ? "up" : "down"}">${q.change_pct >= 0 ? "+" : ""}${number(q.change_pct)}%</span>
-              </div>
-            </a>
-          `).join("")}
-        </div>
-      </div>
-    </section>
-
-    <!-- EMİNEVİM 4 FinTech Advantages -->
-    <section class="section eminevim-advantages-section">
-      <div class="container">
-        <div class="grid grid-3">
-          <div class="eminevim-card-feature">
-            <div class="feature-icon">${icon("activity", 28)}</div>
-            <h3>Yüksek Hızlı Emir Motoru</h3>
-            <p>Milisaniyeler içinde Borsa İstanbul işlem sistemine iletilen piyasa ve limit emirleri.</p>
-          </div>
-          <div class="eminevim-card-feature">
-            <div class="feature-icon">${icon("bank", 28)}</div>
-            <h3>7/24 Kesintisiz Para Transferi</h3>
-            <p>Anlaşmalı bankalardan saniyeler içinde hesabınıza yansıyan FAST/Havale altyapısı.</p>
-          </div>
-          <div class="eminevim-card-feature">
-            <div class="feature-icon">${icon("lock", 28)}</div>
-            <h3>Kurumsal Güvenlik ve Oturum Koruması</h3>
-            <p>Şifre, cihaz oturumu ve bildirim kontrolleriyle hesabınızı güvenli şekilde yönetin.</p>
-          </div>
-        </div>
+    <section class="landing-esube-band">
+      <div class="container landing-feature-grid">
+        <article><span>${icon("user", 20)}</span><h2>Referans Akışı</h2><p>Profil, referans fırsatları ve bildirim alanları sade e-şube yapısında toplandı.</p></article>
+        <article><span>${icon("bank", 20)}</span><h2>T+2 Takas</h2><p>Satış sonrası tutar önce T2 takasta görünür, yönetimden açılıp kapatılabilir.</p></article>
+        <article><span>${icon("settings", 20)}</span><h2>APK Uyumlu Arayüz</h2><p>Renk, menü ve kart düzeni şube ekranındaki mobil deneyimle aynı ailede tutuldu.</p></article>
       </div>
     </section>
   </main>`;
@@ -909,7 +863,7 @@ function renderLegacyHomeB() {
     <section class="eminevim-hero">
       <div class="container Eminevim Yatırım-hero-inner">
         <div class="eminevim-crest">
-          <img src="/assets/Eminevim Yatırım-logo.svg" alt="Eminevim Yatırım Crest" class="eminevim-hero-logo" />
+          <img src="/assets/eminevim-yatirim-logo.svg" alt="Eminevim Yatırım" class="eminevim-hero-logo" />
         </div>
         <span class="eminevim-eyebrow">ÖZEL VARLIK YÖNETİMİ &amp; AİLE OFİSİ</span>
         <h1 class="eminevim-title">Eminevim Yatırım ÖZEL PORTFÖY &amp; YATIRIM</h1>
@@ -1102,7 +1056,7 @@ function renderAuthV2() {
     renderAuth();
     return;
   }
-  app.innerHTML = `<main class="auth-shell auth-shell-v2 eminevim-auth theme-${state.theme}"><section class="eminevim-login-frame"><div class="eminevim-security-note">${icon("shield", 15)} Güvenli E-Şube</div><header class="mobile-login-brand"><img class="auth-brand-logo" src="/assets/eminevim-yatirim-logo.svg" alt="Eminevim Yatırım" /><div><strong>EMİNEVİM</strong><span>YATIRIM</span></div><p>Yatırım hesabınıza hoş geldiniz</p></header><form id="login-form" class="mobile-login-form"><label class="auth-input"><span>T.C. Kimlik / Müşteri No</span><input name="tc" inputmode="numeric" maxlength="11" autocomplete="username" placeholder="11 haneli numaranız" required /></label><label class="auth-input"><span>Şifre</span><span class="password-wrap"><input name="password" type="${state.showPassword ? "text" : "password"}" autocomplete="current-password" placeholder="Şifreniz" required /><button type="button" class="icon-button" data-toggle-password aria-pressed="${state.showPassword}" aria-label="${state.showPassword ? "Şifreyi gizle" : "Şifreyi göster"}">${icon(state.showPassword ? "eyeOff" : "eye", 18)}</button></span></label><div class="mobile-login-options"><label><input name="remember" type="checkbox" /> Beni hatırla</label><button type="button" class="text-link" data-auth-mode="forgot">Şifremi unuttum</button></div><button class="primary-button login-submit" type="submit">Giriş Yap ${icon("arrow", 17)}</button></form><footer class="mobile-login-footer"><button type="button" data-auth-mode="register">Yeni hesap aç</button><span></span><a href="/" data-link>Kurumsal site</a><div><button type="button">${icon("user", 14)} 0850 303 60 00</button></div></footer></section></main>`;
+  app.innerHTML = `<main class="auth-shell auth-shell-v2 eminevim-auth theme-${state.theme}"><section class="eminevim-login-frame"><div class="eminevim-security-note">${icon("shield", 15)} Güvenli E-Şube</div><header class="mobile-login-brand"><img class="auth-brand-logo" src="/assets/eminevim-logo-square.webp" alt="Eminevim Yatırım" /><div><strong>EMİNEVİM</strong><span>YATIRIM</span></div><p>Yatırım hesabınıza hoş geldiniz</p></header><form id="login-form" class="mobile-login-form"><label class="auth-input"><span>T.C. Kimlik / Müşteri No</span><input name="tc" inputmode="numeric" maxlength="11" autocomplete="username" placeholder="11 haneli numaranız" required /></label><label class="auth-input"><span>Şifre</span><span class="password-wrap"><input name="password" type="${state.showPassword ? "text" : "password"}" autocomplete="current-password" placeholder="Şifreniz" required /><button type="button" class="icon-button" data-toggle-password aria-pressed="${state.showPassword}" aria-label="${state.showPassword ? "Şifreyi gizle" : "Şifreyi göster"}">${icon(state.showPassword ? "eyeOff" : "eye", 18)}</button></span></label><div class="mobile-login-options"><label><input name="remember" type="checkbox" /> Beni hatırla</label><button type="button" class="text-link" data-auth-mode="forgot">Şifremi unuttum</button></div><button class="primary-button login-submit" type="submit">Giriş Yap ${icon("arrow", 17)}</button></form><footer class="mobile-login-footer"><button type="button" data-auth-mode="register">Yeni hesap aç</button><span></span><a href="/" data-link>Kurumsal site</a><div><button type="button">${icon("user", 14)} 0850 303 60 00</button></div></footer></section></main>`;
 }
 
 function loginForm() {
@@ -2012,7 +1966,7 @@ const BRAND_PRESETS = {
     brand_name: "EMİNEVİM",
     brand_descriptor: "YATIRIM",
     brand_symbol: "EY",
-    brand_logo_url: "/assets/eminevim-yatirim-logo.svg",
+    brand_logo_url: "/assets/eminevim-logo-square.webp",
     brand_tagline: "Eminevim Yatırım dijital yatırım deneyimi",
     ui_primary_color: "#0f6bff",
     ui_accent_color: "#20c997",
@@ -3221,7 +3175,10 @@ window.addEventListener("unhandledrejection", (event) => {
   showToast(event.reason?.message || "İşlem tamamlanamadı.");
 });
 window.addEventListener("error", (event) => {
-  if (event.error) showToast("Sayfa bileşeni yüklenemedi. Lütfen tekrar deneyin.");
+  if (event.error) {
+    console.error("Page component error", event.error);
+    showToast("Sayfa bileşeni yüklenemedi. Lütfen tekrar deneyin.");
+  }
 });
 setInterval(async () => {
   if (document.hidden || state.path === "/esube/giris") return;

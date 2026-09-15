@@ -39,7 +39,7 @@ mobileHeaderBar = function () {
   const avatarHtml = `<button type="button" class="rf-header-avatar" data-profile-menu-toggle aria-label="Profil menüsü">${getCustomAvatarHtml()}</button>`;
   
   if (isHome) {
-    return `<header class="mobile-app-header rf-mobile-header home"><div class="rf-mobile-header-left">${avatarHtml}</div><div class="eminevim-script-title"><img src="/assets/eminevim-yatirim-logo.svg" alt="Eminevim Yatırım" /><span>Eminevim Yatırım</span></div><div class="rf-header-actions">${isAdmin ? `<a href="/esube/admin" data-link class="rf-admin-badge-btn">${icon("shield", 14)} Admin</a>` : ""}<button type="button" class="icon-button" data-theme-toggle aria-label="Gece modu">${icon("moon", 21)}</button><a href="/esube/notifications" data-link class="icon-button" aria-label="Bildirimler">${icon("bell", 21)}<span class="notice-dot"></span></a></div></header>`;
+    return `<header class="mobile-app-header rf-mobile-header home"><div class="rf-mobile-header-left">${avatarHtml}</div><div class="eminevim-script-title"><img src="/assets/eminevim-logo-square.webp" alt="Eminevim Yatırım" /><span>Eminevim Yatırım</span></div><div class="rf-header-actions">${isAdmin ? `<a href="/esube/admin" data-link class="rf-admin-badge-btn">${icon("shield", 14)} Admin</a>` : ""}<button type="button" class="icon-button" data-theme-toggle aria-label="Gece modu">${icon("moon", 21)}</button><a href="/esube/notifications" data-link class="icon-button" aria-label="Bildirimler">${icon("bell", 21)}<span class="notice-dot"></span></a></div></header>`;
   }
 
   if (isPortfolio) {
@@ -95,6 +95,21 @@ portfolioPageV2 = function () {
 
   return `<section class="rf-portfolio">${carouselHtml}${tabsHtml}${body}</section>`;
 };
+
+function referenceStockButton(q, index = 0) {
+  const symbol = q.symbol || q.code || "THYAO";
+  const price = Number(q.price ?? q.current_price ?? q.avg_price ?? 0);
+  const change = Number(q.change_pct ?? q.pnl_pct ?? 0);
+  const name = q.name || q.company_name || symbol;
+  const line2 = q.quantity
+    ? `${number(q.quantity)} lot · Ort. ₺${number(q.avg_price || price)}`
+    : name;
+  return `<button type="button" class="rf-stock-row" data-trade-symbol="${esc(symbol)}" style="--row-index:${index}">
+    <span class="market-identity">${stockLogo(symbol, name)}<span><strong>${esc(symbol)}</strong><small>${esc(line2)}</small></span></span>
+    <span class="rf-stock-price"><strong>${money(price)}</strong><small>${q.quantity ? money(q.market_value || price * Number(q.quantity || 0)) : "Güncel"}</small></span>
+    <span class="change-pill ${change >= 0 ? "up" : "down"}">${change >= 0 ? "+" : ""}${number(change)}%</span>
+  </button>`;
+}
 
 function customTxRow(t) {
   const isSell = String(t.transaction_type || "").includes("sell");
