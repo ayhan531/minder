@@ -5,6 +5,7 @@ state.profileMenuOpen = false;
 state.installModalOpen = false;
 state.selectedTxDetail = null;
 state.specialNoticeOpen = false;
+state.bankAccountsOpen = false;
 state.userLanguage = localStorage.getItem("eminevim_lang") || "tr";
 state.fontSizeMode = localStorage.getItem("eminevim_font_size") || "medium";
 state.customAvatar = localStorage.getItem("eminevim_avatar") || "";
@@ -38,10 +39,12 @@ mobileHeaderBar = function () {
     "/esube/profile": "Profil",
     "/esube/profile/security": "Güvenlik",
     "/esube/profile/identity": "İletişim Bilgileri",
-    "/esube/profile/documents": "Belgelerim",
+    "/esube/profile/documents": "Sözleşmeler",
     "/esube/settings": "Ayarlar",
     "/esube/notifications": "Bildirim Ayarları",
-    "/esube/support": "Referans Fırsatları"
+    "/esube/support": "Referans Fırsatları",
+    "/esube/news": "Haberler",
+    "/esube/money": "Para İşlemleri"
   };
 
   const isAdmin = state.me?.role === "admin";
@@ -225,6 +228,13 @@ function specialNoticeModal() {
   return `<div class="modal-backdrop open" data-close-special-notice><div class="modal rf-install-modal" data-modal-stop><header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;"><h2 style="margin:0;font-size:17px;">Yetkili Temsilci Bilgilendirmesi</h2><button type="button" class="icon-button" data-close-special-notice aria-label="Kapat">${icon("close", 20)}</button></header><div style="text-align:center;padding:10px 0;"><div style="width:54px;height:54px;border-radius:50%;background:#fef3c7;color:#d97706;display:grid;place-items:center;margin:0 auto 14px;">${icon("award", 28)}</div><h3 style="margin:0 0 8px;font-size:16px;">Referansınız İle İletişime Geçiniz</h3><p class="muted" style="font-size:13px;line-height:1.4;">Halka arz, fon ve döviz işlemleriniz için referans temsilciniz size özel tahsisat ve işlem yönlendirmesi sağlayacaktır.</p></div><a href="/esube/support" data-link class="primary-button full" style="margin-top:14px;text-decoration:none;display:block;text-align:center;">${icon("message", 18)} Temsilcimle İletişime Geç</a></div></div>`;
 }
 
+// Banka Hesaplarım Modal (matches the real app: simple "no account" notice)
+function bankAccountsModal() {
+  if (!state.bankAccountsOpen) return "";
+  const accounts = state.portfolio?.user_bank_accounts || [];
+  return `<div class="modal-backdrop open" data-close-bank-accounts><div class="modal" data-modal-stop style="max-width:380px;"><header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;"><h2 style="margin:0;font-size:18px;">Banka hesaplarım</h2><button type="button" class="icon-button" data-close-bank-accounts aria-label="Kapat">${icon("close", 20)}</button></header>${accounts.length ? `<div class="rf-tx-detail-list">${accounts.map((a) => `<div class="rf-tx-detail-row"><span>${esc(a.bank_name)}</span><strong>${esc(a.iban)}</strong></div>`).join("")}</div>` : `<p class="muted" style="margin:0 0 18px;">Tanımlı banka hesabı bulunmuyor.</p>`}<button type="button" class="primary-button full" data-close-bank-accounts>Tamam</button></div></div>`;
+}
+
 // Global modal injection
 const originalRender = render;
 render = function (options) {
@@ -232,7 +242,7 @@ render = function (options) {
   document.body.classList.toggle("theme-dark", state.theme === "dark");
   const container = document.getElementById("app");
   if (container) {
-    container.insertAdjacentHTML("beforeend", profileDropdownModal() + appInstallModal() + txDetailModal() + specialNoticeModal());
+    container.insertAdjacentHTML("beforeend", profileDropdownModal() + appInstallModal() + txDetailModal() + specialNoticeModal() + bankAccountsModal());
   }
 };
 document.body.classList.toggle("theme-dark", state.theme === "dark");
@@ -323,6 +333,19 @@ document.addEventListener("click", (event) => {
   }
   if (event.target.closest("[data-close-special-notice]") || (event.target.closest("[data-close-special-notice]") && !event.target.closest("[data-modal-stop]"))) {
     state.specialNoticeOpen = false;
+    render({ motion: false, preserveScroll: true });
+    return;
+  }
+
+  if (event.target.closest("[data-open-bank-accounts]")) {
+    event.preventDefault();
+    state.profileMenuOpen = false;
+    state.bankAccountsOpen = true;
+    render({ motion: false, preserveScroll: true });
+    return;
+  }
+  if (event.target.closest("[data-close-bank-accounts]")) {
+    state.bankAccountsOpen = false;
     render({ motion: false, preserveScroll: true });
     return;
   }

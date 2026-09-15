@@ -5,6 +5,13 @@
   font-style: normal;
   font-display: swap;
 }
+/* .mobile-app-header + .toolbar + * assumes the toolbar above is hidden
+   and applies a compensating -35px margin, but the toolbar here stays
+   visible (it carries a live-status badge), so the two collide. */
+.official-source-strip {
+  margin-top: 14px !important;
+}
+
 .reference-opportunity {
   display: grid;
   grid-template-columns: 1fr 20px;
