@@ -799,60 +799,34 @@ function renderLegacyHomeA() {
 }
 
 function renderEMİNEVİMHome() {
-  const brand = state.publicConfig?.branding || {};
-  const heroQuotes = state.market.filter((item) => (item.asset_class || "stock") === "stock").slice(0, 8);
-  const previewRows = heroQuotes.slice(0, 3).map((q) => `
-    <div class="landing-market-row">
-      <span><strong>${esc(q.symbol)}</strong><small>${esc(q.name)}</small></span>
-      <b>${money(q.price)}</b>
-      <em class="${q.change_pct >= 0 ? "up" : "down"}">${q.change_pct >= 0 ? "+" : ""}${number(q.change_pct)}%</em>
-    </div>
-  `).join("");
-  return `<main class="public-main theme-eminevim-view landing-esube">
-    <section class="landing-esube-hero">
-      <div class="container landing-esube-inner">
-        <div class="landing-copy">
-          <span class="landing-kicker">GÜVENLİ E-ŞUBE</span>
-          <h1>Eminevim Yatırım E-Şube</h1>
-          <p>Portföy, emir, T+2 takas, referans bildirimi ve hesap hareketleri için APK deneyimiyle uyumlu dijital yatırım ekranı.</p>
-          <div class="landing-actions">
-            <a href="/esube/giris" data-link class="eminevim-btn-blue">E-Şubeye Giriş ${icon("arrow", 17)}</a>
-            <a href="/esube/giris?mode=register" data-link class="eminevim-btn-ghost">Hesap Oluştur</a>
-          </div>
-          <div class="landing-trust-row">
-            <span>${icon("shield", 15)} Güvenli oturum</span>
-            <span>${icon("bell", 15)} Referans bildirimi</span>
-            <span>${icon("chart", 15)} Canlı piyasa</span>
-          </div>
-        </div>
-        <div class="landing-phone" aria-label="Eminevim Yatırım e-şube önizleme">
-          <div class="landing-phone-top">
-            <span class="landing-avatar">E</span>
-            <span class="landing-phone-brand"><strong>EMİNEVİM</strong><small>YATIRIM</small></span>
-            <span class="landing-phone-icon">${icon("moon", 17)}</span>
-          </div>
-          <div class="landing-bank-card">
-            <span>Portföy Özeti</span>
-            <strong>₺192.300,00</strong>
-            <small>+₺7.432,50 (%4,63) toplam kâr</small>
-            <div class="landing-card-foot">
-              <b>Kullanılabilir<br />₺24.200,00</b>
-              <b>T+2 Bakiye<br />₺24.200,00</b>
-            </div>
-          </div>
-          <div class="landing-mini-tabs"><span class="active">Pozisyonlar</span><span>Emirler</span><span>Geçmiş</span></div>
-          <div class="landing-search">${icon("search", 14)} İşlem ara</div>
-          <div class="landing-market-list">${previewRows}</div>
-        </div>
+  const services = [
+    ["bank", "Borsa İstanbul", "BIST'te güvenle hisse senedi alım satım işlemleri yapın."],
+    ["pie", "Yatırım Fonları", "Profesyonel yönetilen fonlarla portföyünüzü çeşitlendirin."],
+    ["chart", "Vadeli İşlemler", "VİOP'ta vadeli ve opsiyon sözleşmeleriyle yatırım yapın."],
+    ["activity", "Portföy Yönetimi", "Uzman portföy yöneticileri ile kişisel yatırım stratejisi."]
+  ];
+  const reasons = ["SPK lisanslı güvenilir aracı kurum", "Düşük komisyon oranları", "7/24 müşteri desteği", "Gelişmiş analiz araçları", "Mobil uygulama ile her yerden erişim", "Ücretsiz eğitim ve webinarlar"];
+  return `<main class="public-main fuzul-clone">
+    <section class="fuzul-hero">
+      <span class="fuzul-shape one"></span><span class="fuzul-shape two"></span>
+      <div class="container fuzul-hero-inner">
+        <span class="fuzul-license">${icon("shield", 15)} SPK Lisanslı Güvenilir Aracı Kurum</span>
+        <h1>Güvenli Yatırımın <span>Adresi</span></h1>
+        <p>Eminevim Yatırım Menkul Değerler ile borsa, yatırım fonları ve vadeli işlemlerde güvenle yatırım yapın. 20 yılı aşkın deneyimimizle yanınızdayız.</p>
+        <div class="fuzul-actions"><a href="/esube/giris?mode=register" data-link>Hemen Başla ${icon("arrow", 15)}</a><a href="#hizmetler">Hizmetlerimiz</a></div>
+        <div class="fuzul-proof"><span>${icon("shield", 12)} SSL Güvenli</span><span>${icon("file", 12)} SPK Lisanslı</span><span>${icon("user", 12)} 50.000+ Müşteri</span></div>
       </div>
     </section>
-    <section class="landing-esube-band">
-      <div class="container landing-feature-grid">
-        <article><span>${icon("user", 20)}</span><h2>Referans Akışı</h2><p>Profil, fırsatlar ve referans bildirimleri tek menü düzeninde.</p></article>
-        <article><span>${icon("bank", 20)}</span><h2>T+2 Takas</h2><p>Satış sonrası bakiye ana hesaptan ayrı, net ve izlenebilir.</p></article>
-        <article><span>${icon("settings", 20)}</span><h2>APK Uyumlu</h2><p>Kart, menü, renk ve font düzeni mobil şube ile aynı ailede.</p></article>
+    <section class="fuzul-section" id="hizmetler">
+      <div class="container">
+        <div class="fuzul-section-head"><h2>Yatırım <span>Hizmetlerimiz</span></h2><p>Eminevim Menkul Değerler olarak geniş ürün yelpazemizle yatırım hedeflerinize ulaşmanızı sağlıyoruz.</p></div>
+        <div class="fuzul-service-grid">${services.map(([ic, title, copy]) => `<article><i>${icon(ic, 27)}</i><h3>${title}</h3><p>${copy}</p><a href="/hizmetlerimiz" data-link>Detaylı bilgi</a></article>`).join("")}</div>
+        <a class="fuzul-all-link" href="/hizmetlerimiz" data-link>Tüm hizmetlerimizi görüntüleyin ${icon("arrow", 14)}</a>
       </div>
     </section>
+    <section class="fuzul-stats"><div class="container"><h2>Rakamlarla Eminevim Yatırım</h2><div><strong>15.833+<span>Aktif Müşteri</span></strong><strong>₺7 Milyar<span>Yıllık İşlem Hacmi</span></strong><strong>6+ Yıl<span>Sektör Deneyimi</span></strong><strong>31.9%<span>Platform Uptime</span></strong></div></div></section>
+    <section class="fuzul-section fuzul-why"><div class="container"><div class="fuzul-section-head"><h2>Neden <span>Eminevim Yatırım?</span></h2><p>Yatırımcılar neden Eminevim Menkul Değerler'i tercih ediyor?</p></div><div class="fuzul-reason-grid">${reasons.map((x) => `<span>${icon("check", 14)} ${x}</span>`).join("")}</div></div></section>
+    <section class="fuzul-cta"></section>
   </main>`;
 }
 
@@ -1052,11 +1026,9 @@ function renderAuth() {
 }
 
 function renderAuthV2() {
-  if (state.authMode !== "login") {
-    renderAuth();
-    return;
-  }
-  app.innerHTML = `<main class="auth-shell auth-shell-v2 eminevim-auth theme-${state.theme}"><section class="eminevim-login-frame"><div class="eminevim-security-note">${icon("shield", 15)} Güvenli E-Şube</div><header class="mobile-login-brand"><img class="auth-brand-logo" src="/assets/eminevim-logo-square.webp" alt="Eminevim Yatırım" /><div><strong>EMİNEVİM</strong><span>YATIRIM</span></div><p>Yatırım hesabınıza hoş geldiniz</p></header><form id="login-form" class="mobile-login-form"><label class="auth-input"><span>T.C. Kimlik / Müşteri No</span><input name="tc" inputmode="numeric" maxlength="11" autocomplete="username" placeholder="11 haneli numaranız" required /></label><label class="auth-input"><span>Şifre</span><span class="password-wrap"><input name="password" type="${state.showPassword ? "text" : "password"}" autocomplete="current-password" placeholder="Şifreniz" required /><button type="button" class="icon-button" data-toggle-password aria-pressed="${state.showPassword}" aria-label="${state.showPassword ? "Şifreyi gizle" : "Şifreyi göster"}">${icon(state.showPassword ? "eyeOff" : "eye", 18)}</button></span></label><div class="mobile-login-options"><label><input name="remember" type="checkbox" /> Beni hatırla</label><button type="button" class="text-link" data-auth-mode="forgot">Şifremi unuttum</button></div><button class="primary-button login-submit" type="submit">Giriş Yap ${icon("arrow", 17)}</button></form><footer class="mobile-login-footer"><button type="button" data-auth-mode="register">Yeni hesap aç</button><span></span><a href="/" data-link>Kurumsal site</a><div><button type="button">${icon("user", 14)} 0850 303 60 00</button></div></footer></section></main>`;
+  const form = state.authMode === "register" ? registerForm() : state.authMode === "forgot" ? forgotPasswordForm() : state.authMode === "reset" ? resetPasswordForm() : loginForm();
+  const title = state.authMode === "register" ? "Hesap oluşturun" : state.authMode === "forgot" ? "Şifre yenileme" : "Yatırım hesabınıza hoş geldiniz";
+  app.innerHTML = `<main class="auth-shell auth-shell-v2 eminevim-auth theme-${state.theme}"><section class="eminevim-login-frame auth-frame-unified"><div class="eminevim-security-note">${icon("shield", 15)} Güvenli E-Şube</div><header class="mobile-login-brand"><img class="auth-brand-logo" src="/assets/eminevim-logo-square.webp" alt="Eminevim Yatırım" /><div><strong>EMİNEVİM</strong><span>YATIRIM</span></div><p>${title}</p></header><div class="auth-mode-tabs"><button class="${state.authMode === "login" ? "active" : ""}" type="button" data-auth-mode="login">${icon("user", 15)} Giriş Yap</button><button class="${state.authMode === "register" ? "active" : ""}" type="button" data-auth-mode="register">${icon("file", 15)} Hesap Oluştur</button></div><div class="auth-form-host">${form}</div><footer class="mobile-login-footer"><button type="button" data-auth-mode="register">Yeni hesap aç</button><span></span><a href="/" data-link>Kurumsal site</a><div><button type="button">${icon("user", 14)} 0850 303 60 00</button></div></footer></section></main>`;
 }
 
 function loginForm() {

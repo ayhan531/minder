@@ -46,8 +46,42 @@
 .eminevim-auth .login-submit { border-radius: 11px; background: #0b6ef3 !important; }
 .eminevim-auth .login-submit:hover { background: #2680f5 !important; transform: translateY(-1px); }
 
+.auth-frame-unified { width: min(520px, 100%); }
+.auth-mode-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 0 0 22px; border: 1px solid rgba(185, 210, 255, .18); border-radius: 13px; background: rgba(255,255,255,.04); padding: 5px; }
+.auth-mode-tabs button { display: inline-flex; min-height: 42px; align-items: center; justify-content: center; gap: 8px; border: 0; border-radius: 10px; background: transparent; color: #b8c8e5; font-weight: 750; }
+.auth-mode-tabs button.active { background: #0b6ef3; color: #fff; }
+.eminevim-auth .auth-form-host form { display: grid; gap: 15px; }
+.eminevim-auth .field,
+.eminevim-auth .auth-secondary-form > div { display: grid; gap: 7px; color: #d7e5ff; }
+.eminevim-auth .field span,
+.eminevim-auth .auth-secondary-form h2 { color: #d7e5ff; }
+.eminevim-auth .field input,
+.eminevim-auth .field textarea,
+.eminevim-auth .field select,
+.eminevim-auth .password-wrap input { min-height: 48px; border: 1px solid rgba(185, 210, 255, .24) !important; border-radius: 11px; background: #0a255b !important; color: #fff !important; padding: 0 14px; }
+.eminevim-auth .field textarea { min-height: 84px; padding: 12px 14px; }
+.eminevim-auth .field small,
+.eminevim-auth .muted,
+.eminevim-auth .agreement-list { color: #a9b9d6; }
+.eminevim-auth .field-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.eminevim-auth .field.full { grid-column: 1 / -1; }
+.eminevim-auth .kyc-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; margin-bottom: 14px; border: 1px solid rgba(185, 210, 255, .18); border-radius: 12px; overflow: hidden; }
+.eminevim-auth .kyc-steps button { min-height: 42px; border: 0; background: rgba(255,255,255,.04); color: #91a4c6; font-size: 11px; font-weight: 750; }
+.eminevim-auth .kyc-steps button.active { background: #0b6ef3; color: #fff; }
+.eminevim-auth .register-actions,
+.eminevim-auth .login-options { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.eminevim-auth .primary-button { min-height: 48px; border-radius: 11px; color: #fff !important; }
+.eminevim-auth .primary-button .ui-icon { color: #fff !important; }
+.eminevim-auth .ghost-button,
+.eminevim-auth .text-link { border: 0; background: transparent; color: #d6e3f7; }
+.eminevim-auth .agreement-list { display: grid; gap: 12px; }
+.eminevim-auth .agreement-list label,
+.eminevim-auth .remember-row { display: flex; align-items: flex-start; gap: 9px; color: #d6e3f7 !important; }
+
 @media (max-width: 620px) {
   .eminevim-auth.auth-shell-v2 { padding: 0; }
   .eminevim-login-frame { width: 100%; min-height: 100dvh; padding: 34px 24px 22px; border: 0; border-radius: 0; box-shadow: none; }
+  .eminevim-auth .field-grid { grid-template-columns: 1fr; }
+  .eminevim-auth .kyc-steps button { font-size: 10px; }
 }
 

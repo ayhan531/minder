@@ -3437,3 +3437,361 @@ body, button, input, select, textarea { font-family: var(--studio-font), Inter, 
     grid-template-columns: 1fr;
   }
 }
+
+/* Fuzul reference landing clone, rebranded for Eminevim. */
+.fuzul-clone {
+  background: #f5f7fa;
+  color: #172238;
+}
+
+.fuzul-clone + .footer {
+  background: #153f60;
+}
+
+.fuzul-hero {
+  position: relative;
+  min-height: 640px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0d2f50 0%, #1c5f82 100%);
+  color: #fff;
+}
+
+.fuzul-hero-inner {
+  display: grid;
+  min-height: 640px;
+  place-items: center;
+  align-content: center;
+  text-align: center;
+}
+
+.fuzul-license {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 26px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .13);
+  padding: 8px 16px;
+  color: #dcebf7;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.fuzul-hero h1 {
+  max-width: 850px;
+  margin: 0;
+  color: #fff;
+  font-size: clamp(42px, 6.2vw, 72px);
+  font-weight: 850;
+  line-height: 1.1;
+}
+
+.fuzul-hero h1 span,
+.fuzul-section-head span {
+  color: #26aee4;
+}
+
+.fuzul-hero p {
+  max-width: 690px;
+  margin: 24px auto 34px;
+  color: #c7d5e4;
+  font-size: 18px;
+  line-height: 1.65;
+  font-weight: 600;
+}
+
+.fuzul-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.fuzul-actions a {
+  display: inline-flex;
+  min-width: 178px;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 7px;
+  color: #dbeaf6;
+  text-decoration: none;
+  font-weight: 750;
+}
+
+.fuzul-actions a:first-child {
+  border-color: #21aee2;
+  background: #209fd0;
+  color: #fff;
+}
+
+.fuzul-proof {
+  display: flex;
+  justify-content: center;
+  gap: 26px;
+  margin-top: 42px;
+  color: rgba(255,255,255,.55);
+  font-size: 12px;
+}
+
+.fuzul-proof span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.fuzul-shape {
+  position: absolute;
+  border: 1px solid rgba(255,255,255,.07);
+  opacity: .8;
+}
+
+.fuzul-shape.one {
+  width: 86px;
+  height: 86px;
+  left: 15%;
+  bottom: 94px;
+  border-radius: 14px;
+  transform: rotate(52deg);
+}
+
+.fuzul-shape.two {
+  width: 126px;
+  height: 126px;
+  right: 10%;
+  top: 92px;
+  border-radius: 50%;
+}
+
+.fuzul-section {
+  padding: 92px 0;
+  background: #f7f8fa;
+}
+
+.fuzul-section-head {
+  margin-bottom: 56px;
+  text-align: center;
+}
+
+.fuzul-section-head h2 {
+  margin: 0 0 12px;
+  color: #1c2637;
+  font-size: clamp(30px, 3.6vw, 44px);
+  font-weight: 850;
+}
+
+.fuzul-section-head p {
+  max-width: 640px;
+  margin: 0 auto;
+  color: #7b8799;
+  line-height: 1.55;
+}
+
+.fuzul-service-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.fuzul-service-grid article {
+  display: grid;
+  min-height: 250px;
+  justify-items: center;
+  align-content: center;
+  gap: 15px;
+  border: 1px solid #e1e7ee;
+  border-radius: 6px;
+  background: #fff;
+  padding: 28px 22px;
+  text-align: center;
+}
+
+.fuzul-service-grid i {
+  display: grid;
+  width: 58px;
+  height: 58px;
+  place-items: center;
+  border-radius: 14px;
+  background: #e3f7ff;
+  color: #20aee8;
+  font-style: normal;
+}
+
+.fuzul-service-grid h3 {
+  margin: 0;
+  color: #1d2737;
+  font-size: 18px;
+}
+
+.fuzul-service-grid p {
+  margin: 0;
+  color: #8190a2;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.fuzul-service-grid a,
+.fuzul-all-link {
+  color: #21aee2;
+  font-size: 13px;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.fuzul-all-link {
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 42px;
+}
+
+.fuzul-stats {
+  padding: 78px 0;
+  background: linear-gradient(135deg, #1d668d 0%, #24aee1 100%);
+  color: #fff;
+  text-align: center;
+}
+
+.fuzul-stats h2 {
+  margin: 0 0 44px;
+  color: #fff;
+  font-size: 38px;
+}
+
+.fuzul-stats .container > div {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 28px;
+}
+
+.fuzul-stats strong {
+  display: grid;
+  gap: 9px;
+  color: #fff;
+  font-size: clamp(32px, 4vw, 48px);
+  line-height: 1;
+}
+
+.fuzul-stats span {
+  color: rgba(255,255,255,.8);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.fuzul-why {
+  background: #eef1f5;
+}
+
+.fuzul-reason-grid {
+  display: grid;
+  max-width: 920px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin: 0 auto;
+}
+
+.fuzul-reason-grid span {
+  display: flex;
+  min-height: 54px;
+  align-items: center;
+  gap: 12px;
+  border-radius: 6px;
+  background: #fff;
+  color: #4a5b70;
+  padding: 0 20px;
+  font-weight: 700;
+}
+
+.fuzul-reason-grid .ui-icon {
+  color: #20aee8;
+}
+
+.fuzul-cta {
+  min-height: 280px;
+  background:
+    linear-gradient(rgba(13, 47, 80, .96), rgba(13, 47, 80, .96)),
+    radial-gradient(circle, rgba(255,255,255,.22) 1px, transparent 1px);
+  background-size: auto, 28px 28px;
+}
+
+@media (max-width: 860px) {
+  .fuzul-hero,
+  .fuzul-hero-inner {
+    min-height: 430px;
+  }
+
+  .fuzul-hero {
+    padding: 0 10px;
+  }
+
+  .fuzul-license {
+    margin-bottom: 18px;
+    font-size: 10px;
+  }
+
+  .fuzul-hero h1 {
+    font-size: 28px;
+  }
+
+  .fuzul-hero p {
+    margin: 15px auto 22px;
+    font-size: 13px;
+  }
+
+  .fuzul-actions {
+    display: grid;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .fuzul-actions a {
+    min-height: 46px;
+  }
+
+  .fuzul-proof {
+    gap: 14px;
+    margin-top: 22px;
+    font-size: 9px;
+  }
+
+  .fuzul-section {
+    padding: 54px 0;
+  }
+
+  .fuzul-section-head {
+    margin-bottom: 28px;
+  }
+
+  .fuzul-section-head h2 {
+    font-size: 25px;
+  }
+
+  .fuzul-section-head p {
+    font-size: 12px;
+  }
+
+  .fuzul-service-grid,
+  .fuzul-stats .container > div,
+  .fuzul-reason-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fuzul-service-grid {
+    gap: 16px;
+  }
+
+  .fuzul-service-grid article {
+    min-height: 210px;
+  }
+
+  .fuzul-stats {
+    min-height: 290px;
+    padding: 56px 0;
+  }
+
+  .fuzul-stats h2,
+  .fuzul-stats .container > div {
+    display: none;
+  }
+}
