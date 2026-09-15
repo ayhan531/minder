@@ -967,11 +967,12 @@
 .account-profile-card h2 { margin: 0; font-size: 17px; }
 .account-profile-card p { margin: 4px 0 7px; color: #778398; font-size: 11px; }
 .verified-badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 7px; border-radius: 6px; background: #e9f8ee; color: #24964c; font-size: 10px; }
-.account-money-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin-top: 14px; overflow: hidden; border-radius: 13px; }
+.account-money-actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin-top: 14px; overflow: hidden; border-radius: 13px; }
 .account-money-actions button,
 .account-money-actions a { display: grid; min-height: 88px; place-items: center; align-content: center; gap: 8px; padding: 10px; border: 0; background: #fff; color: #5c687c; font-size: 11px; text-decoration: none; }
 .account-money-actions button + button,
-.account-money-actions button + a { border-left: 1px solid #edf0f5; }
+.account-money-actions button + a,
+.account-money-actions a + a { border-left: 1px solid #edf0f5; }
 .account-money-actions span { display: grid; width: 40px; height: 40px; place-items: center; border-radius: 50%; background: #075be8; color: #fff; }
 .account-section-title { margin: 21px 2px 9px; color: #1e2a42; font-size: 13px !important; }
 .account-menu-card { overflow: hidden; border-radius: 13px; }
